@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(npm start)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run build)",
+      "Bash(aws s3api get-bucket-website:*)",
+      "Bash(aws s3 website:*)",
+      "Bash(aws cloudfront get-distribution:*)",
+      "Bash(aws s3api put-bucket-policy:*)",
+      "Bash(aws cloudfront update-distribution:*)",
+      "Bash(aws acm describe-certificate:*)",
+      "Bash(aws cloudfront create-invalidation:*)",
+      "Bash(aws route53 list-hosted-zones:*)",
+      "Bash(aws route53 list-resource-record-sets:*)",
+      "Bash(aws route53 change-resource-record-sets:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
