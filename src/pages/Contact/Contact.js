@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaCheck, FaEnvelope, FaUser, FaBuilding, FaPaperPlane } from 'react-icons/fa';
-// import emailjs from '@emailjs/browser'; // EmailJS設定時に有効化
+import emailjs from '@emailjs/browser';
 
 const schema = yup.object({
   type: yup.string().required('お問い合わせ種別を選択してください'),
@@ -32,13 +32,31 @@ const Contact = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setSubmitStatus(null);
 
     try {
-      // EmailJSの設定（実際の値は環境変数から取得することを推奨）
-      // await emailjs.send(...);
+      // EmailJSの環境変数を取得
+      const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+      const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+      const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
-      // デモ用：実際の送信処理をコメントアウト
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // EmailJSのテンプレートパラメータ
+      const templateParams = {
+        to_email: 'one@linkle.group',
+        from_name: data.name,
+        from_email: data.email,
+        company: data.company || '未記入',
+        inquiry_type: data.type,
+        message: data.message,
+      };
+
+      // EmailJSで送信
+      await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
+      );
 
       setSubmitStatus('success');
       reset();

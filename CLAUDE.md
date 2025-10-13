@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm start     # 開発サーバーを起動 (http://localhost:3000)
 npm test      # テストを実行（インタラクティブウォッチモード）
 npm run build # 本番用ビルド (build/フォルダに出力)
+npm deploy    #　本番環境デプロイ
 ```
 
 ## プロジェクト概要
@@ -68,7 +69,7 @@ linkle-hp/
 ## 会社情報
 
 - **会社名**: linkle株式会社
-- **設立**: 2025年1月30日
+- **設立**: 2025年1月23日
 - **代表者**: 倉石楽生
 - **所在地**: 東京都渋谷区道玄坂1-12-1 渋谷マークシティ W22階
 - **事業内容**: アプリ受託運営開発事業（Web制作特化）

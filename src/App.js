@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 // Layout Components
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-
+import ScrollTop from './components/layout/ScrollTop';
 // Pages
 import Home from './pages/Home/Home';
 import About from './pages/About/About';
@@ -14,10 +14,12 @@ import News from './pages/News/News';
 import Recruit from './pages/Recruit/Recruit';
 import Contact from './pages/Contact/Contact';
 
+
 function App() {
   return (
     <HelmetProvider>
       <Router>
+        <ScrollTop />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">

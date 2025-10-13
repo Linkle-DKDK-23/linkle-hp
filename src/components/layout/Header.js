@@ -26,7 +26,6 @@ const Header = () => {
     { path: '/', label: 'ホーム' },
     { path: '/about', label: '会社概要' },
     { path: '/service', label: 'サービス' },
-    { path: '/news', label: 'ニュース' },
     { path: '/recruit', label: '採用情報' },
   ];
 
@@ -51,7 +50,7 @@ const Header = () => {
                 isScrolled || !isHomePage ? '' : 'text-white'
               }`}
             >
-              linkle
+              Linkle
             </motion.span>
           </Link>
 

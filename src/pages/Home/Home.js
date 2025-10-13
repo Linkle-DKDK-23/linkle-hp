@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaCode, FaRocket, FaLightbulb } from 'react-icons/fa';
@@ -21,6 +21,7 @@ const Home = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+
   const services = [
     {
       icon: <FaCode className="text-4xl" />,
@@ -41,12 +42,11 @@ const Home = () => {
 
   const stats = [
     { number: '20+', label: 'チームメンバー' },
-    { number: '100+', label: 'プロジェクト実績' },
     { number: '99%', label: '顧客満足度' },
   ];
 
   // Floating particles configuration
-  const particles = Array.from({ length: 30 }, (_, i) => ({
+  const particles = Array.from({ length: 300}, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
@@ -203,7 +203,7 @@ const Home = () => {
                   transition={{ duration: 2, repeat: Infinity }}
                   className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2"
                 />
-                Welcome to linkle
+                Welcome to Linkle
               </motion.span>
             </motion.div>
 
@@ -275,7 +275,7 @@ const Home = () => {
                   transition={{ duration: 3, repeat: Infinity }}
                   className="inline-block mt-2 text-primary font-semibold"
                 >
-                  linkleが、あなたのアイデアを形にします。
+                  Linkleが、あなたのアイデアを形にします。
                 </motion.span>
               </p>
             </motion.div>
@@ -332,7 +332,7 @@ const Home = () => {
               initial="hidden"
               animate="visible"
               custom={3}
-              className="grid grid-cols-3 gap-8 max-w-3xl mx-auto"
+              className="grid grid-cols-2 gap-8 max-w-3xl mx-auto"
             >
               {stats.map((stat, index) => (
                 <motion.div
@@ -452,7 +452,7 @@ const Home = () => {
                 viewport={{ once: true }}
               >
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  linkle株式会社について
+                  Linkle株式会社について
                 </h2>
                 <p className="text-xl text-gray-700 leading-relaxed mb-8">
                   私たちは、最新のWeb技術とデザインを駆使し、
@@ -493,7 +493,7 @@ const Home = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 font-medium">事業内容</span>
-                      <span className="font-bold">Web制作</span>
+                      <span className="font-bold">Web制作/プラットフォーム運営</span>
                     </div>
                   </div>
                 </div>

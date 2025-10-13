@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaMapMarkerAlt, FaBuilding, FaUsers, FaCalendar } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaBuilding, FaUsers, FaCalendar, FaUserAlt , FaRegMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa';
 
 const About = () => {
   const companyInfo = [
-    { icon: <FaBuilding />, label: '会社名', value: 'linkle株式会社' },
-    { icon: <FaCalendar />, label: '設立', value: '2025年1月30日' },
-    { label: '代表者', value: '倉石楽生' },
+    { icon: <FaBuilding />, label: '会社名', value: 'Linkle株式会社' },
+    { icon: <FaCalendar />, label: '設立', value: '2025年1月23日' },
+    { icon: <FaUserAlt />, label: '代表者', value: '倉石楽生' },
     { icon: <FaMapMarkerAlt />, label: '所在地', value: '東京都渋谷区道玄坂1-12-1 渋谷マークシティ W22階' },
-    { label: '資本金', value: '700万円' },
+    { icon: <FaRegMoneyBillAlt />, label: '資本金', value: '8,000,000円' },
     { icon: <FaUsers />, label: '従業員数', value: '20名' },
-    { label: '事業内容', value: 'アプリ受託運営開発事業' },
+    { icon: <FaConnectdevelop />, label: '事業内容', value: 'Web制作/プラットフォーム運営' },
   ];
 
   return (
@@ -50,7 +50,7 @@ const About = () => {
                 Company <span className="text-gradient">Information</span>
               </h2>
               <p className="text-xl text-gray-600">
-                linkle株式会社の基本情報
+                Linkle株式会社の基本情報
               </p>
             </motion.div>
 

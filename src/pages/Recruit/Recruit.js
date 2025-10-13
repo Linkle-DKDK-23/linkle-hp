@@ -62,7 +62,7 @@ const Recruit = () => {
                 あなたへ
               </h2>
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                linkleでは、技術への情熱を持った仲間を募集しています。
+                Linkleでは、技術への情熱を持った仲間を募集しています。
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
                 新しい技術に興味を持ち、常に学び続ける姿勢を持った方を歓迎します。
@@ -106,7 +106,7 @@ const Recruit = () => {
                 <div className="flex-1">
                   <h3 className="text-3xl font-bold mb-4">フルスタックエンジニア</h3>
                   <p className="text-xl text-gray-700 leading-relaxed">
-                    フロントエンドからバックエンドまで、幅広く開発に携わっていただけるエンジニアを募集しています。
+                  サーバーサイド/フロントエンド/インフラ構築/デザイナー/PM/ディレクターなど、幅広く開発に携わっていただけるエンジニアを募集しています。
                   </p>
                 </div>
               </div>
@@ -175,10 +175,10 @@ const Recruit = () => {
       </section>
 
       {/* Details Sections */}
-      <section className="section-padding gradient-secondary">
+      {/* <section className="section-padding gradient-secondary">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-8">
-            {/* 福利厚生 */}
+            
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -195,7 +195,7 @@ const Recruit = () => {
               </div>
             </motion.div>
 
-            {/* 選考フロー */}
+            
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -213,7 +213,6 @@ const Recruit = () => {
               </div>
             </motion.div>
 
-            {/* 応募方法 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -241,7 +240,7 @@ const Recruit = () => {
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="section-padding relative overflow-hidden">

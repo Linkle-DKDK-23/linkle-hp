@@ -7,12 +7,11 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/service', label: 'Service' },
-    { path: '/news', label: 'News' },
-    { path: '/recruit', label: 'Recruit' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/', label: 'ホーム' },
+    { path: '/about', label: '会社概要' },
+    { path: '/service', label: 'サービス' },
+    { path: '/recruit', label: '採用情報' },
+    { path: '/contact', label: 'お問い合わせ' },
   ];
 
   const socialLinks = [
@@ -43,7 +42,7 @@ const Footer = () => {
           >
             <Link to="/" className="inline-block mb-6">
               <span className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                linkle
+              Linkle
               </span>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed">
@@ -51,20 +50,7 @@ const Footer = () => {
               お客様のビジネスを<br />
               次のステージへ。
             </p>
-            <div className="flex gap-3">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-all duration-300 hover:scale-110"
-                  aria-label={social.label}
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
+           
           </motion.div>
 
           {/* Quick Links */}
@@ -97,7 +83,7 @@ const Footer = () => {
           >
             <h3 className="text-xl font-bold mb-6">Company</h3>
             <div className="space-y-3 text-gray-400">
-              <p>linkle株式会社</p>
+              <p>Linkle株式会社</p>
               <p className="text-sm leading-relaxed">
                 〒150-0043<br />
                 東京都渋谷区道玄坂1-12-1<br />
@@ -131,22 +117,8 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-left">
               <p className="text-gray-400 text-sm">
-                &copy; {currentYear} linkle Inc. All rights reserved.
+                &copy; {currentYear} Linkle Inc. All rights reserved.
               </p>
-            </div>
-            <div className="flex gap-6">
-              <Link
-                to="/privacy"
-                className="text-gray-400 hover:text-primary transition-colors text-sm"
-              >
-                プライバシーポリシー
-              </Link>
-              <Link
-                to="/terms"
-                className="text-gray-400 hover:text-primary transition-colors text-sm"
-              >
-                利用規約
-              </Link>
             </div>
           </div>
         </div>

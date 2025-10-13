@@ -176,7 +176,7 @@ const Service = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section-padding relative overflow-hidden">
+      {/* <section className="section-padding relative overflow-hidden">
         <div className="absolute inset-0 gradient-primary opacity-90"></div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
@@ -203,7 +203,7 @@ const Service = () => {
             </Link>
           </motion.div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
