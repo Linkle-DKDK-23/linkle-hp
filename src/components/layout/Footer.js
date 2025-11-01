@@ -85,9 +85,9 @@ const Footer = () => {
             <div className="space-y-3 text-gray-400">
               <p>Linkle株式会社</p>
               <p className="text-sm leading-relaxed">
-                〒150-0043<br />
-                東京都渋谷区道玄坂1-12-1<br />
-                渋谷マークシティ W22階
+                〒171-0021<br />
+                東京都豊島区西池袋2-36-1<br />
+                ソフトタウン池袋913号
               </p>
             </div>
           </motion.div>

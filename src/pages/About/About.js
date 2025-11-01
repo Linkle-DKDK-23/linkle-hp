@@ -7,11 +7,14 @@ const About = () => {
     { icon: <FaBuilding />, label: '会社名', value: 'Linkle株式会社' },
     { icon: <FaCalendar />, label: '設立', value: '2025年1月23日' },
     { icon: <FaUserAlt />, label: '代表者', value: '倉石楽生' },
-    { icon: <FaMapMarkerAlt />, label: '所在地', value: '東京都渋谷区道玄坂1-12-1 渋谷マークシティ W22階' },
+    { icon: <FaMapMarkerAlt />, label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
     { icon: <FaRegMoneyBillAlt />, label: '資本金', value: '8,000,000円' },
     { icon: <FaUsers />, label: '従業員数', value: '20名' },
     { icon: <FaConnectdevelop />, label: '事業内容', value: 'Web制作/プラットフォーム運営' },
   ];
+
+  const address = companyInfo.find((info) => info.label === '所在地')?.value || '';
+  const addressForMap = encodeURIComponent(address.replace(/\n/g, ' '));
 
   return (
     <div className="min-h-screen pt-20">
@@ -74,7 +77,7 @@ const About = () => {
                       <dt className="font-bold text-lg mb-2 text-gray-700">
                         {info.label}
                       </dt>
-                      <dd className="text-gray-900 text-lg">{info.value}</dd>
+                      <dd className="text-gray-900 text-lg whitespace-pre-line">{info.value}</dd>
                     </div>
                   </div>
                 </motion.div>
@@ -131,15 +134,20 @@ const About = () => {
             className="max-w-5xl mx-auto"
           >
             <div className="card-modern overflow-hidden">
-              <div className="bg-gradient-to-br from-gray-100 to-gray-200 h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <FaMapMarkerAlt className="text-6xl text-primary mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg">Google Maps埋め込み予定</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    東京都渋谷区道玄坂1-12-1<br />
-                    渋谷マークシティ W22階
-                  </p>
-                </div>
+              <div className="h-96">
+                <iframe
+                  title="Google Map"
+                  src={`https://www.google.com/maps?q=${addressForMap}&output=embed`}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <div className="p-4">
+                <p className="text-sm text-gray-500 whitespace-pre-line text-center">{address}</p>
               </div>
             </div>
           </motion.div>

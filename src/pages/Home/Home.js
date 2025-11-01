@@ -6,20 +6,45 @@ import { FaArrowRight, FaCode, FaRocket, FaLightbulb } from 'react-icons/fa';
 const Home = () => {
   const { scrollY } = useScroll();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const [isMobile, setIsMobile] = useState(false);
+  // モバイルではスクロールアニメーションを無効化してパフォーマンス向上
+  const opacity = useTransform(scrollY, [0, 300], isMobile ? [1, 1] : [1, 0]);
+  const scale = useTransform(scrollY, [0, 300], isMobile ? [1, 1] : [1, 0.8]);
 
   useEffect(() => {
+    // モバイル検出
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    // マウス追従（デスクトップのみ、かつスロットリング）
+    let ticking = false;
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setMousePosition({
+            x: (e.clientX / window.innerWidth - 0.5) * 10,
+            y: (e.clientY / window.innerHeight - 0.5) * 10,
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    }
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      if (!isMobile) {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
+  }, [isMobile]);
 
 
   const services = [
@@ -45,15 +70,16 @@ const Home = () => {
     { number: '99%', label: '顧客満足度' },
   ];
 
-  // Floating particles configuration
-  const particles = Array.from({ length: 300}, (_, i) => ({
+  // Floating particles configuration (最適化: モバイルでは大幅に削減)
+  const particleCount = isMobile ? 15 : 30;
+  const particles = useMemo(() => Array.from({ length: particleCount }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: Math.random() * 4 + 2,
-    duration: Math.random() * 20 + 10,
+    size: Math.random() * 3 + 2,
+    duration: Math.random() * 15 + 10,
     delay: Math.random() * 5,
-  }));
+  })), [particleCount]);
 
   const textVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -89,60 +115,66 @@ const Home = () => {
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900" />
 
-          {/* Animated Gradient Orbs */}
+          {/* Animated Gradient Orbs (最適化: モバイルではblurとアニメーションを軽量化) */}
           <motion.div
-            animate={{
+            animate={isMobile ? {
+              scale: [1, 1.1, 1],
+            } : {
               scale: [1, 1.2, 1],
               rotate: [0, 90, 0],
             }}
             transition={{
-              duration: 20,
+              duration: isMobile ? 15 : 20,
               repeat: Infinity,
               ease: "linear",
             }}
-            className="absolute w-[800px] h-[800px] bg-primary/30 rounded-full blur-3xl -top-40 -left-40"
+            className={`absolute w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-primary/30 rounded-full ${isMobile ? 'blur-md' : 'blur-2xl'} -top-40 -left-40`}
             style={{
-              x: mousePosition.x,
-              y: mousePosition.y,
+              x: isMobile ? 0 : mousePosition.x,
+              y: isMobile ? 0 : mousePosition.y,
             }}
           />
 
           <motion.div
-            animate={{
+            animate={isMobile ? {
+              scale: [1, 1.15, 1],
+            } : {
               scale: [1, 1.3, 1],
               rotate: [0, -90, 0],
             }}
             transition={{
-              duration: 25,
+              duration: isMobile ? 18 : 25,
               repeat: Infinity,
               ease: "linear",
             }}
-            className="absolute w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-3xl top-1/2 -right-40"
+            className={`absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-500/20 rounded-full ${isMobile ? 'blur-md' : 'blur-2xl'} top-1/2 -right-40`}
             style={{
-              x: -mousePosition.x * 0.5,
-              y: -mousePosition.y * 0.5,
+              x: isMobile ? 0 : -mousePosition.x * 0.5,
+              y: isMobile ? 0 : -mousePosition.y * 0.5,
             }}
           />
 
           <motion.div
-            animate={{
+            animate={isMobile ? {
+              scale: [1, 1.2, 1],
+            } : {
               scale: [1, 1.4, 1],
               rotate: [0, 180, 0],
             }}
             transition={{
-              duration: 30,
+              duration: isMobile ? 20 : 30,
               repeat: Infinity,
               ease: "linear",
             }}
-            className="absolute w-[700px] h-[700px] bg-purple-500/20 rounded-full blur-3xl bottom-0 left-1/3"
+            className={`absolute w-[350px] h-[350px] md:w-[700px] md:h-[700px] bg-purple-500/20 rounded-full ${isMobile ? 'blur-md' : 'blur-2xl'} bottom-0 left-1/3`}
             style={{
-              x: mousePosition.x * 0.3,
-              y: mousePosition.y * 0.3,
+              x: isMobile ? 0 : mousePosition.x * 0.3,
+              y: isMobile ? 0 : mousePosition.y * 0.3,
             }}
           />
 
-          {/* Floating Particles */}
-          {particles.map((particle) => (
+          {/* Floating Particles (最適化: モバイルでは簡略化) */}
+          {!isMobile && particles.map((particle) => (
             <motion.div
               key={particle.id}
               className="absolute rounded-full bg-white/20"
@@ -151,6 +183,7 @@ const Home = () => {
                 top: `${particle.y}%`,
                 width: particle.size,
                 height: particle.size,
+                willChange: 'transform, opacity',
               }}
               animate={{
                 y: [0, -30, 0],
@@ -164,18 +197,6 @@ const Home = () => {
               }}
             />
           ))}
-
-          {/* Grid Pattern Overlay */}
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: '50px 50px',
-            }}
-          />
         </div>
 
         <motion.div
@@ -195,41 +216,45 @@ const Home = () => {
               className="mb-8"
             >
               <motion.span
-                whileHover={{ scale: 1.1 }}
-                className="inline-block px-6 py-3 bg-white/10 backdrop-blur-md rounded-full text-white text-sm font-medium border border-white/20 shadow-lg"
+                whileHover={isMobile ? {} : { scale: 1.1 }}
+                className="inline-block px-6 py-3 bg-white/10 backdrop-blur-md rounded-full text-white text-xs font-medium border border-white/20 shadow-lg"
               >
                 <motion.span
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  animate={isMobile ? {} : { opacity: [0.5, 1, 0.5] }}
+                  transition={isMobile ? {} : { duration: 2, repeat: Infinity }}
                   className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2"
                 />
                 Welcome to Linkle
               </motion.span>
             </motion.div>
 
-            {/* Main Heading with Letter Animation */}
+            {/* Main Heading with Letter Animation (最適化: モバイルでは簡略化) */}
             <div className="mb-8 overflow-hidden">
               <motion.div
                 initial="hidden"
                 animate="visible"
-                className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight"
+                className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
               >
                 <div className="mb-4">
-                  {'Web制作で'.split('').map((char, i) => (
-                    <motion.span
-                      key={i}
-                      custom={i}
-                      variants={letterVariants}
-                      className="inline-block"
-                      whileHover={{
-                        scale: 1.2,
-                        color: '#6ccaf1',
-                        transition: { duration: 0.2 }
-                      }}
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
+                  {isMobile ? (
+                    <span>Web制作で</span>
+                  ) : (
+                    'Web制作で'.split('').map((char, i) => (
+                      <motion.span
+                        key={i}
+                        custom={i}
+                        variants={letterVariants}
+                        className="inline-block"
+                        whileHover={{
+                          scale: 1.2,
+                          color: '#6ccaf1',
+                          transition: { duration: 0.2 }
+                        }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))
+                  )}
                 </div>
                 <div>
                   <motion.span
@@ -239,10 +264,10 @@ const Home = () => {
                     className="inline-block"
                   >
                     <motion.span
-                      animate={{
+                      animate={isMobile ? {} : {
                         backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                       }}
-                      transition={{
+                      transition={isMobile ? {} : {
                         duration: 5,
                         repeat: Infinity,
                         ease: 'linear',
@@ -267,12 +292,12 @@ const Home = () => {
               custom={1}
               className="mb-12"
             >
-              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                最新の技術とデザインで、お客様のビジネスを次のステージへ。
+              <p className="text-md md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                最新の技術とデザインで、< br />お客様のビジネスを次のステージへ。
                 <br />
                 <motion.span
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  animate={isMobile ? {} : { opacity: [0.7, 1, 0.7] }}
+                  transition={isMobile ? {} : { duration: 3, repeat: Infinity }}
                   className="inline-block mt-2 text-primary font-semibold"
                 >
                   Linkleが、あなたのアイデアを形にします。
@@ -294,7 +319,7 @@ const Home = () => {
               >
                 <Link
                   to="/contact"
-                  className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-500 text-white px-10 py-5 rounded-full font-semibold overflow-hidden shadow-2xl"
+                  className="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-blue-500 text-white px-10 py-5 rounded-full font-semibold text-sm overflow-hidden shadow-2xl"
                 >
                   <motion.span
                     className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary"
@@ -313,12 +338,12 @@ const Home = () => {
               >
                 <Link
                   to="/service"
-                  className="group inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md text-white px-10 py-5 rounded-full font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20 shadow-xl"
+                  className="group inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md text-white px-10 py-5 rounded-full font-semibold text-sm hover:bg-white/20 transition-all duration-300 border border-white/20 shadow-xl"
                 >
                   サービス詳細
                   <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    animate={isMobile ? {} : { x: [0, 5, 0] }}
+                    transition={isMobile ? {} : { duration: 1.5, repeat: Infinity }}
                   >
                     →
                   </motion.span>
@@ -326,7 +351,7 @@ const Home = () => {
               </motion.div>
             </motion.div>
 
-            {/* Stats with Count Animation */}
+            {/* Stats with Count Animation (最適化: モバイルでは簡略化) */}
             <motion.div
               variants={textVariants}
               initial="hidden"
@@ -337,7 +362,7 @@ const Home = () => {
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  whileHover={{ scale: 1.1, y: -10 }}
+                  whileHover={isMobile ? {} : { scale: 1.1, y: -10 }}
                   className="text-center"
                 >
                   <motion.div
@@ -352,7 +377,7 @@ const Home = () => {
                   >
                     <motion.div
                       className="text-3xl md:text-5xl font-bold text-white mb-2"
-                      animate={{
+                      animate={isMobile ? {} : {
                         textShadow: [
                           '0 0 20px rgba(108, 202, 241, 0.5)',
                           '0 0 30px rgba(108, 202, 241, 0.8)',
@@ -405,12 +430,12 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6">
               私たちの
               <span className="text-gradient"> 強み</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              お客様のビジネスを成功に導くための、3つの価値
+            <p className="text-base text-gray-700 leading-relaxed mb-8">
+              お客様のビジネスを成功に導くための、<br />3つの価値
             </p>
           </motion.div>
 
@@ -428,10 +453,10 @@ const Home = () => {
                 <div className="text-primary mb-6 transform group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-bold mb-4 group-hover:text-primary transition-colors">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600 leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>
@@ -451,10 +476,10 @@ const Home = () => {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold mb-6">
                   Linkle株式会社について
                 </h2>
-                <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                <p className="text-base text-gray-700 leading-relaxed mb-8">
                   私たちは、最新のWeb技術とデザインを駆使し、
                   お客様のビジネスを成長させるソリューションを提供します。
                   <br /><br />
@@ -463,7 +488,7 @@ const Home = () => {
                 </p>
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-2 text-primary font-semibold text-lg hover:gap-4 transition-all"
+                  className="inline-flex items-center gap-2 text-primary font-semibold text-base hover:gap-4 transition-all"
                 >
                   会社概要を見る
                   <FaArrowRight />
@@ -480,20 +505,20 @@ const Home = () => {
                 <div className="card-modern p-8 bg-white">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                      <span className="text-gray-600 font-medium">設立</span>
-                      <span className="font-bold">2025年1月</span>
+                      <span className="text-gray-600 font-medium text-sm">設立</span>
+                      <span className="font-bold text-sm">2025年1月</span>
                     </div>
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                      <span className="text-gray-600 font-medium">所在地</span>
-                      <span className="font-bold">東京・渋谷</span>
+                      <span className="text-gray-600 font-medium text-sm">所在地</span>
+                      <span className="font-bold text-sm">東京・渋谷</span>
                     </div>
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-                      <span className="text-gray-600 font-medium">従業員数</span>
-                      <span className="font-bold">20名</span>
+                      <span className="text-gray-600 font-medium text-sm">従業員数</span>
+                      <span className="font-bold text-sm">20名</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 font-medium">事業内容</span>
-                      <span className="font-bold">Web制作/プラットフォーム運営</span>
+                      <span className="text-gray-600 font-medium text-sm">事業内容</span>
+                      <span className="font-bold text-sm">Web制作/プラットフォーム運営</span>
                     </div>
                   </div>
                 </div>
@@ -516,17 +541,17 @@ const Home = () => {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto text-center text-white"
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-8">
+            <h2 className="text-2xl md:text-4xl font-bold mb-8">
               プロジェクトを
               <br />
               始めませんか？
             </h2>
-            <p className="text-xl md:text-2xl mb-12 text-white/90">
+            <p className="text-base md:text-lg mb-12 text-white/90">
               お客様のビジョンを実現するため、まずはお気軽にご相談ください。
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-white text-primary px-12 py-5 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 bg-white text-primary px-12 py-5 rounded-full font-bold text-base hover:shadow-2xl hover:scale-105 transition-all duration-300"
             >
               無料相談する
               <FaArrowRight />
