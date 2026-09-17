@@ -510,7 +510,7 @@ const Home = () => {
                     </div>
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                       <span className="text-gray-600 font-medium text-sm">所在地</span>
-                      <span className="font-bold text-sm">東京・渋谷</span>
+                      <span className="font-bold text-sm">東京・豊島区</span>
                     </div>
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4">
                       <span className="text-gray-600 font-medium text-sm">従業員数</span>
