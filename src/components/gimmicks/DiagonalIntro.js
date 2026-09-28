@@ -1,9 +1,19 @@
 import React, { useMemo, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useTransform } from 'framer-motion';
 import { splitBunsetsu, isLatin } from '../../lib/text/splitText';
 import { useWrapperInView } from '../../lib/scroll/useWrapperInView';
 import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 import { EASE, T } from '../../lib/motion/timings';
+
+const clamp01 = (v) => Math.min(1, Math.max(0, v));
+const smoothstep = (a, b, x) => {
+  const t = clamp01((x - a) / (b - a));
+  return t * t * (3 - 2 * t);
+};
+
+/** 退場の開始位置（セクション進捗）。lusion では次見出しが現れる直前に文が左へ流れ出る */
+const EXIT_START = 0.72;
+const EXIT_LEN = 0.22;
 
 function Block({ text, italicPrefix, startIndex, inView, align, style, reducedMotion }) {
   const parts = useMemo(() => splitBunsetsu(text), [text]);
@@ -44,13 +54,19 @@ function Block({ text, italicPrefix, startIndex, inView, align, style, reducedMo
 
 /**
  * G6: 対角配置（左上 / 右下）+ 文節ステージ出現。
- * @param {{ topLeft: string, bottomRight: string, italicPrefix?: string }} props
+ * progress（セクション進捗 0〜1）を渡すと、終盤に 2 つの文が左へ流れ出て次セクションへ場所を渡す（lusion の退場）。
+ * @param {{ topLeft: string, bottomRight: string, italicPrefix?: string, progress?: import('framer-motion').MotionValue<number> }} props
  */
-export default function DiagonalIntro({ topLeft, bottomRight, italicPrefix }) {
+export default function DiagonalIntro({ topLeft, bottomRight, italicPrefix, progress }) {
   const ref = useRef(null);
   const inView = useWrapperInView(ref, { amount: 0.3, once: true });
   const { reducedMotion, isMobile } = useMotionPrefs();
   const topCount = useMemo(() => splitBunsetsu(topLeft).length, [topLeft]);
+  const still = useMemo(() => ({ get: () => 0, on: () => () => {} }), []);
+  const src = progress || still;
+  const xTop = useTransform(src, (v) => (reducedMotion ? 0 : `${-120 * smoothstep(EXIT_START, EXIT_START + EXIT_LEN, v)}vw`));
+  const xBottom = useTransform(src, (v) => (reducedMotion ? 0 : `${-120 * smoothstep(EXIT_START + 0.04, EXIT_START + EXIT_LEN + 0.04, v)}vw`));
+  const fade = useTransform(src, (v) => (reducedMotion ? 1 - smoothstep(EXIT_START, EXIT_START + 0.1, v) : 1));
   return (
     <div
       ref={ref}
@@ -62,12 +78,12 @@ export default function DiagonalIntro({ topLeft, bottomRight, italicPrefix }) {
         padding: '0 var(--bp-margin)',
       }}
     >
-      <div style={{ gridArea: isMobile ? '1 / 1' : '1 / 1', paddingTop: 'calc(170 / 827 * 100vh)', maxWidth: 'min(56vw, 720px)', minWidth: isMobile ? '100%' : undefined }}>
+      <motion.div style={{ gridArea: isMobile ? '1 / 1' : '1 / 1', paddingTop: 'calc(170 / 827 * 100vh)', maxWidth: 'min(56vw, 720px)', minWidth: isMobile ? '100%' : undefined, x: xTop, opacity: fade }}>
         <Block text={topLeft} italicPrefix={italicPrefix} startIndex={0} inView={inView} align="left" reducedMotion={reducedMotion} />
-      </div>
-      <div style={{ gridArea: isMobile ? '2 / 1' : '2 / 2', alignSelf: 'end', justifySelf: 'end', paddingBottom: '10vh', maxWidth: 'min(56vw, 720px)', minWidth: isMobile ? '100%' : undefined }}>
+      </motion.div>
+      <motion.div style={{ gridArea: isMobile ? '2 / 1' : '2 / 2', alignSelf: 'end', justifySelf: 'end', paddingBottom: '10vh', maxWidth: 'min(56vw, 720px)', minWidth: isMobile ? '100%' : undefined, x: xBottom, opacity: fade }}>
         <Block text={bottomRight} startIndex={topCount} inView={inView} align="right" reducedMotion={reducedMotion} />
-      </div>
+      </motion.div>
     </div>
   );
 }

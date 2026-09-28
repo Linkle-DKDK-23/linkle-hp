@@ -10,9 +10,10 @@ import DimensionLine from '../ui/DimensionLine';
  * G3: 巨大ブランド名せり上がり。各行 overflow:hidden、文字 span が y 110% + rotate ±30° から着地。
  * 着地 200ms 前に文字の左右に寸法線を 400ms だけ出す。
  * G4 用に各文字の外側 span へ style を渡せる（letterStyles[i]）。
- * @param {{ lines: string[], play: boolean, letterStyles?: object[], onFontSize?: (fs:number)=>void }} props
+ * @param {{ lines: string[], play: boolean, letterStyles?: object[], titleStyle?: object, measureFont?: string }} props
+ *   書体は全ページ共通で Bungee（400 のみ、大文字）。titleStyle / measureFont を渡すとページ単位で差し替えられる。
  */
-export default function HeroTitle({ lines, play, letterStyles = [], titleStyle }) {
+export default function HeroTitle({ lines, play, letterStyles = [], titleStyle, measureFont }) {
   const { reducedMotion, isMobile } = useMotionPrefs();
   const [fs, setFs] = useState(120);
 
@@ -21,7 +22,7 @@ export default function HeroTitle({ lines, play, letterStyles = [], titleStyle }
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const margin = Math.max(20, vw * 0.05);
-      setFs(fitGiantFontSize(lines, vw - margin * 2, vh));
+      setFs(fitGiantFontSize(lines, vw - margin * 2, vh, measureFont));
     };
     compute();
     fontsReady().then(compute);
@@ -29,7 +30,7 @@ export default function HeroTitle({ lines, play, letterStyles = [], titleStyle }
     const onResize = () => { clearTimeout(t); t = setTimeout(compute, 150); };
     window.addEventListener('resize', onResize);
     return () => { clearTimeout(t); window.removeEventListener('resize', onResize); };
-  }, [lines]);
+  }, [lines, measureFont]);
 
   const [flash, setFlash] = useState(-1);
   useEffect(() => {
@@ -54,8 +55,8 @@ export default function HeroTitle({ lines, play, letterStyles = [], titleStyle }
 
   return (
     <div
-      className="font-latin uppercase font-medium"
-      style={{ fontSize: fs, lineHeight: 0.85, letterSpacing: '-.01em', color: 'var(--bp-ink)', ...titleStyle }}
+      className="uppercase"
+      style={{ fontFamily: '"Bungee", "Chakra Petch", sans-serif', fontWeight: 400, fontSize: fs, lineHeight: 0.85, letterSpacing: 0, color: 'var(--bp-ink)', ...titleStyle }}
       aria-label={lines.join(' ')}
     >
       {lines.map((line, li) => (

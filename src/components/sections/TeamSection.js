@@ -3,7 +3,6 @@ import { motion, useMotionValueEvent, useTransform } from 'framer-motion';
 import { useSectionBase, nextSectionOf } from './useSectionBase';
 import { useWrapperInView } from '../../lib/scroll/useWrapperInView';
 import { sceneBus, uiBus, crosshairBus } from '../../lib/bus';
-import { useTube } from '../gimmicks/TubeController';
 import MeterLabels from '../gimmicks/MeterLabels';
 import { isLatin } from '../../lib/text/splitText';
 import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
@@ -14,7 +13,7 @@ const smoothstep = (a, b, x) => {
 };
 
 /**
- * 003 TEAM 相当（300vh）。G7 計測器ラベル / G8 青円ボタン / G9 等高線 / G13 配管導入 / クロスヘア 22vh。
+ * 003 TEAM 相当（300vh）。G7 計測器ラベル / G8 青円ボタン / G9 等高線 / クロスヘア 22vh。
  * @param {{ label?: string, heading: string, headingLines?: string[], paragraph?: string, sheet: number, coords: {x:string,y:string}, arrow?: 'lr'|'down', prevTail?: string, height?: string }} props
  */
 export default function TeamSection({
@@ -47,13 +46,6 @@ export default function TeamSection({
   }, [inView, ref]);
 
   useEffect(() => sceneBus.subscribe((b) => setLabels(b.contourLabels)), []);
-
-  useTube(ref, [
-    { at: 0, mode: 'none', topY: 0, bottomY: 0, opacity: 1 },
-    { at: 0.55, mode: 'glass', topY: 0, bottomY: 0 },
-    { at: 0.8, mode: 'glass', bottomY: (vh) => vh * 0.49 - 42 },
-    { at: 1, mode: 'glass', bottomY: (vh) => vh * 0.49 - 42 },
-  ]);
 
   const textOpacity = useTransform(p, (v) => 1 - smoothstep(0.62, 0.85, v));
   const tailOpacity = useTransform(p, (v) => (prevTail ? 0.4 * (1 - smoothstep(0.1, 0.25, v)) : 0));

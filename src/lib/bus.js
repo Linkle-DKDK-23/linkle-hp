@@ -9,6 +9,8 @@ export const sceneBus = {
   team: motionValue(0), // TEAM 相当の p（G9 reveal）
   heroVisible: false,
   teamVisible: false,
+  ribbonVisible: false, // 虹色の帯（G13'）。複数セクションが同時に可視になり得るので count で管理
+  ribbonCount: 0,
   mouse: { x: 0, y: 0 },
   revealAt: 0, // REVEAL 完了時刻（粒子の拡散 1.2s 用）
   contourLabels: [],

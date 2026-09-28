@@ -63,9 +63,9 @@ export function splitBunsetsu(text) {
  * @param {string[]} lines
  * @param {number} containerW  マージン内幅 px
  * @param {number} vh
+ * @param {string} [font]  計測に使う書体（既定はヒーロー巨大文字の Bungee 400。ページ単位で差し替える時に渡す）
  */
-export function fitGiantFontSize(lines, containerW, vh) {
-  const font = '500 100px "Instrument Sans"';
+export function fitGiantFontSize(lines, containerW, vh, font = '400 100px "Bungee"') {
   const wMax = Math.max(...lines.map((l) => measureEm(l, font)));
   const fsByWidth = containerW / wMax;
   const capRatio = lines.length > 1 ? 0.24 : 0.32;
@@ -78,7 +78,8 @@ export function fitGiantFontSize(lines, containerW, vh) {
  */
 export function fitGhostFontSize(line, vw, minVw = 0.18, italic = false) {
   const latin = isLatin(line);
-  const font = latin ? `${italic ? 'italic ' : ''}500 100px "Instrument Sans"` : '500 100px "Zen Kaku Gothic New"';
+  // 欧文は Chakra Petch 700（italic 700 も読み込み済み）、和文は Dela Gothic One（巨大見出し用ディスプレイ書体）
+  const font = latin ? `${italic ? 'italic ' : ''}700 100px "Chakra Petch"` : '400 100px "Dela Gothic One"';
   const emW = Math.max(0.2, measureEm(line, font));
   return Math.max(minVw * vw, (1.15 * vw) / emW);
 }

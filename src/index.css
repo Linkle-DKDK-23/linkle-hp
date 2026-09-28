@@ -54,7 +54,7 @@
   --fs-section: clamp(36px, 4vw, 60px);   --fs-section-ja: clamp(32px, 3.4vw, 52px);
   --fs-footer-h: clamp(28px, 3.3vw, 50px); --fs-footer-h-ja: clamp(24px, 2.65vw, 40px);
   --fs-card-title: 26px; --fs-card-title-ja: 22px; --fs-card-item: 15px;
-  --fs-body: 14px; --fs-nav: 13px; --fs-label: 11px;
+  --fs-body: 14px; --fs-nav: 13px; --fs-label: 12px;
   --fs-counter: clamp(64px, 12vh, 100px); --fs-stat: clamp(40px, 4.5vw, 68px);
 
   /* 面に追従する色 */
@@ -70,7 +70,7 @@
     --bp-pill-h: 40px; --bp-circle-btn: 40px;
     --bp-card-w: 240px;
     --bp-blue-btn: 64px;
-    --bp-continue-w: 220px; --bp-continue-h: 48px;
+    --bp-continue-w: 220px; --bp-continue-h: 48px; --bp-continue-fs: 11px; --bp-continue-pad: 18px;
     --bp-tube-w: 72px;
   }
 }
@@ -89,7 +89,9 @@
     height: 100%;
     background: var(--bp-black);
     color: var(--bp-ink);
-    font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+    font-family: "DotGothic16", "Hiragino Kaku Gothic ProN", sans-serif;
+    /* DotGothic16 / Bungee は 400 しか無い。700 指定時に疑似ボールドでドットがにじむのを防ぐ（Chakra Petch は実 700 を持つので影響なし） */
+    font-synthesis: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -184,9 +186,9 @@
   height: var(--bp-pill-h);
   padding: 0 22px;
   border-radius: 999px;
-  font-family: "Instrument Sans", "Zen Kaku Gothic New", sans-serif;
+  font-family: "Chakra Petch", "DotGothic16", sans-serif;
   font-size: var(--fs-nav);
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: .04em;
   white-space: nowrap;
   transition: background-color 240ms var(--bp-ease), color 240ms var(--bp-ease), transform 120ms var(--bp-ease);
@@ -242,6 +244,16 @@ textarea.bp-field { min-height: 160px; padding: 20px; resize: vertical; height: 
 .bp-flip .char .b { position: absolute; top: 100%; left: 0; }
 .bp-flip.is-on .char .a, .bp-flip.is-on .char .b { transform: translateY(-100%); }
 .bp-flip.hover-on:hover .char .a, .bp-flip.hover-on:hover .char .b { transform: translateY(-100%); }
+
+/* G17' ScatterText: リンク時はホバーで各行に下線が左から伸びる */
+.bp-scatter { display: inline-block; color: inherit; text-decoration: none; }
+.bp-scatter .line { padding: 0 .04em; white-space: nowrap; }
+.bp-scatter--link .line::after {
+  content: ''; position: absolute; left: .04em; right: .04em; bottom: .02em; height: .05em;
+  background: currentColor; transform: scaleX(0); transform-origin: left center;
+  transition: transform .45s var(--bp-ease);
+}
+.bp-scatter--link:hover .line::after { transform: scaleX(1); }
 
 /* カードの横トラック（< 1024px） */
 @media (max-width: 1023px) {

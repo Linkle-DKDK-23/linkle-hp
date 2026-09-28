@@ -99,8 +99,9 @@ export default function ParticleField() {
     if (linesRef.current) linesRef.current.visible = visible && !isMobile;
     if (!visible) return;
     const p = sceneBus.hero.get();
-    const morph = smoothstep(0.1, 0.7, p);
-    const pull = smoothstep(0.6, 1.0, p);
+    // 文字変形（p .02→.18）と同時に雲→メッシュ、その後はタグライン固定のままドリーバック（lusion のカメラ引き）
+    const morph = smoothstep(0.04, 0.3, p);
+    const pull = smoothstep(0.3, 0.9, p);
     const t = reducedMotion ? 12.3 : state.clock.elapsedTime;
     const since = sceneBus.revealAt ? (performance.now() - sceneBus.revealAt) / 1200 : 0;
     const k = Math.min(1, Math.max(0, since));

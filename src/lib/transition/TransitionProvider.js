@@ -38,6 +38,11 @@ function reducer(state, action) {
 }
 
 const LOADER_TIMEOUT = 5000;
+/**
+ * 監視タイマー: 各フェーズが規定時間を超えて終わらないとき、強制的に次へ進める（画面が開かない事故の保険）。
+ * 正常時は PRELOAD ≈ 1.8s、SPLIT 0.6s、REVEAL 1.1s、CAPTURE 0.9s、LOADING ≈ 1s。
+ */
+const PHASE_WATCHDOG_MS = { PRELOAD: 15000, SPLIT: 6000, REVEAL: 6000, CAPTURE: 6000, LOADING: 8000 };
 
 export function TransitionProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initial);
@@ -63,6 +68,18 @@ export function TransitionProvider({ children }) {
     document.documentElement.dataset.phase = state.phase;
     if (state.phase === 'IDLE') sceneBus.revealAt = performance.now();
   }, [state.phase]);
+
+  // 監視タイマー: フェーズが長時間止まったら強制的に DONE（アニメーションの完了コールバックが来ない事故への保険）
+  useEffect(() => {
+    const ms = PHASE_WATCHDOG_MS[state.phase];
+    if (!ms) return undefined;
+    const t = setTimeout(() => {
+      // eslint-disable-next-line no-console
+      console.warn(`[transition] phase ${state.phase} が ${ms}ms 以内に終わらなかったため強制的に進めます`);
+      dispatch({ type: 'DONE', phase: state.phase });
+    }, ms);
+    return () => clearTimeout(t);
+  }, [state.phase, state.seq]);
 
   // lenis は IDLE の間だけ動く
   useEffect(() => {
@@ -136,9 +153,10 @@ export function TransitionProvider({ children }) {
     fonts: () => Promise.all([
       fontsReady(),
       ...(document.fonts ? [
-        document.fonts.load('500 1em "Instrument Sans"'),
-        document.fonts.load('400 1em "JetBrains Mono"'),
-        document.fonts.load('500 1em "Zen Kaku Gothic New"'),
+        document.fonts.load('700 1em "Chakra Petch"'),
+        document.fonts.load('400 1em "DotGothic16"'),
+        document.fonts.load('400 1em "Dela Gothic One"'),
+        document.fonts.load('400 1em "Bungee"'),
       ].map((p) => p.catch(() => null)) : []),
     ]),
     webgl: () => webglReady.current.promise,

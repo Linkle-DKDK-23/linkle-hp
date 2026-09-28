@@ -13,11 +13,11 @@ const About = () => {
   const companyInfo = [
     { label: '会社名', value: 'Linkle株式会社' },
     { label: '設立', value: '2025年1月23日' },
-    { label: '代表者', value: '倉石楽生' },
+    { label: '代表者', value: '鳥澤祐介' },
     { label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
     { label: '資本金', value: '8,000,000円' },
     { label: '従業員数', value: '20名' },
-    { label: '事業内容', value: 'Web制作/プラットフォーム運営' },
+    { label: '事業内容', value: 'アプリ受託運営開発事業（Web制作特化）' },
   ];
 
   const address = companyInfo.find((info) => info.label === '所在地')?.value || '';
@@ -47,17 +47,16 @@ const About = () => {
       <HeroSection
         sheet={1}
         lines={['About', 'Us']}
-        left={['会社概要', 'Our Mission', '最新のWeb技術とデザインを駆使し、', 'お客様のビジネスを成長させるソリューションを提供します。']}
+        left={['会社概要', 'Our Mission', '速く、美しく、見つかるWebで、', 'ビジネスの勢いを最大化する。']}
         italicLeft={[3]}
         right={['Company Information', 'Linkle株式会社の基本情報']}
       />
       <IntroSection
         sheet={2}
-        topLeft="私たちは、システム開発のプロフェッショナル集団として、常にお客様の期待を超える価値を届けることを使命としています。"
+        topLeft="私たちは、2025年に生まれた、Web制作に特化したクリエイティブチームです。"
         italicPrefix="私たちは、"
-        bottomRight="技術への情熱と創造性を持って、お客様と共に未来を創造していきます。"
+        bottomRight="速さ。フットワークの軽さと本気のクオリティで、期待の一歩先へ。"
       />
-      <Spacer />
       <TeamSection
         sheet={3}
         heading="Company Information"
@@ -69,7 +68,6 @@ const About = () => {
       <ListSection
         sheet={4}
         height="250vh"
-        tube="through"
         items={companyInfo.map(({ label, value }) => ({ title: label, description: value }))}
       />
       <Spacer />
@@ -77,9 +75,8 @@ const About = () => {
       <CardsSection
         sheet={6}
         height="250vh"
-        giant="Mission"
         label="Access"
-        paragraph="アクセス情報"
+        paragraph="アクセス"
         cards={accessCard}
         layout="wide"
         extra={(
@@ -88,7 +85,12 @@ const About = () => {
           </p>
         )}
       />
-      <LiquidSection sheet={7} />
+      <LiquidSection
+        sheet={7}
+        headingLines={['一緒に、', '勢いをつくろう。']}
+        paragraph="お仕事のご相談も、採用の話も。まずは気軽にどうぞ。"
+        pills={[{ label: '無料で相談する', to: '/contact', variant: 'dark' }]}
+      />
       <FooterSection nextLabel="サービス" nextPath="/service" sheet={9} />
     </article>
   );

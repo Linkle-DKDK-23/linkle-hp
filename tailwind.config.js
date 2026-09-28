@@ -25,10 +25,13 @@ module.exports = {
         primary: '#6ccaf1',
       },
       fontFamily: {
-        sans: ['"Zen Kaku Gothic New"', '"Hiragino Kaku Gothic ProN"', 'sans-serif'],
-        latin: ['"Instrument Sans"', '"Zen Kaku Gothic New"', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        sans: ['"DotGothic16"', '"Hiragino Kaku Gothic ProN"', 'sans-serif'],
+        latin: ['"Chakra Petch"', '"DotGothic16"', 'sans-serif'],
+        mono: ['"DotGothic16"', 'monospace'],
+        display: ['"Dela Gothic One"', '"DotGothic16"', 'sans-serif'],
       },
+      // Chakra Petch は 400 と 700 しか無いので、`font-medium` は 700 に寄せる（500 は 400 に落ちて細く見えるため）
+      fontWeight: { medium: '700' },
       spacing: { margin: 'var(--bp-margin)' },
       zIndex: {
         canvas: '0',
@@ -49,15 +52,15 @@ module.exports = {
     plugin(({ addUtilities }) => {
       addUtilities({
         '.text-label': {
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: '11px',
+          fontFamily: '"DotGothic16", monospace',
+          fontSize: '12px',
           letterSpacing: '.12em',
           textTransform: 'uppercase',
           fontVariantNumeric: 'tabular-nums',
           lineHeight: '1',
         },
         '.text-num': {
-          fontFamily: '"JetBrains Mono", monospace',
+          fontFamily: '"DotGothic16", monospace',
           fontVariantNumeric: 'tabular-nums',
         },
         '.skew-italic': { transform: 'skewX(-10deg)' },

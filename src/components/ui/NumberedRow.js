@@ -16,7 +16,7 @@ export default function NumberedRow({ index, title, description, meta, to, linkL
   const content = (
     <>
       <span className="num text-num" style={{ fontSize: 13, color: 'var(--bp-ink-muted)' }}>{String(index + 1).padStart(3, '0')}</span>
-      <span className="palt" style={{ fontSize: isMobile ? 16 : 18, fontWeight: 500, lineHeight: 1.4 }}>
+      <span className="palt" style={{ fontSize: isMobile ? 16 : 18, fontWeight: 700, lineHeight: 1.4 }}>
         {meta && <span className="text-num block" style={{ fontSize: 11, letterSpacing: '.1em', color: 'var(--bp-ink-muted)', marginBottom: 6 }}>{meta}</span>}
         {title}
       </span>

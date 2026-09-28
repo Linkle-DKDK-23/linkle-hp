@@ -10,7 +10,6 @@ import MenuOverlay from './components/layout/MenuOverlay';
 import GridLayer from './components/layout/GridLayer';
 import FixedUI from './components/layout/FixedUI';
 import SceneCanvas from './components/webgl/SceneCanvas';
-import LiquidTube from './components/gimmicks/LiquidTube';
 import Preloader from './components/gimmicks/Preloader';
 import PageTransition from './components/gimmicks/PageTransition';
 
@@ -39,7 +38,6 @@ function Shell() {
           </Routes>
         </Suspense>
       </SmoothScroll>
-      <LiquidTube />
       <FixedUI />
       <Header />
       <MenuOverlay />

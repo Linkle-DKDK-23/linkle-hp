@@ -21,7 +21,7 @@ const isCJK = (ch) => /[　-鿿＀-￯]/.test(ch);
 /**
  * 1em あたりの文字列幅（em 単位）。
  * @param {string} text
- * @param {string} font  例: '500 100px "Instrument Sans"'（100px で測ることを前提）
+ * @param {string} font  例: '700 100px "Chakra Petch"'（100px で測ることを前提）
  */
 export function measureEm(text, font) {
   const key = `${font}|${text}`;

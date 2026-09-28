@@ -41,7 +41,7 @@ export default function FooterReveal({ sheet }) {
 
   const colStyle = { position: 'relative', paddingLeft: 16, fontSize: 17, lineHeight: `${lh}px`, color: 'var(--bp-ink-dark)' };
   const guide = <i className="absolute top-0 bottom-0 block" style={{ left: 0, width: 1, background: 'var(--bp-dim-dark)' }} aria-hidden="true" />;
-  const headingStyle = { fontFamily: '"Instrument Sans", sans-serif', fontWeight: 500, fontSize: 13, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--bp-ink-dark-muted)', marginBottom: 6, display: 'block' };
+  const headingStyle = { fontFamily: '"Chakra Petch", sans-serif', fontWeight: 700, fontSize: 13, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--bp-ink-dark-muted)', marginBottom: 6, display: 'block' };
 
   return (
     <footer
@@ -86,7 +86,7 @@ export default function FooterReveal({ sheet }) {
         />
         <div style={{ marginTop: blockGap }}>
           <RevealLines lines={[{ text: 'Contact', node: <span style={headingStyle}>Contact</span> }]} startRow={7} />
-          <RevealLines lines={['ご質問やご相談は', 'お気軽にお問い合わせください']} startRow={8} />
+          <RevealLines lines={['まずは、話すところから。', 'ご相談・お見積りは無料です。']} startRow={8} />
         </div>
       </div>
 
@@ -97,7 +97,7 @@ export default function FooterReveal({ sheet }) {
           as="p"
           className="m-0 palt font-medium"
           style={{ fontSize: 'var(--fs-footer-h-ja)', lineHeight: 1.3 }}
-          lines={['最新のWeb技術とデザインで、', 'お客様のビジネスを', '次のステージへ。']}
+          lines={['速く、美しく、', '見つかるWebを、', 'まるごと。']}
           startRow={0}
         />
         <form onSubmit={submit} className="relative" style={{ marginTop: 24, width: isMobile ? '100%' : 'var(--bp-input-w)', maxWidth: '100%' }}>

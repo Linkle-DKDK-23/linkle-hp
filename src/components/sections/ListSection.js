@@ -1,25 +1,20 @@
 import React from 'react';
 import { useSectionBase } from './useSectionBase';
-import { useTube } from '../gimmicks/TubeController';
+import { useRibbon } from '../../lib/scroll/useRibbon';
 import NumberedList from '../gimmicks/NumberedList';
 import SheetNumber from '../ui/SheetNumber';
 import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 
 /**
- * 005 AWARDS 相当（3 桁番号リスト）。G11。
- * @param {{ items: any[], stats?: any[], sheet: number, height?: string, heading?: string, subheading?: string, tube?: 'dim'|'through'|'none', flow?: boolean, children?: any }} props
+ * 005 AWARDS 相当（3 桁番号リスト）。G11。背景に虹色の帯（G13'）。
+ * @param {{ items: any[], stats?: any[], sheet: number, height?: string, heading?: string, subheading?: string, flow?: boolean, children?: any }} props
  */
 export default function ListSection({
-  items, stats, sheet, height = '200vh', heading, subheading, tube = 'dim', flow = false, children,
+  items, stats, sheet, height = '200vh', heading, subheading, flow = false, children,
 }) {
   const { ref } = useSectionBase('dark');
   const { isMobile } = useMotionPrefs();
-  const tubeKfs = tube === 'through'
-    ? [{ at: 0, mode: 'glass', topY: 0, bottomY: (vh) => vh * 0.49 - 42, opacity: 0.4 }, { at: 0.3, mode: 'glass', bottomY: (vh) => vh, opacity: 0.5 }, { at: 1, mode: 'glass', bottomY: (vh) => vh, opacity: 0.5 }]
-    : tube === 'none'
-      ? [{ at: 0, mode: 'none' }]
-      : [{ at: 0, mode: 'glass', topY: 0, bottomY: (vh) => vh * 0.49 - 42, opacity: 0.4 }, { at: 1, mode: 'glass', bottomY: (vh) => vh * 0.49 - 42, opacity: 0.4 }];
-  useTube(ref, tubeKfs);
+  useRibbon(ref);
   const useFlow = flow || isMobile;
   return (
     <section ref={ref} className="bp-section" data-surface="dark" style={{ height: useFlow ? 'auto' : height, minHeight: useFlow ? '100dvh' : undefined }}>

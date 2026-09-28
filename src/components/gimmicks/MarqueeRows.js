@@ -4,7 +4,7 @@ import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 
 /**
  * G10: 3 段逆方向マーキー（文字）。行ピッチ 196px、40s、偶数段 reverse、項目列を 2 回複製。
- * 項目間 120px、区切りは 1px×24px の縦目盛り。段 2 の番号（`01 ヒアリング`）は JetBrains Mono。
+ * 項目間 120px、区切りは 1px×24px の縦目盛り。段 2 の番号（`01 ヒアリング`）は DotGothic16。
  * @param {{ rows: string[][] }} props
  */
 export default function MarqueeRows({ rows }) {
@@ -18,10 +18,10 @@ export default function MarqueeRows({ rows }) {
         {m ? (
           <>
             <span className="text-num" style={{ fontWeight: 500, marginRight: '.4em' }}>{m[1]}</span>
-            <span className="palt" style={{ fontWeight: 500 }}>{m[2]}</span>
+            <span className="palt" style={{ fontWeight: 700 }}>{m[2]}</span>
           </>
         ) : (
-          <span className={isLatin(item) ? 'font-latin' : 'palt'} style={{ fontWeight: 500 }}>{item}</span>
+          <span className={isLatin(item) ? 'font-latin' : 'palt'} style={{ fontWeight: 700 }}>{item}</span>
         )}
         <i className="block" style={{ width: 1, height: 24, background: 'var(--bp-dim)', marginLeft: 120 }} aria-hidden="true" />
       </span>

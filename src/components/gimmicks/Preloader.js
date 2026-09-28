@@ -34,7 +34,9 @@ export default function Preloader() {
   const rectB = useRef(null);
   const windowRef = useRef(null);
   const [visible, setVisible] = useState(true);
-  const [showWindow, setShowWindow] = useState(false);
+  // L 窓は phase から直接描く（state 更新経由だと、REVEAL の effect が走る時点で窓がまだ描画されておらず
+  // ref が取れずに done('REVEAL') が呼ばれない = 100 + L 字のまま止まる、というレースがあった）
+  const showWindow = phase === 'REVEAL';
 
   const active = phase === 'PRELOAD' || phase === 'SPLIT' || phase === 'REVEAL' || phase === 'BOOT' || phase === 'RESET';
 
@@ -42,13 +44,18 @@ export default function Preloader() {
     if (active) setVisible(true);
   }, [active]);
 
+  // 監視タイマー等で外から IDLE に進められた場合も、必ずオーバーレイを外す
+  useEffect(() => {
+    if (phase === 'IDLE') setVisible(false);
+  }, [phase]);
+
   // PRELOAD: バー + カウンター
   useEffect(() => {
     if (phase !== 'PRELOAD') return undefined;
     const root = rootRef.current;
     const bar = barRef.current;
     if (!root || !bar) return undefined;
-    setShowWindow(false);
+    gsap.set(root, { opacity: 1 });
     gsap.set([troughRef.current, counterRef.current], { opacity: 1 });
     gsap.set([rectA.current, rectB.current], { opacity: 0 });
     gsap.set(bar, { scaleX: 0 });
@@ -115,28 +122,34 @@ export default function Preloader() {
   // REVEAL: L 窓が拡大回転してワイプ
   useEffect(() => {
     if (phase !== 'REVEAL') return undefined;
-    setShowWindow(true);
     let cancelled = false;
     let tl = null;
-    const raf = requestAnimationFrame(() => {
+    let raf = 0;
+    let tries = 0;
+    const finish = () => { if (!cancelled) { setVisible(false); done('REVEAL'); } };
+    const start = () => {
+      if (cancelled) return;
       const win = windowRef.current;
-      if (!win) return;
+      if (!win) {
+        // 窓がまだ無い場合は数フレーム待って再試行。それでも無ければワイプを省いて先へ進む（止まらせない）
+        tries += 1;
+        if (tries < 60) { raf = requestAnimationFrame(start); return; }
+        finish();
+        return;
+      }
       gsap.set([rectA.current, rectB.current], { opacity: 0 });
       gsap.set(counterRef.current, { opacity: 0 });
       const g = win.geometry;
       if (reducedMotion) {
         win.setTransform({ scale: 1, rotation: -8 });
-        gsap.to(rootRef.current, {
-          opacity: 0, duration: 0.2, onComplete: () => { if (!cancelled) { setVisible(false); done('REVEAL'); } },
-        });
+        gsap.to(rootRef.current, { opacity: 0, duration: 0.2, onComplete: finish });
         return;
       }
-      tl = gsap.timeline({
-        onComplete: () => { if (!cancelled) { setVisible(false); done('REVEAL'); } },
-      });
+      tl = gsap.timeline({ onComplete: finish });
       tl.add(win.tween({ scale: 1, rotation: -8 }, { scale: g.coverScale, rotation: -35 }, { duration: T.reveal, ease: 'power3.inOut' }), 0);
       tl.to(win.paneG(), { opacity: 0, duration: T.reveal * 0.4, ease: 'power2.in' }, T.reveal * 0.6);
-    });
+    };
+    raf = requestAnimationFrame(start);
     return () => { cancelled = true; cancelAnimationFrame(raf); if (tl) tl.kill(); };
   }, [phase, done, reducedMotion]);
 

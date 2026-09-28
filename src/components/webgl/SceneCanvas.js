@@ -5,11 +5,13 @@ import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 import { sceneBus } from '../../lib/bus';
 import ParticleField from './ParticleField';
 import ContourField from './ContourField';
+import RibbonField from './RibbonField';
 import ParticleField2D from './ParticleField2D';
 import ContourField2D from './ContourField2D';
 
 /**
- * R3F <Canvas> 1 枚（z 0、fixed）。G2 / G9 を内包。可視シーンが 0 のとき frameloop='never'。
+ * R3F <Canvas> 1 枚（z 0、fixed）。G2 / G9 / G13' を内包。可視シーンが 0 のとき frameloop='never'。
+ * 消える側のフェードアウト（RibbonField）を描き切るため、停止は 800ms 遅らせる。
  * WebGL 非対応時は Canvas2D 版を同じ位置に描く。
  */
 export default function SceneCanvas() {
@@ -18,9 +20,16 @@ export default function SceneCanvas() {
   const [loop, setLoop] = useState('always');
 
   useEffect(() => {
-    const update = () => setLoop(sceneBus.heroVisible || sceneBus.teamVisible ? 'always' : 'never');
+    let t = 0;
+    const update = () => {
+      const any = sceneBus.heroVisible || sceneBus.teamVisible || sceneBus.ribbonVisible;
+      clearTimeout(t);
+      if (any) setLoop('always');
+      else t = setTimeout(() => setLoop('never'), 800);
+    };
     update();
-    return sceneBus.subscribe(update);
+    const off = sceneBus.subscribe(update);
+    return () => { clearTimeout(t); off(); };
   }, []);
 
   useEffect(() => {
@@ -70,6 +79,7 @@ export default function SceneCanvas() {
         <Suspense fallback={null}>
           <ParticleField />
           <ContourField />
+          <RibbonField />
         </Suspense>
       </Canvas>
     </div>

@@ -31,12 +31,13 @@ export default function ContourField() {
     if (mesh.current) mesh.current.visible = visible;
     if (!visible || !mat.current) return;
     const p = sceneBus.team.get();
-    let reveal = smoothstep(0.05, 0.3, p);
+    // 入りは早く（約 1 秒分のスクロールで全開）、抜けはブランド面に隠れる直前
+    let reveal = smoothstep(0.02, 0.14, p);
     if (p > 0.9) reveal *= 1 - smoothstep(0.9, 1, p);
     mat.current.uReveal = reveal;
     mat.current.uTime = reducedMotion ? 3.7 : state.clock.elapsedTime;
     mat.current.uAspect = size.width / size.height;
-    mat.current.uLines = isMobile ? 10 : 14;
+    mat.current.uLines = isMobile ? 3 : 4;
   });
 
   return (

@@ -12,7 +12,7 @@ import CardsSection from '../../components/sections/CardsSection';
 import LiquidSection from '../../components/sections/LiquidSection';
 import FooterSection from '../../components/sections/FooterSection';
 import Spacer from '../../components/sections/Spacer';
-import GlyphFountain from '../../components/gimmicks/GlyphFountain';
+import Fireworks from '../../components/gimmicks/Fireworks';
 import Pill from '../../components/ui/Pill';
 import PixelGlyph from '../../components/ui/PixelGlyph';
 import SplitFlipText from '../../components/ui/SplitFlipText';
@@ -30,7 +30,7 @@ const schema = yup.object({
 
 const zeroRate = motionValue(0);
 
-const labelStyle = { display: 'block', fontSize: 14, fontWeight: 500, color: 'var(--bp-ink-dark)', marginBottom: 10 };
+const labelStyle = { display: 'block', fontSize: 14, fontWeight: 700, color: 'var(--bp-ink-dark)', marginBottom: 10 };
 const requiredMark = <span style={{ color: 'var(--bp-ink-dark-muted)', marginLeft: 4 }}>*</span>;
 const errorStyle = { color: '#c0392b', fontSize: 14, marginTop: 8, marginBottom: 0 };
 
@@ -158,7 +158,7 @@ const Contact = () => {
         <h2 className="m-0 font-medium palt" style={{ fontSize: 'var(--fs-section-ja)', lineHeight: 1.1 }}>送信完了</h2>
         <PixelGlyph char="1" size={34} />
       </div>
-      <p className="m-0" style={{ fontSize: 17, lineHeight: 1.7 }}>お問い合わせありがとうございます。</p>
+      <p className="m-0" style={{ fontSize: 17, lineHeight: 1.7 }}>お問い合わせありがとうございます！</p>
       <p className="m-0" style={{ fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-dark-muted)' }}>担当者より折り返しご連絡いたします。</p>
       <div style={{ marginTop: 16 }}>
         <Pill variant="dark" onClick={() => setSubmitStatus(null)}>新しいお問い合わせ</Pill>
@@ -171,9 +171,9 @@ const Contact = () => {
       <HeroSection
         sheet={1}
         lines={['Contact', 'Us']}
-        left={['Contact Us', 'お気軽に', 'お問い合わせ', 'ください']}
+        left={['お問い合わせ', 'ご相談・お見積りは', 'いつでも、', '無料です。']}
         italicLeft={[3]}
-        right={['ご質問やご相談は', 'お気軽にお問い合わせください']}
+        right={['「まだふわっとしてる」でも大歓迎。', 'まずは、話すところから。']}
       />
       <Spacer />
       <TeamSection sheet={2} height="350vh" heading="Contact Us" headingLines={['Contact', 'Us']} coords={{ x: 'X 0084', y: 'Y 0405' }} arrow="down" />
@@ -185,10 +185,10 @@ const Contact = () => {
         layout="wide"
         cards={[{ title: 'Contact Us', glyph: '1', items: submitStatus === 'success' ? success : form }]}
       >
-        <GlyphFountain ref={fountainRef} rate={zeroRate} active={false} />
+        <Fireworks ref={fountainRef} rate={zeroRate} active={false} />
       </CardsSection>
       <Spacer surface="brand" />
-      <LiquidSection sheet={5} height="300vh" />
+      <LiquidSection sheet={5} />
       <FooterSection nextLabel="ホーム" nextPath="/" sheet={7} />
     </article>
   );

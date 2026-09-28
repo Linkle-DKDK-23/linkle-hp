@@ -38,9 +38,9 @@ const News = () => {
       <HeroSection
         sheet={1}
         lines={['News']}
-        left={['最新情報を', 'お届けします', '最新の', 'ニュース・お知らせ']}
+        left={['ニュース', 'Linkleの「いま」を、', 'いち早く', 'お届けします。']}
         italicLeft={[3]}
-        right={['linkleの最新ニュースやお知らせを', 'こちらでご確認いただけます']}
+        right={['お知らせ・リリース・メディア掲載など', '最新情報はこちらから。']}
       />
       <Spacer />
       <TeamSection sheet={2} heading="News" coords={{ x: 'X 0084', y: 'Y 0405' }} arrow="down" />
@@ -85,21 +85,25 @@ const News = () => {
       ) : (
         <IntroSection
           sheet={3}
-          topLeft="お知らせはありません"
-          bottomRight="現在、掲載中のニュース・お知らせはございません。"
+          topLeft="まだお知らせはありません。"
+          bottomRight="近いうちに、いいニュースをお届けします。"
         />
       )}
       <Spacer />
-      <GhostSection sheet={4} top="最新情報を" bottom="お届けします" tail="News" />
+      <GhostSection sheet={4} top="Latest" bottom="News" tail="What's New" />
       <CardsSection
         sheet={5}
         height="250vh"
-        giant="お届けします"
-        label="最新情報を お届けします"
-        paragraph="linkleの最新ニュースやお知らせをこちらでご確認いただけます"
+        label="Linkleの「いま」"
+        paragraph="お知らせ・リリース・メディア掲載などを随時更新していきます。"
         cards={[]}
       />
-      <LiquidSection sheet={6} />
+      <LiquidSection
+        sheet={6}
+        headingLines={['気になることは、', '直接聞いてください。']}
+        paragraph="取材・掲載のご相談もこちらから。"
+        pills={[{ label: 'お問い合わせ', to: '/contact', variant: 'dark' }]}
+      />
       <FooterSection nextLabel="採用情報" nextPath="/recruit" sheet={8} />
     </article>
   );

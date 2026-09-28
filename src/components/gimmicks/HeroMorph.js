@@ -10,22 +10,36 @@ const smoothstep = (a, b, x) => {
   return t * t * (3 - 2 * t);
 };
 
+/**
+ * タイミング（lusion 録画 2026-09 より）:
+ * - 文字のゴム変形は最初のホイールで約 0.6 秒。p .02→.20 で完了させ、以降は触らない
+ * - タグラインは p .10→.30 で着地し、残り（.30→.82）はカメラ引き（ドリーバック + 周辺減光）の間じっと固定
+ * - p .82→.97 でタグラインが左へ流れ出て、次のイントロ文に場所を渡す
+ */
+const MORPH_START = 0.02;
+const MORPH_LEN = 0.14;
+const LAND_START = 0.10;
+const EXIT_START = 0.82;
+const EXIT_LEN = 0.15;
+
 /** 1 文字分の G4 変形 MotionValue 群 */
 function useLetterMorph(p, i, n, reducedMotion, isMobile) {
-  const t = useTransform(p, (v) => clamp01((v - 0.02 - i * 0.03) / 0.3));
+  const t = useTransform(p, (v) => clamp01((v - MORPH_START - i * 0.012) / MORPH_LEN));
   const scaleX = useTransform(t, (v) => (reducedMotion ? 1 : i === 0 ? 1 - 0.4 * v : 1 + 1.6 * v));
   const skewX = useTransform(t, (v) => (reducedMotion ? 0 : -18 * v));
   const x = useTransform(t, (v) => (reducedMotion ? 0 : `${(isMobile ? 30 : 60) * v * (i / n)}vw`));
   const rotate = useTransform(t, (v) => (reducedMotion ? 0 : (i % 2 ? -6 : 4) * v));
-  const opacity = useTransform([t, p], ([v, pv]) => (reducedMotion ? (pv >= 0.3 ? 0 : 1) : 1 - smoothstep(0.55, 1, v)));
+  const opacity = useTransform([t, p], ([v, pv]) => (reducedMotion ? (pv >= 0.15 ? 0 : 1) : 1 - smoothstep(0.55, 1, v)));
   return { scaleX, skewX, x, rotate, opacity, transformOrigin: 'left bottom' };
 }
 
 function TagLine({ p, j, text, italic, reducedMotion, align }) {
-  const u = useTransform(p, (v) => clamp01((v - 0.25 - j * 0.05) / 0.2));
+  const u = useTransform(p, (v) => clamp01((v - LAND_START - j * 0.02) / 0.10));
   const clip = useTransform(u, (v) => (reducedMotion ? 'inset(0 0 0 0)' : `inset(0 0 ${(1 - v) * 100}% 0)`));
   const color = useTransform(u, [0, 1], ['#8a8d96', '#f0f1fa']);
-  const opacity = useTransform(p, (v) => (reducedMotion ? (v >= 0.3 ? 1 : 0) : 1));
+  const opacity = useTransform(p, (v) => (reducedMotion ? (v >= 0.15 && v < EXIT_START ? 1 : 0) : 1));
+  // 退場: 上の行から順に左へ流れ出る（右揃えの行も同じ方向）
+  const x = useTransform(p, (v) => (reducedMotion ? 0 : `${-130 * smoothstep(EXIT_START + j * 0.012, EXIT_START + EXIT_LEN + j * 0.012, v)}vw`));
   const latin = isLatin(text);
   return (
     <motion.span
@@ -34,6 +48,7 @@ function TagLine({ p, j, text, italic, reducedMotion, align }) {
         clipPath: clip,
         color,
         opacity,
+        x,
         fontSize: latin ? 'var(--fs-tagline)' : 'var(--fs-tagline-ja)',
         lineHeight: 1.42,
         fontWeight: 400,
@@ -47,7 +62,7 @@ function TagLine({ p, j, text, italic, reducedMotion, align }) {
 }
 
 function RowNumber({ p, j }) {
-  const opacity = useTransform(p, (v) => smoothstep(0.5, 0.6, v));
+  const opacity = useTransform(p, (v) => smoothstep(0.30, 0.38, v) * (1 - smoothstep(EXIT_START, EXIT_START + 0.06, v)));
   return (
     <motion.span
       className="text-label absolute"
@@ -62,9 +77,9 @@ function RowNumber({ p, j }) {
 /**
  * G4: 巨大文字のゴム変形 → 左 4 行 / 右 2 行のタグライン着地。行番号 01〜06（B 案）。
  * 巨大文字は HeroTitle の span を使い回す（外側 span に MotionValue を渡す）。
- * @param {{ progress: MotionValue, lines: string[], play: boolean, left: string[], right: string[], italicLeft?: number[], italicRight?: boolean }} props
+ * @param {{ progress: MotionValue, lines: string[], play: boolean, left: string[], right: string[], italicLeft?: number[], italicRight?: boolean, titleStyle?: object, measureFont?: string }} props
  */
-export default function HeroMorph({ progress: p, lines, play, left, right, italicLeft = [], italicRight = false }) {
+export default function HeroMorph({ progress: p, lines, play, left, right, italicLeft = [], italicRight = false, titleStyle, measureFont }) {
   const { reducedMotion, isMobile } = useMotionPrefs();
   const letters = useMemo(() => lines.flatMap((l) => splitChars(l)), [lines]);
   const n = letters.length;
@@ -74,14 +89,15 @@ export default function HeroMorph({ progress: p, lines, play, left, right, itali
     // eslint-disable-next-line react-hooks/rules-of-hooks
     styles.push(useLetterMorph(p, i, Math.max(1, n), reducedMotion, isMobile));
   }
-  const vignette = useTransform(p, (v) => 0.6 * smoothstep(0.6, 1, v));
-  const titleOpacity = useTransform(p, (v) => (v > 0.62 ? 0 : 1));
+  // ドリーバックに合わせて周辺減光がゆっくり深まる
+  const vignette = useTransform(p, (v) => 0.65 * smoothstep(0.3, 0.9, v));
+  const titleOpacity = useTransform(p, (v) => (v > 0.34 ? 0 : 1));
 
   return (
     <>
       {/* 巨大文字（G3 のせり上がり + G4 の変形） */}
       <motion.div className="absolute left-0 right-0" style={{ bottom: '7vh', padding: '0 var(--bp-margin)', opacity: titleOpacity, zIndex: 2 }}>
-        <HeroTitle lines={lines} play={play} letterStyles={styles.slice(0, n)} />
+        <HeroTitle lines={lines} play={play} letterStyles={styles.slice(0, n)} titleStyle={titleStyle} measureFont={measureFont} />
       </motion.div>
 
       {/* タグライン 6 行: 左 4 + 右 2 を同一 grid 行に置き align-items: end でベースライン共有 */}

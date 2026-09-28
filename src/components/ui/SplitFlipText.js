@@ -26,7 +26,9 @@ export default function SplitFlipText({
 
   const hover = (trigger === 'hover' || trigger === 'both') && !reducedMotion;
   return (
-    <Tag ref={ref} className={`bp-flip ${on ? 'is-on' : ''} ${hover ? 'hover-on' : ''} ${className}`} style={style} aria-label={text}>
+    <Tag ref={ref} className={`bp-flip ${on ? 'is-on' : ''} ${hover ? 'hover-on' : ''} ${className}`} style={style}>
+      {/* 支援技術・文字列検索向けの読み上げ用テキスト（分割 span は aria-hidden） */}
+      <span className="sr-only">{text}</span>
       {splitChars(text).map((c, i) => (
         <span key={i} className="char" style={{ '--i': i }} aria-hidden="true">
           <span className="a" style={{ color: colorTop }}>{c === ' ' ? ' ' : c}</span>

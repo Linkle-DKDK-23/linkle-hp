@@ -8,9 +8,10 @@ import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
  * G12: 巨大低コントラスト文字 2 段 + 見切れる末尾行。
  * 各行は max(18vw, 1.15 × 100vw ÷ emW) で画面幅を 15% 以上超える（高さクランプなし、縦は溢れる）。
  * 下段のベースラインを bottom 6vh に固定し、上段・tail はその上に積む（上端で見切れてよい）。
- * @param {{ top: string, bottom: string, tail: string, progress: MotionValue }} props
+ * color / gridOpacity（MotionValue）を渡すと、面のクロスフェードで文字色と方眼を追従させられる（G18'）。
+ * @param {{ top: string, bottom: string, tail: string, progress: MotionValue, color?: MotionValue|string, gridOpacity?: MotionValue|number }} props
  */
-export default function GiantGhostText({ top, bottom, tail, progress }) {
+export default function GiantGhostText({ top, bottom, tail, progress, color = 'var(--bp-ghost)', gridOpacity = 1 }) {
   const { isMobile, reducedMotion } = useMotionPrefs();
   const [fs, setFs] = useState({ top: 300, bottom: 300, tail: 300, showTail: true });
 
@@ -36,40 +37,41 @@ export default function GiantGhostText({ top, bottom, tail, progress }) {
 
   const xTop = useTransform(progress, [0, 1], reducedMotion ? ['0vw', '0vw'] : ['-4vw', '4vw']);
   const xBottom = useTransform(progress, [0, 1], reducedMotion ? ['0vw', '0vw'] : ['3vw', '-3vw']);
-  const fontOf = (s) => (isLatin(s) ? 'font-latin' : 'palt');
+  const fontOf = (s) => (isLatin(s) ? 'font-latin font-bold' : 'font-display');
 
   return (
     <div className="absolute inset-0" style={{ zIndex: 1, overflow: 'hidden', width: '100vw', pointerEvents: 'none' }} aria-hidden="true">
       <div className="absolute left-0 right-0" style={{ bottom: '6vh' }}>
         <div className="relative">
           {fs.showTail && (
-            <div
+            <motion.div
               className={`skew-italic whitespace-nowrap ${fontOf(tail)}`}
               style={{
-                position: 'absolute', bottom: `${fs.top * 0.9}px`, left: '-6vw',
-                fontSize: fs.tail, lineHeight: 0.9, fontWeight: 500, color: 'var(--bp-ghost)',
+                // 上段 + 下段の高さ分だけ上に置く（上段の真上）。translateY(-.55em) でさらに持ち上げ、上端で見切れさせる
+                position: 'absolute', bottom: `${(fs.top + fs.bottom) * 0.9}px`, left: '-6vw',
+                fontSize: fs.tail, lineHeight: 0.9, color,
                 transform: 'translateY(-.55em) skewX(-10deg)',
               }}
             >
               {tail}
-            </div>
+            </motion.div>
           )}
           <motion.div
             className={`whitespace-nowrap ${fontOf(top)}`}
-            style={{ x: xTop, marginLeft: '-6vw', fontSize: fs.top, lineHeight: 0.9, fontWeight: 500, color: 'var(--bp-ghost)', fontStyle: isLatin(top) ? 'italic' : 'normal' }}
+            style={{ x: xTop, marginLeft: '-6vw', fontSize: fs.top, lineHeight: 0.9, color, fontStyle: isLatin(top) ? 'italic' : 'normal' }}
           >
             <span className={isLatin(top) ? '' : 'skew-italic'} style={{ display: 'inline-block' }}>{top}</span>
           </motion.div>
           <motion.div
             className={`whitespace-nowrap ${fontOf(bottom)}`}
-            style={{ x: xBottom, marginLeft: '4vw', fontSize: fs.bottom, lineHeight: 0.9, fontWeight: 500, color: 'var(--bp-ghost)' }}
+            style={{ x: xBottom, marginLeft: '4vw', fontSize: fs.bottom, lineHeight: 0.9, color }}
           >
             {bottom}
           </motion.div>
         </div>
       </div>
-      {/* 文字の上を通る方眼（このセクションだけ z 2 に重ねる） */}
-      <div className="absolute inset-0 bp-grid-inline" style={{ zIndex: 2, pointerEvents: 'none' }} />
+      {/* 文字の上を通る方眼（このセクションだけ z 2 に重ねる）。面のフェードで消える */}
+      <motion.div className="absolute inset-0 bp-grid-inline" style={{ zIndex: 2, pointerEvents: 'none', opacity: gridOpacity }} />
     </div>
   );
 }

@@ -1,17 +1,14 @@
 import React from 'react';
 import { useSectionBase } from './useSectionBase';
-import { useTube } from '../gimmicks/TubeController';
+import { useRibbon } from '../../lib/scroll/useRibbon';
 import MarqueeRows from '../gimmicks/MarqueeRows';
 import SheetNumber from '../ui/SheetNumber';
 import { TLink } from '../../lib/transition/useTransitionNavigate';
 
-/** 004 BRANDS 相当（200vh）。G10 文字マーキー 3 段。配管は中央で暗く残る */
+/** 004 BRANDS 相当（200vh）。G10 文字マーキー 3 段。背景に虹色の帯（G13'） */
 export default function BrandsSection({ label, labelTo, rows, sheet }) {
   const { ref } = useSectionBase('dark');
-  useTube(ref, [
-    { at: 0, mode: 'glass', topY: 0, bottomY: (vh) => vh * 0.49 - 42, opacity: 0.4 },
-    { at: 1, mode: 'glass', bottomY: (vh) => vh * 0.49 - 42, opacity: 0.4 },
-  ]);
+  useRibbon(ref);
   return (
     <section ref={ref} className="bp-section" data-surface="dark" style={{ height: '200vh' }}>
       <div className="bp-sticky">

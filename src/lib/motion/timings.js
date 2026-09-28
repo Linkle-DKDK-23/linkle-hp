@@ -16,6 +16,8 @@ export const T = {
   decode: 0.06,
   listRow: { d: 0.5, stagger: 0.06 },
   card: { d: 0.7, stagger: 0.08 },
+  cardFan: 0.7,   // G14: 裏向きの束が扇状に広がって定位置へ
+  cardFlip: 0.6,  // G14: 1 枚が表に裏返る時間（左から 0.16s 間隔）
   pillDelay: 1.2,
   pillIn: 0.8,
   pillHide: 0.3,

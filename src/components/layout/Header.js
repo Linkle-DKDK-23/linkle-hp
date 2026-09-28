@@ -19,7 +19,7 @@ const SHOW_V = 1;
  */
 export default function Header() {
   const { phase } = useTransition();
-  const { reducedMotion } = useMotionPrefs();
+  const { reducedMotion, isMobile } = useMotionPrefs();
   const menuOpen = useMenuOpen();
   const groupRef = useRef(null); // 出現 / 隠れ
   const innerRef = useRef(null); // 速度ずれ
@@ -107,7 +107,8 @@ export default function Header() {
       >
         <div ref={groupRef} style={{ transform: 'translateY(100%)', willChange: 'transform' }}>
           <div ref={innerRef} className="flex items-center" style={{ gap: 'var(--bp-pill-gap)', willChange: 'transform' }}>
-            <div style={{ marginRight: 2 }}><CircleButton to="/" /></div>
+            {/* SP はロゴとピル群が重なるので丸ボタンを省く（lusion も SP では 2 ピルのみ） */}
+            {!isMobile && <div style={{ marginRight: 2 }}><CircleButton to="/" /></div>}
             <Pill variant="dark" dots={1} to="/contact">LET'S TALK</Pill>
             <Pill
               variant="light"

@@ -59,12 +59,23 @@ CRA 5 の注意: `three/examples/jsm/*` は使わない（本設計では不要�
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,700;1,700&family=DotGothic16&family=Dela+Gothic+One&family=Bungee&display=swap">
 ```
+
+書体の役割（「若く攻めた」トーンに合わせて 2026-09 に入替。サイバー／エッジ系）:
+
+| 書体 | 役割 | Tailwind |
+|---|---|---|
+| Bungee | 全ページのヒーロー巨大文字（G3 `HeroTitle`、400 のみ・大文字）。`titleStyle` / `measureFont` でページ単位の差し替え可 | インライン |
+| Chakra Petch | 欧文見出し（TeamSection・カード・G12 ゴースト文字の欧文は 700）・ピル・UI。角を落とした角張りで方眼・計測器と揃える | `font-latin` |
+| DotGothic16 | 和文本文・和文見出し（`font-sans` 既定）と、計測器ラベル・番号・カウンター（`.text-label` / `.text-num`）。5×7 ドット文字（PixelGlyph）と同じピクセル言語 | `font-sans` / `font-mono` |
+| Dela Gothic One | 和文の巨大文字（G12 ゴースト文字 / G14 ブランド面の巨大白文字） | `font-display` |
+
+Chakra Petch は 400 / 700 しか無いので、Tailwind の `font-medium` は 700 に再定義している（500 指定は 400 に落ちて細く見えるため）。DotGothic16 と Bungee は 400 のみなので、`html, body` に `font-synthesis: none` を置き、700 指定でも疑似ボールドをかけない。`--fs-label` は DotGothic16 が読める 12px。
 
 `<html lang="en">` は `lang="ja"` に直す。`<meta name="theme-color" content="#000000">` はそのまま。
 
-プリローダーは `document.fonts.load('500 1em "Instrument Sans"')`, `('400 1em "JetBrains Mono"')`, `('500 1em "Zen Kaku Gothic New"')` の 3 つを `Promise.all` で待ってから 100 に到達させる（§2.5）。
+プリローダーは `document.fonts.load('700 1em "Chakra Petch"')`, `('400 1em "DotGothic16"')`, `('400 1em "Dela Gothic One"')`, `('400 1em "Bungee"')` の 4 つを `Promise.all` で待ってから 100 に到達させる（§2.5）。
 
 ### 1.3 `html, body { overflow: hidden }` と仮想スクロールの初期化場所
 
@@ -425,7 +436,8 @@ onScroll(scroll):
 | `LiquidTube.js` | 配管（fixed）。`TubeController` から `{mode, topY, bottomY, fill, ring, break}` を受けて描画 | — | SVG + gsap | G13, G18 |
 | `TubeController.js` | ページ側が `useTube({ sectionRef, from, to })` で区間を登録。スクロール位置から `LiquidTube` の状態を合成 | hook | — | G13 |
 | `ExpertiseCards.js` | 白カード群（4 枚 or 6 枚横トラック / 1 枚幅 664 のフォーム用 `wide`） | `cards: {title, items: string[] | ReactNode, glyph: string}[], layout: 'row4' | 'track6' | 'wide'` | framer-motion | G14 |
-| `GlyphFountain.js` | `+ × ○` 噴水（Canvas2D）。`rate: MotionValue` と imperative `burst()` | `rate, ref` | Canvas2D | G15 |
+| `Fireworks.js` | 花火（Canvas2D、Contact 送信完了のみ）。`rate: MotionValue` と imperative `burst()`（3 発） | `rate, ref` | Canvas2D | G15 |
+| `DotLiquid.js` | 粒子の液体（Canvas2D）。白グリフ粒が下部に溜まり、カーソルで噴き上がって戻る。`burst()` | `active, depth, ref` | Canvas2D | G15' |
 | `SurfaceWipe.js` | 外側 200vh。sticky ブランド面（100dvh）の後ろに白面（100dvh）を通常フローで置き、白面が上がって覆う構造 + 液のメタボール分離を `TubeController` に通知 | `children(brand), children(light)` | framer-motion | G18 |
 | `NextPageBand.js` | 帯 39vh。オーバースクロール累積 → プログレス線 → `go(next)` | `nextLabel: string, nextPath: string, sheet: number` | scrollStore, lenis `virtual-scroll` | G20 |
 | `StatBlock.js` | `20+ チームメンバー` / `99% 顧客満足度` | `stats` | — | G11 |
@@ -710,24 +722,25 @@ Wipe:  [{at:0, breakT:0}, {at:1, breakT:1}]                                     
 - `wide`（About のマップ / Contact のフォーム）: 幅 `calc(2 * var(--bp-card-w) + var(--bp-card-gap))`（= 664px）、高さ auto、傾きなし。
 - RM: フェードのみ。`< 1024px`: `row4` は横スクロールのトラック（`overflow-x: auto; scroll-snap-type: x mandatory`、`touch-action: pan-x`、lenis の wheel と競合しないよう `data-lenis-prevent` を付ける）。SP: `--bp-card-w: 240px`、`PixelGlyph size=28`。
 
-### G15 `+ × ○` 噴水（`gimmicks/GlyphFountain.js`）
+### G15 花火（`gimmicks/Fireworks.js`）— 旧 `+ × ○` 噴水の置き換え（2026-09）
 
 - 技術: Canvas2D（`position: absolute; inset: 0`、DPR 上限 1.5、`z-index: 3`）。`rate: MotionValue`（0〜1）と `ref.burst()`。
+- 構成: ロケット（下端 → 上部 20〜45% の頂点、白い尾）→ 閃光（0.18s）→ 火花（放射状 110 粒 / SP 70。3 割強は環状）。
+- 色: 1 発ごとに白 + パレット `#fff23a #ff4fa3 #ff7a1a #c6ff4a #7b5cff #0b3a56` から 1〜2 色。火花のグリフは `+ × ○ ・`（DotGothic16）。
 - 擬似コード:
 
 ```js
-apex = { x: W/2, y: .47*H }; spreadHalf = 275 * (W/1512); MAX = 500 (SP 220)
-spawn(n): for n: glyph = rand()<.125 ? '○' : (rand()<.5 ? '+' : '×')
-  parts.push({ x: apex.x, y: apex.y, vx: (rand()-.5)*2*spreadHalf/1.6, vy: -(220 + rand()*120), life: 1.8, glyph })
-frame(dt): if (visible) spawn(rate.get() * 18 * dt*60)      // rate=1 で毎フレーム ≈ 18 個
-  for p: p.vy += 380*dt; p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt
-  ctx.clearRect; ctx.fillStyle='#fff'; ctx.font='10px "JetBrains Mono"'
-  for p: ctx.globalAlpha = clamp(p.life,0,1); ctx.fillText(p.glyph, p.x, p.y)   // ○ は ctx.arc(1.6px) で描く
-burst(): spawn(160) を 1 回（Contact 送信成功）
+launch(): rockets.push({ x: W*rand(.25,.75), y: H+8, vy: -H*rand(.85,1.05), targetY: H*rand(.2,.45), colors })
+frame(dt): acc += rate.get()*dt*.7; while (acc>=1) launch()          // rate=1 で約 1.4s に 1 発
+  rocket: y += vy*dt; vy *= 1-.9*dt; if (y<=targetY || vy>-H*.12) explode()
+  explode(): for 110: speed = min(W,H)*.34*(ring ? rand(.85,1) : rand(.25,1)); life = rand(1.1,1.9)
+  spark: vy += 170*dt; vx,vy に空気抵抗; alpha = life/maxLife*1.4 × 明滅（後半のみ）
+burst(): launch() を 0 / 220 / 480ms で 3 発（Contact 送信成功）
 ```
 
+- 1 発目は Canvas の 50% が見えた瞬間（`useWrapperInView`）に即打ち上げ、積算を .35 に置いて次弾を約 0.9 秒後に出す。
 - `LiquidSection` で `rate = useTransform(p, [0, .15, .7, 1], [0, 1, 1, 0])`。G18 でブランド面と一緒に上へ抜ける（Canvas は sticky ブランド面の子なので自然に隠れる）。
-- RM: 1 フレームだけ 120 個を静止配置して停止。noGL: 影響なし（Canvas2D）。SP: MAX 220、`spreadHalf` を `W*.3`。
+- RM: 弾けた直後の火花 3 発分を静止画として 1 回描いて停止。noGL: 影響なし（Canvas2D）。SP: 火花 70 粒 / 発、上限 360 粒、打ち上げ x は 20〜80%。
 
 ### G16 CONTINUE ピル（`ui/ContinuePill.js`）
 
@@ -1034,7 +1047,7 @@ scrollStore.subscribe(({ velocity }) => {
 | G12 | `GiantGhostText fit='exceed'`: 行ごとに `max(18vw, 1.15 × 100vw ÷ emW)` を measureText で算出し、各行が画面幅を 15% 以上超える（高さクランプなし。下段ベースライン bottom 6vh、上段は sticky 上端で見切れてよい、親 `overflow: hidden`）。`--bp-ghost` on `#000`、`nowrap`、上に `tail` の見切れ（上段が上端を超える場合は非描画） |
 | G13 | `LiquidTube`（fixed 中央）+ `TubeController`: Team → Ghost → Cards → Liquid → Wipe を跨いで連続。`mode: 'brand'` で最も強い |
 | G14 | `ExpertiseCards layout='row4'`: 316×442 r16 影なし、`translateY(-i*6px) rotate(tilt)`、`PixelGlyph`、180° ミラー |
-| G15 | `GlyphFountain`: Canvas2D `+ × ○`、頂点 47vh、底辺 550px |
+| G15 | `Fireworks`: Canvas2D 花火。打ち上げ → 上部 20〜45% で爆発、火花 110 粒/発（SP 70）、7 色パレット |
 | G16 | `ContinuePill`: 250×53 白ピル、bottom 58px、`↓` bob |
 | G17 | `SplitFlipText`: 文字二重、`translateY(-100%)` 20ms stagger、inview + hover |
 | G18 | `SurfaceWipe`（外側 200vh）: sticky ブランド面の後ろに通常フローの白面 100dvh が続き、上がって覆う直線境界。液は `breakT` で千切れる |
@@ -1068,3 +1081,47 @@ scrollStore.subscribe(({ velocity }) => {
 3. **ヒーロー巨大文字のフォント計測タイミング** — `fitGiantFontSize` は `document.fonts.ready` 後に測る必要がある。PRELOAD で fonts を待つ設計なので REVEAL 時点では確定しているが、`resize` 時の再計測を忘れると幅が崩れる。
 4. **iOS Safari のタッチスクロール** — `syncTouch: false` で OS 慣性に任せるため、`virtual-scroll` イベントがタッチで発火しない。G20 のタッチ経路（`touchmove` 累積）を別途実装する（§4 G20 に記載）。
 5. **バンドル増** — three は tree-shaking が効きにくい。`import * as THREE` を避け、必要クラスのみ named import。予算 +220KB gzip を超えたら `drei` の import をさらに絞る。
+
+---
+
+## 11. lusion 実サイト（2026-09-28 録画）に基づく質感是正
+
+lusion.co/about は仕様書（§1〜§3）作成時点から更新されている。ユーザー提供の画面録画（74.9 秒、1920×1080、60fps）を ffmpeg で 1fps / 10fps に切り出して測った値で、以下を是正した。構造・面色・寸法は変えていない。
+
+| G | 変更 | 根拠（録画） |
+|---|---|---|
+| G2 粒子雲 | 球を 1.6 倍・グレー 0.55〜1.0 のばらつき・奥は薄く・3% をシアン。渦（中心ほど速い回転）を追加。メッシュ化で白く締まる | 灰色の泡状の雲がうねり、シアンの光が混ざる（0〜14s） |
+| G4 変形 | 文字のゴム変形を p .02→.20 に圧縮（従来 .02→.35）。タグライン着地 p .10→.30。以降 .30→.82 は固定でドリーバック（`uPull` .3→.9、周辺減光 .3→.9）。p .82→.97 でタグラインが上の行から左へ流れ出る | 変形は最初のホイールで約 0.6s、7s の固定、退場は左へ（14〜22s） |
+| G6 イントロ | セクション進捗 .72→.94 で 2 文が左へ流れ出る（`DiagonalIntro progress`）。sticky に `overflow: hidden` | 22〜27s |
+| G9 等高線 | 本数 14 → 4（SP 3）、地形スケール 3 → 1.35、太い芯 + 広いハロー + 霧、線に沿う明滅（大半は薄く一部が強く光る）、下 35% の帯に集める、淡い青のティント、背景に縦のデジタルレイン（14% の列） | 27〜34s。太く少ない発光ライン、縦の筋 |
+| G13 → G13' 虹色の帯 | **縦の配管（LiquidTube / TubeController）は廃止**（ユーザー指示: 中央の棒が邪魔）。代わりに黒面（BRANDS / リスト / 巨大文字）の背景に WebGL の `RibbonField`: 画面幅の水平な帯がカーソルの y に追従し、カーソルの x 付近で太く明るく、ノイズでうねる。縁が虹色（hue は x・帯内位置・時間で回る）、加算合成。`useRibbon(ref)` で可視セクション数を数えて ON/OFF | 44〜49s（カーソルを追う液体ガラスの帯） |
+| G18' 黒→青の繋ぎ目 | 直線ワイプではなく**面全体のクロスフェード**。`GhostSection` の進捗 .86→.97 で背景 黒→ブランド色、巨大文字 `#14171b`→白、方眼・シート番号は消える。同じ白い文字がそのまま上へ流れて青面に続くので、`CardsSection` の頭の白い巨大文字（`giant`）は削除。面の登録はフェード中点でヘッダー線が brand に入るよう 2 分割 | 49.5〜50.0s（背景と文字色が約 0.5 秒で同時に変わる。硬い境界なし） |
+| 002 の間 | `IntroSection` 200vh → 160vh、直後の `Spacer`（Home / About / Recruit）を削除 | ユーザー指摘（次セクションまでが長い） |
+| SP 是正 | G12 の `tail` 行の位置を「上段 + 下段の高さ」ぶん上に修正（従来は上段に重なっていた。PC でも上段が崩れて見えていた原因）。SP では `CardsSection` の中身を上詰めにして、面がスクロールインした瞬間からカードが見えるように。SP のヘッダーは丸ボタンを省き、ロゴとピルの重なりを解消 | ユーザーの SP スクリーンショット（2026-09-28） |
+| G1 プリローダーが開かない（不定期） | 原因: REVEAL 開始時に L 窓を state 更新で表示し、次フレームで ref を参照していたため、React の再描画が遅れると ref が null で処理が抜け `done('REVEAL')` が呼ばれず 100 + L 字で停止。是正: 窓を `phase === 'REVEAL'` から直接描画（同一コミットで ref が揃う）、ref が無ければ最大 60 フレーム再試行してから強制的に先へ。保険として `TransitionProvider` に監視タイマー（PRELOAD 15s / SPLIT・REVEAL・CAPTURE 6s / LOADING 8s）を追加し、超過時は警告を出して次フェーズへ。IDLE でプリローダーの overlay を必ず外す | ヘッドレスで PC / SP 各 6 回（低速回線を交互に）ロードし全て IDLE 到達 |
+| G14 カード | 入場を「裏向きの束（中央）→ 扇状に定位置へ（`T.cardFan` .7s）→ 左から順に表へ裏返る（`T.cardFlip` .6s、.16s 間隔）」に。裏面はブランド色 + 白二重枠 + ドット地紋 + 中央円に 5×7 の `L` | 52〜55s |
+
+未対応（アセットが必要 / 判断待ち）: ヒーローの月面・宇宙飛行士シーン、TEAM の点描ポートレート、CTA の図形リング（現状は花火を維持）。
+
+### 11.x G13' リボン: SP / タブレットは画面中央に固定
+
+- 現象: SP でリボンが画面上端（ヘッダー付近）に寄る。タップ時にブラウザが互換 `mousemove` を発火し、その座標（多くはヘッダーのタップ位置）にリボンが追従したまま留まるため。
+- 対応: `RibbonField` で `isTablet`（<1024px）のときはカーソルを無視し、縦は uv 0.5（画面中央）に固定。明るい膨らみだけ `0.5 + 0.22·sin(t·0.35)` で左右にゆっくり流す。RM は従来どおり中央静止。
+- 検証: ヘッドレス（390×844 / 820×1180、ヘッダーを tap してから）で、黒面の間ずっと中央に出ることをフレームで確認。
+
+### 11.x 008 LiquidSection: lusion "Let's work together!" 面と同じ仕様へ（録画 2026-09-28 23.44.54）
+
+- **G15 花火 → G15' 粒子の液体 `gimmicks/DotLiquid.js`（Canvas2D）**。白いグリフ粒（○ ■ ▲ + ×、間隔 17px / SP 15px、最大 2600 / SP 1100）が画面下部（高さの 38% / SP 30%）に溜まる。Verlet 積分 + 空間ハッシュの分離拘束（最小距離 = 間隔）で砂・液体の質感。カーソルの速度に引きずられて軌跡に沿った帯で噴き上がり（速度結合 ×30、上向き 4200·k、放射 1200+3000·k、半径 0.14H）、重力（2.6H/s²）で落ちて平らに戻る。持ち上がった塊の下に濃い青（rgba(8,60,110)）の影が 1.3 秒で消える。初回可視時に左→右へ 1.1 秒の波を一度通す。`ref.burst()`（中央から全体噴き上げ）は維持。RM: 落ち着いた状態を 1 フレーム。
+- **G17 SplitFlipText → G17' `ui/ScatterText.js`**。カーソルが触れた文字だけ x ±.14em / y ±.36em / 回転 ±30°（16% で ±180°）へ跳び、380ms 後にバネ（stiffness 360 / damping 13）で戻る。同じ文字の再ヒットは 750ms 抑止。`to` を渡すとリンクになり、ホバーで各行に下線が左から伸びる（`.bp-scatter--link .line::after`）。
+- **レイアウト**: 中央寄せ・白文字。上に小ラベル（段落文を `text-label` で）、巨大見出し（Latin `clamp(44px, 8.5vw, 132px)` / JP `clamp(34px, 6.4vw, 96px)`）、その下にピル、下端に CONTINUE ピル。`fountain` / `fountainRef` props は廃止（液体は常に描く）。Contact フォームの送信完了花火（`Fireworks`）は別セクションなので継続。
+- SP: CONTINUE ピルの文字が 2 行に折れていたので 11px / padding 18px / nowrap に。影の半径 0.085H・濃さ 0.2 に抑制。
+- 検証: ヘッドレス（1512×827 / 390×844）で、進入波 → 沈静 → カーソル横断で縦に噴き上がる → 見出し横断で文字が跳ねる → 2 秒後に文字・粒とも復帰、をフレームで確認。
+
+### 11.x 008 → 009 のスクロール: CTA を固定したまま白面が覆う（録画 2026-09-29 0.07.08）
+
+- 録画: "Let's work together!" 面は見出し・粒が固定されたまま、白いフッター面が下端から直線で上がって覆う（約 1 画面ぶんのスクロール）。その後フッター（住所・リンク・ニュースレター）→ 黒い次ページ帯。CTA が先に流れて空の青面が続く間延びは無い。
+- 変更前: LiquidSection 200vh（sticky 100vh）→ 内容がスクロールで上に流れ → FooterSection（SurfaceWipe）の空の青 sticky 100vh → 白面ワイプ。CTA 完成から白面まで約 2 画面ぶんの空白があった。
+- 変更後: `LiquidSection` は `hold`（既定 100）で高さ `(hold+200)vh`、sticky は `hold+100vh` ぶん固定。`FooterSection` は既定 `overlap=true` → `SurfaceWipe` に `margin-top: -200vh`、自身のブランド面を透明・pointer-events none、section `z-index: 3`。白面は hold vh の時点から下端を上がり、200vh で CTA を完全に覆う（CTA の sticky 解除と同時）。`surfaceRegistry` は top が大きい範囲を優先するので、光面 / 帯の判定は SurfaceWipe の計算値が勝つ。
+- CONTINUE ピル: 進入 30vh でフェードイン、白面が上がり始める hold vh から 30vh でフェードアウト。遷移先は白面（`[data-surface="light"]` のフッター）。
+- Contact の `height="300vh"` は廃止（既定 hold）。
+- 検証: ヘッドレス 1512×827 で s=109vh で白が下端 9vh、150vh で半分、200vh で全面 → 黒帯、の順を確認。
