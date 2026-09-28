@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FaCheck, FaEnvelope, FaUser, FaBuilding, FaPaperPlane } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
+import { useSearchParams } from 'react-router-dom';
+import { motionValue } from 'framer-motion';
+import HeroSection from '../../components/sections/HeroSection';
+import TeamSection from '../../components/sections/TeamSection';
+import GhostSection from '../../components/sections/GhostSection';
+import CardsSection from '../../components/sections/CardsSection';
+import LiquidSection from '../../components/sections/LiquidSection';
+import FooterSection from '../../components/sections/FooterSection';
+import Spacer from '../../components/sections/Spacer';
+import Fireworks from '../../components/gimmicks/Fireworks';
+import Pill from '../../components/ui/Pill';
+import PixelGlyph from '../../components/ui/PixelGlyph';
+import SplitFlipText from '../../components/ui/SplitFlipText';
 
 const schema = yup.object({
   type: yup.string().required('お問い合わせ種別を選択してください'),
@@ -17,18 +28,33 @@ const schema = yup.object({
   message: yup.string().required('お問い合わせ内容を入力してください'),
 }).required();
 
+const zeroRate = motionValue(0);
+
+const labelStyle = { display: 'block', fontSize: 14, fontWeight: 700, color: 'var(--bp-ink-dark)', marginBottom: 10 };
+const requiredMark = <span style={{ color: 'var(--bp-ink-dark-muted)', marginLeft: 4 }}>*</span>;
+const errorStyle = { color: '#c0392b', fontSize: 14, marginTop: 8, marginBottom: 0 };
+
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [params] = useSearchParams();
+  const fountainRef = useRef(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    const e = params.get('email');
+    if (e) setValue('email', e);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
@@ -60,6 +86,7 @@ const Contact = () => {
 
       setSubmitStatus('success');
       reset();
+      if (fountainRef.current) fountainRef.current.burst();
     } catch (error) {
       console.error('送信エラー:', error);
       setSubmitStatus('error');
@@ -68,193 +95,102 @@ const Contact = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen pt-20">
-      {/* Page Header */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 gradient-primary opacity-90"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAgMTBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6TTI2IDI0YzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00em0xMCAwYzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+  const form = (
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col" style={{ gap: 24 }}>
+      {/* お問い合わせ種別 */}
+      <div>
+        <label htmlFor="contact-type" style={labelStyle}>お問い合わせ種別{requiredMark}</label>
+        <select id="contact-type" {...register('type')} className={`bp-field ${errors.type ? 'is-error' : ''}`} aria-invalid={!!errors.type}>
+          <option value="">選択してください</option>
+          <option value="service">サービスについて</option>
+          <option value="recruit">採用について</option>
+          <option value="press">取材について</option>
+          <option value="other">その他</option>
+        </select>
+        {errors.type && <p style={errorStyle} role="alert">{errors.type.message}</p>}
+      </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center text-white"
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              Contact Us
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              お気軽にお問い合わせください
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* お名前 */}
+      <div>
+        <label htmlFor="contact-name" style={labelStyle}>お名前{requiredMark}</label>
+        <input id="contact-name" type="text" {...register('name')} className={`bp-field ${errors.name ? 'is-error' : ''}`} placeholder="山田 太郎" aria-invalid={!!errors.name} />
+        {errors.name && <p style={errorStyle} role="alert">{errors.name.message}</p>}
+      </div>
 
-      {/* Contact Form */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            {submitStatus === 'success' ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="card-modern p-12 text-center"
-              >
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <FaCheck className="text-4xl text-green-600" />
-                </div>
-                <h2 className="text-3xl font-bold mb-4">送信完了</h2>
-                <p className="text-xl text-gray-600 mb-2">お問い合わせありがとうございます。</p>
-                <p className="text-gray-600 mb-8">担当者より折り返しご連絡いたします。</p>
-                <button
-                  onClick={() => setSubmitStatus(null)}
-                  className="btn-primary"
-                >
-                  新しいお問い合わせ
-                </button>
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="card-modern p-8 md:p-12"
-              >
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                  {/* お問い合わせ種別 */}
-                  <div>
-                    <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3 text-lg">
-                      <FaEnvelope className="text-primary" />
-                      お問い合わせ種別 <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      {...register('type')}
-                      className={`w-full px-5 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                        errors.type ? 'border-red-300' : 'border-gray-200'
-                      }`}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="service">サービスについて</option>
-                      <option value="recruit">採用について</option>
-                      <option value="press">取材について</option>
-                      <option value="other">その他</option>
-                    </select>
-                    {errors.type && (
-                      <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
-                        {errors.type.message}
-                      </p>
-                    )}
-                  </div>
+      {/* メールアドレス */}
+      <div>
+        <label htmlFor="contact-email" style={labelStyle}>メールアドレス{requiredMark}</label>
+        <input id="contact-email" type="email" {...register('email')} className={`bp-field ${errors.email ? 'is-error' : ''}`} placeholder="example@example.com" aria-invalid={!!errors.email} />
+        {errors.email && <p style={errorStyle} role="alert">{errors.email.message}</p>}
+      </div>
 
-                  {/* お名前 */}
-                  <div>
-                    <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3 text-lg">
-                      <FaUser className="text-primary" />
-                      お名前 <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      {...register('name')}
-                      className={`w-full px-5 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                        errors.name ? 'border-red-300' : 'border-gray-200'
-                      }`}
-                      placeholder="山田 太郎"
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm mt-2">{errors.name.message}</p>
-                    )}
-                  </div>
+      {/* 会社名 */}
+      <div>
+        <label htmlFor="contact-company" style={labelStyle}>会社名</label>
+        <input id="contact-company" type="text" {...register('company')} className="bp-field" placeholder="株式会社〇〇" />
+      </div>
 
-                  {/* メールアドレス */}
-                  <div>
-                    <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3 text-lg">
-                      <FaEnvelope className="text-primary" />
-                      メールアドレス <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      {...register('email')}
-                      className={`w-full px-5 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                        errors.email ? 'border-red-300' : 'border-gray-200'
-                      }`}
-                      placeholder="example@example.com"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>
-                    )}
-                  </div>
+      {/* お問い合わせ内容 */}
+      <div>
+        <label htmlFor="contact-message" style={labelStyle}>お問い合わせ内容{requiredMark}</label>
+        <textarea id="contact-message" {...register('message')} rows="6" data-lenis-prevent className={`bp-field ${errors.message ? 'is-error' : ''}`} placeholder="お問い合わせ内容をご記入ください" aria-invalid={!!errors.message} />
+        {errors.message && <p style={errorStyle} role="alert">{errors.message.message}</p>}
+      </div>
 
-                  {/* 会社名 */}
-                  <div>
-                    <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3 text-lg">
-                      <FaBuilding className="text-primary" />
-                      会社名
-                    </label>
-                    <input
-                      type="text"
-                      {...register('company')}
-                      className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      placeholder="株式会社〇〇"
-                    />
-                  </div>
+      {/* Submit Button */}
+      <div style={{ paddingTop: 8 }}>
+        <Pill type="submit" variant="dark" disabled={isSubmitting} aria-busy={isSubmitting} className="w-full justify-center" style={{ height: 56, opacity: isSubmitting ? 0.7 : 1 }}>
+          {isSubmitting ? '送信中...' : <SplitFlipText text="送信する" colorTop="#fff" colorBottom="var(--bp-brand)" trigger="hover" />}
+        </Pill>
+      </div>
 
-                  {/* お問い合わせ内容 */}
-                  <div>
-                    <label className="flex items-center gap-2 text-gray-700 font-semibold mb-3 text-lg">
-                      <FaPaperPlane className="text-primary" />
-                      お問い合わせ内容 <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      {...register('message')}
-                      rows="6"
-                      className={`w-full px-5 py-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none ${
-                        errors.message ? 'border-red-300' : 'border-gray-200'
-                      }`}
-                      placeholder="お問い合わせ内容をご記入ください"
-                    />
-                    {errors.message && (
-                      <p className="text-red-500 text-sm mt-2">{errors.message.message}</p>
-                    )}
-                  </div>
+      {submitStatus === 'error' && (
+        <p role="alert" className="m-0 text-center" style={{ color: '#c0392b', fontSize: 14 }}>
+          送信に失敗しました。もう一度お試しください。
+        </p>
+      )}
+    </form>
+  );
 
-                  {/* Submit Button */}
-                  <div className="pt-4">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className={`w-full btn-primary text-lg py-5 ${
-                        isSubmitting
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }`}
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          送信中...
-                        </span>
-                      ) : (
-                        <span className="flex items-center justify-center gap-2">
-                          <FaPaperPlane />
-                          送信する
-                        </span>
-                      )}
-                    </button>
-                  </div>
-
-                  {submitStatus === 'error' && (
-                    <div className="bg-red-50 border-2 border-red-200 text-red-800 px-6 py-4 rounded-xl text-center">
-                      送信に失敗しました。もう一度お試しください。
-                    </div>
-                  )}
-                </form>
-              </motion.div>
-            )}
-          </div>
-        </div>
-      </section>
+  const success = (
+    <div className="flex flex-col items-start" style={{ gap: 16 }}>
+      <div className="flex items-center" style={{ gap: 16 }}>
+        <h2 className="m-0 font-medium palt" style={{ fontSize: 'var(--fs-section-ja)', lineHeight: 1.1 }}>送信完了</h2>
+        <PixelGlyph char="1" size={34} />
+      </div>
+      <p className="m-0" style={{ fontSize: 17, lineHeight: 1.7 }}>お問い合わせありがとうございます！</p>
+      <p className="m-0" style={{ fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-dark-muted)' }}>担当者より折り返しご連絡いたします。</p>
+      <div style={{ marginTop: 16 }}>
+        <Pill variant="dark" onClick={() => setSubmitStatus(null)}>新しいお問い合わせ</Pill>
+      </div>
     </div>
+  );
+
+  return (
+    <article data-page="contact">
+      <HeroSection
+        sheet={1}
+        lines={['Contact', 'Us']}
+        left={['お問い合わせ', 'ご相談・お見積りは', 'いつでも、', '無料です。']}
+        italicLeft={[3]}
+        right={['「まだふわっとしてる」でも大歓迎。', 'まずは、話すところから。']}
+      />
+      <Spacer />
+      <TeamSection sheet={2} height="350vh" heading="Contact Us" headingLines={['Contact', 'Us']} coords={{ x: 'X 0084', y: 'Y 0405' }} arrow="down" />
+      <Spacer />
+      <GhostSection sheet={3} height="350vh" top="Contact" bottom="Us" tail="Contact Us" />
+      <CardsSection
+        sheet={4}
+        variant="flow"
+        layout="wide"
+        cards={[{ title: 'Contact Us', glyph: '1', items: submitStatus === 'success' ? success : form }]}
+      >
+        <Fireworks ref={fountainRef} rate={zeroRate} active={false} />
+      </CardsSection>
+      <Spacer surface="brand" />
+      <LiquidSection sheet={5} />
+      <FooterSection nextLabel="ホーム" nextPath="/" sheet={7} />
+    </article>
   );
 };
 

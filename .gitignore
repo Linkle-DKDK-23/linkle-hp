@@ -22,3 +22,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# 参照用の画面録画（サイズが大きいためコミットしない）
+/sample

@@ -1,210 +1,98 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { FaArrowRight, FaMobile, FaLaptopCode, FaSearch, FaPalette, FaRocket, FaShieldAlt } from 'react-icons/fa';
+import HeroSection from '../../components/sections/HeroSection';
+import IntroSection from '../../components/sections/IntroSection';
+import TeamSection from '../../components/sections/TeamSection';
+import BrandsSection from '../../components/sections/BrandsSection';
+import ListSection from '../../components/sections/ListSection';
+import GhostSection from '../../components/sections/GhostSection';
+import CardsSection from '../../components/sections/CardsSection';
+import LiquidSection from '../../components/sections/LiquidSection';
+import FooterSection from '../../components/sections/FooterSection';
+import Spacer from '../../components/sections/Spacer';
 
+/**
+ * 事業内容（Service 01〜05）。番号付きの事業一覧 + 提供形態（01 / 02）で構成する。
+ */
 const Service = () => {
-  const features = [
+  const businesses = [
     {
-      icon: <FaLaptopCode className="text-4xl" />,
-      title: 'レスポンシブデザイン',
-      description: 'スマートフォン、タブレット、PCなど、あらゆるデバイスに最適化されたWebサイトを制作します。',
+      title: 'Webサイト制作事業',
+      description: 'コーポレートサイト、LP、ECサイトまで。要件定義から企画・設計・デザイン・開発・テスト・公開・運用保守を一括で。デザイン力とスピード、公開初日から効く本格SEOを標準装備。',
     },
     {
-      icon: <FaRocket className="text-4xl" />,
-      title: 'モダンな技術スタック',
-      description: 'React、Vue.jsなど最新のフレームワークを使用し、高速で保守性の高いWebサイトを構築します。',
+      title: 'SEO・グロース支援事業',
+      description: 'テクニカルSEO、コンテンツ設計、MEO、アクセス解析。「つくったのに見つからない」を、数字で解決する。',
     },
     {
-      icon: <FaSearch className="text-4xl" />,
-      title: 'SEO最適化',
-      description: '検索エンジンで上位表示されるよう、SEOを考慮した構造とコンテンツで制作します。',
+      title: 'UI/UX・ブランディング事業',
+      description: 'ロゴ、トンマナ、UI設計。「らしさ」を一目で伝えるビジュアルと、迷わせない体験をデザインする。',
     },
     {
-      icon: <FaPalette className="text-4xl" />,
-      title: 'UI/UXデザイン',
-      description: 'ユーザー体験を重視した、直感的で使いやすいインターフェースをデザインします。',
+      title: 'Webアプリ・システム開発事業',
+      description: '業務のWeb化から新規サービスの立ち上げまで。React / Next.js を中心としたモダンな技術で、速く、壊れにくく。',
     },
     {
-      icon: <FaMobile className="text-4xl" />,
-      title: 'パフォーマンス最適化',
-      description: '高速な読み込みとスムーズな動作を実現し、ユーザー満足度を向上させます。',
-    },
-    {
-      icon: <FaShieldAlt className="text-4xl" />,
-      title: 'セキュリティ',
-      description: '最新のセキュリティ対策を実装し、安全で信頼性の高いWebサイトを提供します。',
+      title: '運用・伴走支援事業',
+      description: '公開後こそ本番。改善サイクルを、チームの一員として回し続ける。\n01 スポット改善｜必要な時だけ、必要な分だけ。\n02 月額伴走｜毎月の改善サイクルをチームとして回す。',
     },
   ];
 
   const process = [
-    { step: '01', title: 'ヒアリング', description: 'お客様のニーズと目標を詳しくお伺いします' },
-    { step: '02', title: '企画・提案', description: '最適なソリューションをご提案します' },
-    { step: '03', title: 'デザイン', description: 'UI/UXを考慮したデザインを作成します' },
-    { step: '04', title: '開発', description: '最新技術で高品質な実装を行います' },
-    { step: '05', title: 'テスト', description: '徹底的な品質チェックを実施します' },
-    { step: '06', title: 'リリース', description: '本番環境へのデプロイとサポート' },
+    { step: '01', title: 'ヒアリング', description: '課題とゴールを整理。「何をつくるか」より「なぜつくるか」から。' },
+    { step: '02', title: '企画・提案', description: '戦略・構成・SEO設計をまとめてご提案。見積りもここで。' },
+    { step: '03', title: 'デザイン', description: 'ブランドの「らしさ」を形に。UI/UXまで一気に。' },
+    { step: '04', title: '開発', description: 'モダンな技術で、速く、壊れにくく実装。' },
+    { step: '05', title: 'テスト・SEO実装', description: '全デバイス検証と、公開初日から効くSEOの最終チェック。' },
+    { step: '06', title: '公開・運用', description: 'リリースして終わりじゃない。数字を見て、育て続ける。' },
+  ];
+
+  const marqueeRows = [
+    businesses.map((b) => b.title),
+    process.map((p) => `${p.step} ${p.title}`),
+    ['コーポレートサイト', 'LP', 'ECサイト', 'Webアプリ', 'SEO', 'MEO', 'React', 'Next.js', 'WordPress'],
   ];
 
   return (
-    <div className="min-h-screen pt-20">
-      {/* Page Header */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 gradient-primary opacity-90"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAgMTBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6TTI2IDI0YzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00em0xMCAwYzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center text-white"
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              Our Services
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              最高品質のWeb制作サービスを提供します
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Service Description */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-8">
-                Web制作<span className="text-gradient">サービス</span>
-              </h2>
-              <p className="text-xl text-gray-700 leading-relaxed">
-                お客様のビジネスを成長させるため、最新の技術とデザインを駆使したWebサイトを制作いたします。
-                企業サイト、ECサイト、Webアプリケーションなど、幅広いニーズに対応しています。
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="section-padding gradient-secondary">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Our <span className="text-gradient">Features</span>
-            </h2>
-            <p className="text-xl text-gray-600">
-              私たちが提供する6つの価値
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="card-modern p-8 group cursor-pointer"
-              >
-                <div className="text-primary mb-6 transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                  {feature.icon}
-                </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Development <span className="text-gradient">Process</span>
-            </h2>
-            <p className="text-xl text-gray-600">
-              品質を保証する開発フロー
-            </p>
-          </motion.div>
-
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {process.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  viewport={{ once: true }}
-                  className="relative"
-                >
-                  <div className="card-modern p-6 h-full">
-                    <div className="text-6xl font-bold text-primary/20 mb-4">
-                      {item.step}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      {/* <section className="section-padding relative overflow-hidden">
-        <div className="absolute inset-0 gradient-primary opacity-90"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto text-center text-white"
-          >
-            <h2 className="text-4xl md:text-6xl font-bold mb-8">
-              お気軽に
-              <br />
-              ご相談ください
-            </h2>
-            <p className="text-xl md:text-2xl mb-12 text-white/90">
-              プロジェクトのご相談やお見積もりは無料です
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-white text-primary px-12 py-5 rounded-full font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              お問い合わせ
-              <FaArrowRight />
-            </Link>
-          </motion.div>
-        </div>
-      </section> */}
-    </div>
+    <article data-page="service">
+      <HeroSection
+        sheet={1}
+        lines={['Business']}
+        left={['事業内容', 'Web制作を軸に、', 'つくる・届ける・伸ばすを', 'ワンストップで。']}
+        italicLeft={[3]}
+        right={['Our Business', '5つの事業領域']}
+      />
+      <IntroSection
+        sheet={2}
+        topLeft="「つくって終わり」にしない。設計・デザイン・開発から、SEO・運用・グロースまで一気通貫で伴走します。"
+        bottomRight="一部の工程だけのご相談も歓迎。必要なところに、必要な分だけ。"
+      />
+      <TeamSection
+        sheet={3}
+        heading="Our Business"
+        headingLines={['Our', 'Business']}
+        paragraph="Web制作を軸にした、5つの事業領域。"
+        coords={{ x: 'X 0084', y: 'Y 0405' }}
+      />
+      <BrandsSection sheet={4} rows={marqueeRows} />
+      <Spacer />
+      <ListSection sheet={5} flow heading="事業内容" subheading="Service 01 — 05" items={businesses} />
+      <GhostSection sheet={6} top="Work" bottom="Flow" tail="How we work" />
+      <CardsSection
+        sheet={7}
+        height="350vh"
+        label="成果までの6ステップ"
+        paragraph="ヒアリングから公開・運用まで、一気通貫で。"
+        layout="track6"
+        cards={process.map((p) => ({ title: p.title, items: [p.description], glyph: p.step }))}
+      />
+      <LiquidSection
+        sheet={8}
+        headingLines={['まず、', '話してみませんか？']}
+        paragraph="「何から始めればいいか分からない」でOK。整理するところから一緒にやります。"
+        pills={[{ label: '無料で相談する', to: '/contact', variant: 'dark' }]}
+      />
+      <FooterSection nextLabel="News" nextPath="/news" sheet={10} />
+    </article>
   );
 };
 

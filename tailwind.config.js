@@ -1,25 +1,77 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ['./src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
+        bp: {
+          black: '#000000',
+          brand: '#6ccaf1',
+          white: '#ffffff',
+          band: '#121416',
+          ink: '#f0f1fa',
+          ghost: '#14171b',
+          'pill-dark': '#22272b',
+          'pill-light': '#e6eef2',
+          field: '#f0f1fa',
+          trough: '#34393f',
+          'rule-card': '#cfe9f5',
+          'fluid-0': '#6ccaf1',
+          'fluid-1': '#2a8ec4',
+          'fluid-2': '#0b3a56',
+        },
         primary: '#6ccaf1',
-        'primary-dark': '#5ab8df',
-        'primary-light': '#8ed6f5',
       },
       fontFamily: {
-        sans: [
-          'Noto Sans JP',
-          'Hiragino Kaku Gothic ProN',
-          'Yu Gothic',
-          'Meiryo',
-          'sans-serif',
-        ],
+        sans: ['"DotGothic16"', '"Hiragino Kaku Gothic ProN"', 'sans-serif'],
+        latin: ['"Chakra Petch"', '"DotGothic16"', 'sans-serif'],
+        mono: ['"DotGothic16"', 'monospace'],
+        display: ['"Dela Gothic One"', '"DotGothic16"', 'sans-serif'],
       },
+      // Chakra Petch は 400 と 700 しか無いので、`font-medium` は 700 に寄せる（500 は 400 に落ちて細く見えるため）
+      fontWeight: { medium: '700' },
+      spacing: { margin: 'var(--bp-margin)' },
+      zIndex: {
+        canvas: '0',
+        grid: '1',
+        scroll: '2',
+        tube: '4',
+        ui: '10',
+        header: '50',
+        overlay: '90',
+        transition: '100',
+        preloader: '110',
+      },
+      transitionTimingFunction: { bp: 'cubic-bezier(.2,.8,.2,1)' },
+      borderRadius: { sm: '8px', md: '12px', lg: '16px' },
     },
   },
-  plugins: [],
-}
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.text-label': {
+          fontFamily: '"DotGothic16", monospace',
+          fontSize: '12px',
+          letterSpacing: '.12em',
+          textTransform: 'uppercase',
+          fontVariantNumeric: 'tabular-nums',
+          lineHeight: '1',
+        },
+        '.text-num': {
+          fontFamily: '"DotGothic16", monospace',
+          fontVariantNumeric: 'tabular-nums',
+        },
+        '.skew-italic': { transform: 'skewX(-10deg)' },
+        '.palt': { fontFeatureSettings: '"palt"' },
+        '.mask-line': { overflow: 'hidden', display: 'block' },
+        '.gpu': { willChange: 'transform', backfaceVisibility: 'hidden' },
+        '.surface-dark': { background: 'transparent', color: 'var(--bp-ink)' },
+        '.surface-brand': { background: 'var(--bp-brand)', color: 'var(--bp-ink-dark)' },
+        '.surface-light': { background: 'var(--bp-white)', color: 'var(--bp-ink-dark)' },
+        '.surface-band': { background: 'var(--bp-band)', color: 'var(--bp-ink)' },
+      });
+    }),
+  ],
+};

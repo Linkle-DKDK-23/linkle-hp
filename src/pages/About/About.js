@@ -1,159 +1,98 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { FaMapMarkerAlt, FaBuilding, FaUsers, FaCalendar, FaUserAlt , FaRegMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa';
+import HeroSection from '../../components/sections/HeroSection';
+import IntroSection from '../../components/sections/IntroSection';
+import TeamSection from '../../components/sections/TeamSection';
+import ListSection from '../../components/sections/ListSection';
+import GhostSection from '../../components/sections/GhostSection';
+import CardsSection from '../../components/sections/CardsSection';
+import LiquidSection from '../../components/sections/LiquidSection';
+import FooterSection from '../../components/sections/FooterSection';
+import Spacer from '../../components/sections/Spacer';
 
 const About = () => {
   const companyInfo = [
-    { icon: <FaBuilding />, label: '会社名', value: 'Linkle株式会社' },
-    { icon: <FaCalendar />, label: '設立', value: '2025年1月23日' },
-    { icon: <FaUserAlt />, label: '代表者', value: '鳥澤祐介' },
-    { icon: <FaMapMarkerAlt />, label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
-    { icon: <FaRegMoneyBillAlt />, label: '資本金', value: '8,000,000円' },
-    { icon: <FaUsers />, label: '従業員数', value: '20名' },
-    { icon: <FaConnectdevelop />, label: '事業内容', value: 'Web制作/プラットフォーム運営' },
+    { label: '会社名', value: 'Linkle株式会社' },
+    { label: '設立', value: '2025年1月23日' },
+    { label: '代表者', value: '鳥澤祐介' },
+    { label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
+    { label: '資本金', value: '8,000,000円' },
+    { label: '従業員数', value: '20名' },
+    { label: '事業内容', value: 'アプリ受託運営開発事業（Web制作特化）' },
   ];
 
   const address = companyInfo.find((info) => info.label === '所在地')?.value || '';
   const addressForMap = encodeURIComponent(address.replace(/\n/g, ' '));
 
+  const accessCard = [{
+    title: 'Access',
+    glyph: '1',
+    items: (
+      <div style={{ height: 'min(38vh, 360px)', borderRadius: 12, overflow: 'hidden' }}>
+        <iframe
+          title="Google Map"
+          src={`https://www.google.com/maps?q=${addressForMap}&output=embed`}
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
+    ),
+  }];
+
   return (
-    <div className="min-h-screen pt-20">
-      {/* Page Header */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 gradient-primary opacity-90"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAgMTBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6TTI2IDI0YzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00em0xMCAwYzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center text-white"
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              About Us
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              会社概要
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Company Info */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Company <span className="text-gradient">Information</span>
-              </h2>
-              <p className="text-xl text-gray-600">
-                Linkle株式会社の基本情報
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {companyInfo.map((info, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  viewport={{ once: true }}
-                  className="card-modern p-6"
-                >
-                  <div className="flex items-start gap-4">
-                    {info.icon && (
-                      <div className="text-primary text-2xl mt-1">
-                        {info.icon}
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <dt className="font-bold text-lg mb-2 text-gray-700">
-                        {info.label}
-                      </dt>
-                      <dd className="text-gray-900 text-lg whitespace-pre-line">{info.value}</dd>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission Section */}
-      <section className="section-padding gradient-secondary">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-8">
-                Our <span className="text-gradient">Mission</span>
-              </h2>
-              <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-8">
-                最新のWeb技術とデザインを駆使し、
-                <br className="hidden md:block" />
-                お客様のビジネスを成長させるソリューションを提供します。
-              </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                私たちは、システム開発のプロフェッショナル集団として、常にお客様の期待を超える価値を届けることを使命としています。技術への情熱と創造性を持って、お客様と共に未来を創造していきます。
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="text-gradient">Access</span>
-            </h2>
-            <p className="text-xl text-gray-600">アクセス情報</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="card-modern overflow-hidden">
-              <div className="h-96">
-                <iframe
-                  title="Google Map"
-                  src={`https://www.google.com/maps?q=${addressForMap}&output=embed`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-              <div className="p-4">
-                <p className="text-sm text-gray-500 whitespace-pre-line text-center">{address}</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </div>
+    <article data-page="about">
+      <HeroSection
+        sheet={1}
+        lines={['About', 'Us']}
+        left={['会社概要', 'Our Mission', '速く、美しく、見つかるWebで、', 'ビジネスの勢いを最大化する。']}
+        italicLeft={[3]}
+        right={['Company Information', 'Linkle株式会社の基本情報']}
+      />
+      <IntroSection
+        sheet={2}
+        topLeft="私たちは、2025年に生まれた、Web制作に特化したクリエイティブチームです。"
+        italicPrefix="私たちは、"
+        bottomRight="速さ。フットワークの軽さと本気のクオリティで、期待の一歩先へ。"
+      />
+      <TeamSection
+        sheet={3}
+        heading="Company Information"
+        headingLines={['Company', 'Information']}
+        paragraph="Linkle株式会社の基本情報"
+        coords={{ x: 'X 0084', y: 'Y 0405' }}
+        arrow="down"
+      />
+      <ListSection
+        sheet={4}
+        height="250vh"
+        items={companyInfo.map(({ label, value }) => ({ title: label, description: value }))}
+      />
+      <Spacer />
+      <GhostSection sheet={5} top="Our" bottom="Mission" tail="Our Mission" />
+      <CardsSection
+        sheet={6}
+        height="250vh"
+        label="Access"
+        paragraph="アクセス"
+        cards={accessCard}
+        layout="wide"
+        extra={(
+          <p className="m-0 text-center" style={{ marginTop: 20, fontSize: 'var(--fs-body)', lineHeight: 1.7, whiteSpace: 'pre-line', color: 'var(--bp-ink-dark-muted)' }}>
+            {address}
+          </p>
+        )}
+      />
+      <LiquidSection
+        sheet={7}
+        headingLines={['一緒に、', '勢いをつくろう。']}
+        paragraph="お仕事のご相談も、採用の話も。まずは気軽にどうぞ。"
+        pills={[{ label: '無料で相談する', to: '/contact', variant: 'dark' }]}
+      />
+      <FooterSection nextLabel="サービス" nextPath="/service" sheet={9} />
+    </article>
   );
 };
 

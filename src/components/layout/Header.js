@@ -1,154 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { TLink } from '../../lib/transition/useTransitionNavigate';
+import { useTransition } from '../../lib/transition/TransitionProvider';
+import { scrollStore } from '../../lib/scroll/scrollStore';
+import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
+import { menuStore, useMenuOpen } from '../../lib/menuStore';
+import { T } from '../../lib/motion/timings';
+import Pill from '../ui/Pill';
+import CircleButton from '../ui/CircleButton';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
+const HIDE_V = 6;
+const SHOW_V = 1;
 
+/**
+ * G22: ヘッダー。ロゴ（面で反転）+ 円ボタン + 2 ピル。
+ * ピル群は overflow:hidden の窓（高さ 45px）に入れ、REVEAL + 1.2s で下から現れ、
+ * 速度連動で ±30px ずれ、|velocity| > 6 の間は上へ隠れる（150ms 静止で復帰）。
+ */
+export default function Header() {
+  const { phase } = useTransition();
+  const { reducedMotion, isMobile } = useMotionPrefs();
+  const menuOpen = useMenuOpen();
+  const groupRef = useRef(null); // 出現 / 隠れ
+  const innerRef = useRef(null); // 速度ずれ
+  const shownRef = useRef(false);
+  const hiddenRef = useRef(false);
+
+  // 初回・遷移後の遅延出現
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const group = groupRef.current;
+    if (!group) return undefined;
+    if (phase === 'IDLE') {
+      const t = setTimeout(() => {
+        shownRef.current = true;
+        gsap.to(group, { yPercent: 0, opacity: 1, duration: reducedMotion ? 0.3 : T.pillIn, ease: 'power3.out' });
+      }, T.pillDelay * 1000);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'CAPTURE' || phase === 'RESET') {
+      shownRef.current = false;
+      hiddenRef.current = false;
+      gsap.set(group, { yPercent: 100, opacity: reducedMotion ? 0 : 1 });
+    }
+    return undefined;
+  }, [phase, reducedMotion]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  // 速度ずれ + 速度ベースの隠れ
   useEffect(() => {
-    setIsMenuOpen(false);
-  }, [location]);
-
-  const navItems = [
-    { path: '/', label: 'ホーム' },
-    { path: '/about', label: '会社概要' },
-    { path: '/service', label: 'サービス' },
-    { path: '/recruit', label: '採用情報' },
-  ];
+    const inner = innerRef.current;
+    const group = groupRef.current;
+    if (!inner || !group) return undefined;
+    const toY = gsap.quickTo(inner, 'y', { duration: 0.25, ease: 'power2.out' });
+    let idleSince = null;
+    const off = scrollStore.subscribe(({ velocity }) => {
+      if (!shownRef.current) return;
+      const v = reducedMotion ? 0 : velocity;
+      toY(Math.max(-30, Math.min(30, v * 0.3)));
+      const abs = Math.abs(velocity);
+      if (abs > HIDE_V) {
+        idleSince = null;
+        if (!hiddenRef.current && scrollStore.scroll > 40) {
+          hiddenRef.current = true;
+          gsap.to(group, { yPercent: -100, duration: T.pillHide, ease: 'power2.out', overwrite: 'auto' });
+        }
+      } else if (abs < SHOW_V) {
+        if (idleSince === null) idleSince = performance.now();
+        if (performance.now() - idleSince >= 150 && hiddenRef.current) {
+          hiddenRef.current = false;
+          gsap.to(group, { yPercent: 0, duration: T.pillHide, ease: 'power2.out', overwrite: 'auto' });
+        }
+      }
+    });
+    return off;
+  }, [reducedMotion]);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled || !isHomePage
-          ? 'glass-dark bg-white/80 shadow-lg backdrop-blur-xl'
-          : 'bg-transparent'
-      }`}
+    <header
+      className="fixed inset-x-0 top-0 flex items-center justify-between"
+      style={{
+        zIndex: 'var(--bp-z-header)',
+        height: 'calc(var(--bp-header-y) * 2)',
+        padding: '0 var(--bp-margin)',
+        pointerEvents: 'none',
+      }}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center group">
-            <motion.span
-              whileHover={{ scale: 1.05 }}
-              className={`text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent transition-all ${
-                isScrolled || !isHomePage ? '' : 'text-white'
-              }`}
-            >
-              Linkle
-            </motion.span>
-          </Link>
+      <TLink
+        to="/"
+        className="font-latin uppercase font-medium"
+        style={{
+          fontSize: 22,
+          letterSpacing: '.08em',
+          color: 'var(--cur-logo)',
+          transition: 'color 240ms var(--bp-ease)',
+          pointerEvents: 'auto',
+          lineHeight: 1,
+        }}
+        aria-label="Linkle"
+      >
+        Linkle
+      </TLink>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`relative px-4 py-2 font-medium transition-all duration-300 rounded-full ${
-                  location.pathname === item.path
-                    ? 'text-primary'
-                    : isScrolled || !isHomePage
-                    ? 'text-gray-700 hover:text-primary'
-                    : 'text-white hover:text-primary/80'
-                }`}
-              >
-                {item.label}
-                {location.pathname === item.path && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute inset-0 bg-primary/10 rounded-full -z-10"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
-            ))}
-            <Link
-              to="/contact"
-              className="ml-4 btn-primary !px-6 !py-2 text-sm"
+      <div
+        className="overflow-hidden"
+        style={{ height: 'var(--bp-pill-h)', pointerEvents: 'auto' }}
+        aria-hidden={menuOpen ? 'true' : undefined}
+      >
+        <div ref={groupRef} style={{ transform: 'translateY(100%)', willChange: 'transform' }}>
+          <div ref={innerRef} className="flex items-center" style={{ gap: 'var(--bp-pill-gap)', willChange: 'transform' }}>
+            {/* SP はロゴとピル群が重なるので丸ボタンを省く（lusion も SP では 2 ピルのみ） */}
+            {!isMobile && <div style={{ marginRight: 2 }}><CircleButton to="/" /></div>}
+            <Pill variant="dark" dots={1} to="/contact">LET'S TALK</Pill>
+            <Pill
+              variant="light"
+              dots={2}
+              onClick={() => menuStore.toggle()}
+              aria-expanded={menuOpen}
+              aria-controls="bp-menu"
             >
-              お問い合わせ
-            </Link>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden text-2xl p-2 rounded-lg transition-all ${
-              isScrolled || !isHomePage
-                ? 'text-gray-700 hover:bg-gray-100'
-                : 'text-white hover:bg-white/10'
-            }`}
-          >
-            {isMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
+              MENU
+            </Pill>
+          </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden glass-dark bg-white/95 backdrop-blur-xl border-t border-gray-200"
-          >
-            <nav className="container mx-auto px-4 py-6 space-y-1">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    to={item.path}
-                    className={`block py-3 px-4 rounded-lg font-medium transition-all ${
-                      location.pathname === item.path
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navItems.length * 0.1 }}
-                className="pt-4"
-              >
-                <Link
-                  to="/contact"
-                  className="block text-center btn-primary"
-                >
-                  お問い合わせ
-                </Link>
-              </motion.div>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+    </header>
   );
-};
-
-export default Header;
+}
