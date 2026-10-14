@@ -48,6 +48,26 @@ export default function MenuOverlay() {
         justifyContent: 'space-between',
       }}
     >
+      {/* 閉じるボタン: ヘッダーの MENU ピルと同じ位置（オーバーレイがヘッダーを覆うため、ここに置き換えて出す） */}
+      <Pill
+        variant="light"
+        onClick={() => menuStore.set(false)}
+        tabIndex={open ? 0 : -1}
+        aria-label="メニューを閉じる"
+        className="bp-menu-close"
+        style={{
+          position: 'absolute',
+          top: 'calc(var(--bp-header-y) - var(--bp-pill-h) / 2)',
+          right: 'var(--bp-margin)',
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(0)' : 'translateY(-8px)',
+          transition: 'opacity 240ms var(--bp-ease), transform 240ms var(--bp-ease), background-color 240ms var(--bp-ease), color 240ms var(--bp-ease)',
+          transitionDelay: open ? '200ms' : '0ms',
+        }}
+      >
+        CLOSE
+        <span aria-hidden="true" style={{ marginLeft: 10, fontSize: '1.3em', lineHeight: 1 }}>×</span>
+      </Pill>
       <nav aria-label="MENU">
         <ol className="flex flex-col" style={{ gap: 'clamp(6px, 1.4vh, 14px)' }}>
           {MENU_ITEMS.map((item, i) => {
@@ -90,8 +110,9 @@ export default function MenuOverlay() {
       </nav>
       <div className="flex items-center justify-between">
         <span className="text-label" style={{ color: 'var(--bp-dim)' }}>[[ MENU ]]</span>
-        <Pill variant="light" dots={2} onClick={() => menuStore.set(false)} tabIndex={open ? 0 : -1}>
-          MENU
+        <Pill variant="light" onClick={() => menuStore.set(false)} tabIndex={open ? 0 : -1} aria-label="メニューを閉じる">
+          CLOSE
+          <span aria-hidden="true" style={{ marginLeft: 10, fontSize: '1.3em', lineHeight: 1 }}>×</span>
         </Pill>
       </div>
     </div>
