@@ -6,8 +6,8 @@
   /* 面色 */
   --bp-black: #000000; --bp-brand: #6ccaf1; --bp-white: #ffffff; --bp-band: #121416;
   /* 文字色 */
-  --bp-ink: #f0f1fa; --bp-ink-muted: rgba(240,241,250,.72);
-  --bp-ink-dark: #000000; --bp-ink-dark-muted: rgba(0,0,0,.64); --bp-ghost: #14171b;
+  --bp-ink: #f0f1fa; --bp-ink-muted: rgba(240,241,250,.8);
+  --bp-ink-dark: #000000; --bp-ink-dark-muted: rgba(0,0,0,.72); --bp-ghost: #14171b;
   /* UI 部品（面に関わらず不変） */
   --bp-pill-dark: #22272b; --bp-pill-light: #e6eef2; --bp-field: #f0f1fa;
   --bp-trough: #34393f; --bp-rule-card: #cfe9f5;
@@ -47,6 +47,9 @@
   --bp-z-canvas: 0; --bp-z-grid: 1; --bp-z-scroll: 2; --bp-z-tube: 4; --bp-z-ui: 10;
   --bp-z-header: 50; --bp-z-overlay: 90; --bp-z-transition: 100; --bp-z-preloader: 110;
 
+  /* 本文（長文）用の書体。見出し・ラベルは DotGothic16 / Chakra Petch のまま */
+  --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+
   /* 文字サイズ */
   --fs-ghost-min: 18vw;
   --fs-tagline: clamp(26px, 3.2vw, 48px); --fs-tagline-ja: clamp(22px, 2.7vw, 40px);
@@ -54,7 +57,7 @@
   --fs-section: clamp(36px, 4vw, 60px);   --fs-section-ja: clamp(32px, 3.4vw, 52px);
   --fs-footer-h: clamp(28px, 3.3vw, 50px); --fs-footer-h-ja: clamp(24px, 2.65vw, 40px);
   --fs-card-title: 26px; --fs-card-title-ja: 22px; --fs-card-item: 15px;
-  --fs-body: 14px; --fs-nav: 13px; --fs-label: 12px;
+  --fs-body: 15px; --fs-nav: 13px; --fs-label: 12px;
   --fs-counter: clamp(64px, 12vh, 100px); --fs-stat: clamp(40px, 4.5vw, 68px);
 
   /* 面に追従する色 */
@@ -72,6 +75,7 @@
     --bp-blue-btn: 64px;
     --bp-continue-w: 220px; --bp-continue-h: 48px; --bp-continue-fs: 11px; --bp-continue-pad: 18px;
     --bp-tube-w: 72px;
+    --bp-next-line-w: 64px;
   }
 }
 
@@ -124,6 +128,8 @@
   min-height: 100dvh;
   overflow: hidden;
 }
+/* シグナル・リッジ（SignalField）の上に載る文字: 黒のにじみで直下の線を抜き、可読性を確保する */
+.bp-signal-legible { text-shadow: 0 0 2px #000, 0 0 10px #000, 0 0 22px rgba(0, 0, 0, .9); }
 
 /* 方眼レイヤ */
 .bp-grid {
@@ -237,6 +243,39 @@ textarea.bp-field { min-height: 160px; padding: 20px; resize: vertical; height: 
 .bp-row { border-bottom: 1px dotted var(--bp-dim); transition: color 240ms var(--bp-ease); }
 .bp-row .num { transition: color 240ms var(--bp-ease); }
 .bp-row:hover .num { color: var(--bp-brand); }
+/* 行ホバー: 左端からブランド色の細線が伸び、名称がわずかに右へ */
+.bp-row { position: relative; }
+.bp-row::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, var(--bp-brand), rgba(108,202,241,0));
+  transform: scaleX(0); transform-origin: left; transition: transform 600ms var(--bp-ease);
+}
+.bp-row:hover::before { transform: scaleX(1); }
+.bp-row .ttl { display: inline-block; transition: transform 400ms var(--bp-ease); }
+.bp-row:hover .ttl { transform: translateX(6px); }
+
+/* 長文: 読みやすい本文書体 + ゆったりした行送り + 行末の孤立を防ぐ */
+.bp-body {
+  font-family: var(--font-body); font-weight: 500;
+  font-size: var(--fs-body); line-height: 1.85; letter-spacing: .02em;
+  font-feature-settings: "palt"; text-wrap: pretty;
+}
+
+/* フィルムグレイン: 面のフラットさを崩す微細なノイズ（固定・操作を妨げない） */
+.bp-grain {
+  position: fixed; inset: -50%; pointer-events: none; z-index: var(--bp-z-ui);
+  opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 -.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation: bp-grain 1.2s steps(6) infinite;
+}
+@keyframes bp-grain {
+  0% { transform: translate(0, 0); } 20% { transform: translate(-3%, 2%); } 40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); } 80% { transform: translate(3%, 1%); } 100% { transform: translate(0, 0); }
+}
+
+/* 白面（フッター）がヘッダー位置に来たら固定ロゴを隠す（フッター自身のロゴと二重になるため） */
+.bp-header-logo { transition: color 240ms var(--bp-ease), opacity 240ms var(--bp-ease); }
+:root[data-theme="light"] .bp-header-logo { opacity: 0; pointer-events: none !important; }
 
 /* 文字二重分割 */
 .bp-flip .char { display: inline-block; position: relative; overflow: hidden; height: 1em; line-height: 1; vertical-align: top; }
@@ -262,6 +301,7 @@ textarea.bp-field { min-height: 160px; padding: 20px; resize: vertical; height: 
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bp-grain { animation: none; }
   .bp-marquee-track { animation: none; }
   .bp-bob { animation: none; }
   .bp-reveal .line, .bp-reveal .ch { transition: opacity .2s; transform: none; opacity: 0; }

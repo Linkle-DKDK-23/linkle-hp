@@ -159,7 +159,7 @@ const Contact = () => {
         <PixelGlyph char="1" size={34} />
       </div>
       <p className="m-0" style={{ fontSize: 17, lineHeight: 1.7 }}>お問い合わせありがとうございます！</p>
-      <p className="m-0" style={{ fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-dark-muted)' }}>担当者より折り返しご連絡いたします。</p>
+      <p className="m-0 bp-body" style={{ color: 'var(--bp-ink-dark-muted)' }}>担当者より折り返しご連絡いたします。</p>
       <div style={{ marginTop: 16 }}>
         <Pill variant="dark" onClick={() => setSubmitStatus(null)}>新しいお問い合わせ</Pill>
       </div>

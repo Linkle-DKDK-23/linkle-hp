@@ -90,7 +90,7 @@ export default function NextPageBand({ nextLabel, nextPath, sheet }) {
         </p>
       </div>
       <div className="flex items-end justify-between" style={{ marginTop: isMobile ? 24 : 36 }}>
-        <p className={`m-0 font-medium ${isLatin(nextLabel) ? 'font-latin' : 'palt'}`} style={{ fontSize: isMobile ? 32 : 50, lineHeight: 1 }}>{nextLabel}</p>
+        <p className={`m-0 font-medium ${isLatin(nextLabel) ? 'font-latin' : 'palt'}`} style={{ fontSize: isMobile ? 32 : 50, lineHeight: 1, whiteSpace: 'nowrap' }}>{nextLabel}</p>
         <button
           type="button"
           className="flex items-center"

@@ -60,6 +60,8 @@ function Card({ card, i, n, layout, inView, reducedMotion, glyphSize }) {
   const step = wide ? 0 : i * 6;
   const latin = isLatin(card.title);
   const items = Array.isArray(card.items) ? card.items : null;
+  // 短い値 1 つだけのカード（設立・従業員数など）は、値そのものを大きく見せる
+  const bigValue = items && items.length === 1 && typeof items[0] === 'string' && items[0].length <= 8;
   const flip = !wide && !reducedMotion;
   // 入場: 中央に重なった 1 束（裏向き）→ 扇状に広がって定位置へ → 左から順に表へ裏返る
   const centerDx = flip ? ((n - 1) / 2 - i) * (cardWidthPx() + 32) : 0;
@@ -92,9 +94,11 @@ function Card({ card, i, n, layout, inView, reducedMotion, glyphSize }) {
             {items.map((it, k) => (
               <li
                 key={k}
+                className={bigValue ? 'palt' : 'bp-body'}
                 style={{
-                  fontSize: 'var(--fs-card-item)',
-                  lineHeight: 1.5,
+                  ...(bigValue
+                    ? { fontSize: 'clamp(28px, 2.5vw, 38px)', lineHeight: 1.15, letterSpacing: '-.01em' }
+                    : { fontSize: 'var(--fs-card-item)', lineHeight: 1.7 }),
                   minHeight: 52,
                   display: 'flex',
                   alignItems: 'center',

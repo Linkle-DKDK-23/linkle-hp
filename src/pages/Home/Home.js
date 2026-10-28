@@ -9,9 +9,10 @@ import CardsSection from '../../components/sections/CardsSection';
 import LiquidSection from '../../components/sections/LiquidSection';
 import FooterSection from '../../components/sections/FooterSection';
 import Spacer from '../../components/sections/Spacer';
+import { MARQUEE_ROWS } from '../../content/marquee';
 
 const Home = () => {
-  // 3 つの武器: デザイン力 / スピード / 本格SEO
+  // 6 つの武器: デザイン力 / スピード / 本格SEO / システム開発 / 業務効率化 / 保守・セキュリティ
   const strengths = [
     {
       title: 'デザイン力',
@@ -25,6 +26,18 @@ const Home = () => {
       title: '本格SEO',
       description: 'テクニカルSEOからコンテンツ設計まで。公開した瞬間から、検索で見つかる構造。',
     },
+    {
+      title: 'システム開発',
+      description: 'Webアプリ・業務システムを要件定義から設計・実装まで一気通貫で。将来の拡張に耐える設計でつくる。',
+    },
+    {
+      title: '業務効率化',
+      description: '手作業や属人化した業務を洗い出し、ツール導入から自動化まで。現場が無理なく回る仕組みに変える。',
+    },
+    {
+      title: '保守・セキュリティ',
+      description: 'テスト、コードレビュー、脆弱性対策を標準装備。公開後の運用・改善まで、長く安心して任せられる。',
+    },
   ];
 
   const stats = [
@@ -32,18 +45,11 @@ const Home = () => {
     { number: '99%', label: '顧客満足度' },
   ];
 
-  // 文字マーキー 3 段
-  const marqueeRows = [
-    ['デザイン', 'スピード', '本格SEO', 'UI/UX', 'ブランディング', 'グロース'],
-    ['01 ヒアリング', '02 企画・提案', '03 デザイン', '04 開発', '05 テスト・SEO実装', '06 公開・運用'],
-    ['コーポレートサイト', 'LP', 'ECサイト', 'Webアプリ', 'React', 'Next.js', 'WordPress'],
-  ];
-
   const companyCards = [
     { title: '設立', items: ['2025年1月'], glyph: '1' },
     { title: '所在地', items: ['東京・池袋'], glyph: '2' },
     { title: '従業員数', items: ['20名'], glyph: '3' },
-    { title: '事業内容', items: ['Web制作 / アプリ受託運営開発'], glyph: '4' },
+    { title: '事業内容', items: ['ホームページ制作', 'Webシステム開発', '業務効率化支援'], glyph: '4' },
   ];
 
   return (
@@ -65,12 +71,12 @@ const Home = () => {
       <TeamSection
         sheet={3}
         label="Linkleの"
-        heading="3つの武器"
-        paragraph="見た目の良さ、公開までの速さ、公開後の伸び。どれも妥協しない。"
+        heading="6つの武器"
+        paragraph="見た目の良さ、公開までの速さ、公開後の伸び、そして確かな技術力。どれも妥協しない。"
         coords={{ x: 'X 0084', y: 'Y 0405' }}
         prevTail="最速で。"
       />
-      <BrandsSection sheet={4} label="事業内容を見る" labelTo="/service" rows={marqueeRows} />
+      <BrandsSection sheet={4} label="事業内容を見る" labelTo="/service" rows={MARQUEE_ROWS} />
       <Spacer />
       <ListSection sheet={5} items={strengths} stats={stats} />
       <Spacer />
