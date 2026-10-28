@@ -53,7 +53,8 @@ export function buildHead(config, path) {
         image: `${site.url}/og/home.png?v=${site.ogImageVersion}`,
         description: pages['/'].description,
         foundingDate: org.foundingDate,
-        founder: { '@type': 'Person', name: org.founder },
+        // 代表者（創業者とは限らないため founder ではなく、役職付きの所属者として表す）
+        employee: { '@type': 'Person', name: org.representative, jobTitle: '代表者', worksFor: { '@id': orgId } },
         numberOfEmployees: { '@type': 'QuantitativeValue', value: org.numberOfEmployees },
         address: {
           '@type': 'PostalAddress',
