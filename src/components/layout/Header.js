@@ -86,12 +86,11 @@ export default function Header() {
     >
       <TLink
         to="/"
-        className="font-latin uppercase font-medium"
+        className="bp-header-logo font-latin uppercase font-medium"
         style={{
           fontSize: 22,
           letterSpacing: '.08em',
           color: 'var(--cur-logo)',
-          transition: 'color 240ms var(--bp-ease)',
           pointerEvents: 'auto',
           lineHeight: 1,
         }}

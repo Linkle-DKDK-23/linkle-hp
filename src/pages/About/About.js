@@ -17,7 +17,7 @@ const About = () => {
     { label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
     { label: '資本金', value: '8,000,000円' },
     { label: '従業員数', value: '20名' },
-    { label: '事業内容', value: 'アプリ受託運営開発事業（Web制作特化）' },
+    { label: '事業内容', value: 'ホームページ制作 / Webシステム開発 / 業務効率化支援' },
   ];
 
   const address = companyInfo.find((info) => info.label === '所在地')?.value || '';
@@ -80,7 +80,7 @@ const About = () => {
         cards={accessCard}
         layout="wide"
         extra={(
-          <p className="m-0 text-center" style={{ marginTop: 20, fontSize: 'var(--fs-body)', lineHeight: 1.7, whiteSpace: 'pre-line', color: 'var(--bp-ink-dark-muted)' }}>
+          <p className="m-0 text-center bp-body" style={{ marginTop: 20, whiteSpace: 'pre-line', color: 'var(--bp-ink-dark-muted)' }}>
             {address}
           </p>
         )}

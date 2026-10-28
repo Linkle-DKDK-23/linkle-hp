@@ -5,6 +5,7 @@ import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 /**
  * G10: 3 段逆方向マーキー（文字）。行ピッチ 196px、40s、偶数段 reverse、項目列を 2 回複製。
  * 項目間 120px、区切りは 1px×24px の縦目盛り。段 2 の番号（`01 ヒアリング`）は DotGothic16。
+ * 項目数が段ごとに違っても流れる速さが揃うよう、周期は項目数に比例させる（約 6.5 項目で 40s / SP 28s）。
  * @param {{ rows: string[][] }} props
  */
 export default function MarqueeRows({ rows }) {
@@ -36,7 +37,11 @@ export default function MarqueeRows({ rows }) {
           style={{ height: pitch, display: 'flex', alignItems: 'flex-start', fontSize, lineHeight: 1, color: 'var(--bp-ink)' }}
           aria-label={row.join(' ')}
         >
-          <div className={`bp-marquee-track ${r % 2 === 1 ? 'is-reverse' : ''}`} aria-hidden={reducedMotion ? undefined : 'true'}>
+          <div
+            className={`bp-marquee-track ${r % 2 === 1 ? 'is-reverse' : ''}`}
+            style={{ animationDuration: `${(row.length * (isMobile ? 28 : 40)) / 6.5}s` }}
+            aria-hidden={reducedMotion ? undefined : 'true'}
+          >
             {row.map(renderItem)}
             {!reducedMotion && row.map((it, k) => renderItem(it, `dup-${k}`))}
           </div>

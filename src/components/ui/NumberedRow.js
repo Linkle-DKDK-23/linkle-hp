@@ -16,16 +16,16 @@ export default function NumberedRow({ index, title, description, meta, to, linkL
   const content = (
     <>
       <span className="num text-num" style={{ fontSize: 13, color: 'var(--bp-ink-muted)' }}>{String(index + 1).padStart(3, '0')}</span>
-      <span className="palt" style={{ fontSize: isMobile ? 16 : 18, fontWeight: 700, lineHeight: 1.4 }}>
+      <span className="palt" style={{ fontSize: isMobile ? 17 : 20, fontWeight: 700, lineHeight: 1.4 }}>
         {meta && <span className="text-num block" style={{ fontSize: 11, letterSpacing: '.1em', color: 'var(--bp-ink-muted)', marginBottom: 6 }}>{meta}</span>}
-        {title}
+        <span className="ttl">{title}</span>
       </span>
       {!isMobile && (
-        <span style={{ fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-muted)', whiteSpace: 'pre-line' }}>{description}</span>
+        <span className="bp-body" style={{ color: 'var(--bp-ink-muted)', whiteSpace: 'pre-line', maxWidth: '38em' }}>{description}</span>
       )}
       <span aria-hidden={to ? undefined : 'true'} style={{ textAlign: 'right', fontSize: 16 }}>{to ? '→' : ''}</span>
       {isMobile && description && (
-        <span style={{ gridColumn: '2 / -1', fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-muted)', whiteSpace: 'pre-line' }}>{description}</span>
+        <span className="bp-body" style={{ gridColumn: '2 / -1', color: 'var(--bp-ink-muted)', whiteSpace: 'pre-line' }}>{description}</span>
       )}
     </>
   );

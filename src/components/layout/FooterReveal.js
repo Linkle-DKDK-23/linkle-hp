@@ -100,10 +100,10 @@ export default function FooterReveal({ sheet }) {
           lines={['速く、美しく、', '見つかるWebを、', 'まるごと。']}
           startRow={0}
         />
-        <form onSubmit={submit} className="relative" style={{ marginTop: 24, width: isMobile ? '100%' : 'var(--bp-input-w)', maxWidth: '100%' }}>
-          <span className="mask-line">
-            <span className="line" style={{ '--r': 3 }}>
-              <label className="sr-only" htmlFor="footer-email">example@example.com</label>
+        <form onSubmit={submit} style={{ marginTop: 24, width: isMobile ? '100%' : 'var(--bp-input-w)', maxWidth: '100%' }}>
+          <RevealLines lines={[{ text: 'メールアドレスから相談をはじめる', node: <label htmlFor="footer-email" style={{ ...headingStyle, marginBottom: 10 }}>メールアドレスから相談をはじめる</label> }]} startRow={3} />
+          <span className="mask-line relative">
+            <span className="line" style={{ '--r': 4 }}>
               <input
                 id="footer-email"
                 type="email"

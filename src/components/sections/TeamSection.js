@@ -72,8 +72,8 @@ export default function TeamSection({
         {/* 右下段落 */}
         {paragraph && (
           <motion.p
-            className="absolute m-0 text-right"
-            style={{ right: 'var(--bp-margin)', bottom: isMobile ? 120 : 60, width: isMobile ? '70vw' : 312, fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink)', opacity: textOpacity, zIndex: 2 }}
+            className="absolute m-0 text-right bp-body bp-signal-legible"
+            style={{ right: 'var(--bp-margin)', bottom: isMobile ? 120 : 60, width: isMobile ? '70vw' : 340, color: 'var(--bp-ink)', opacity: textOpacity, zIndex: 2 }}
           >
             {paragraph}
           </motion.p>

@@ -9,6 +9,7 @@ import CardsSection from '../../components/sections/CardsSection';
 import LiquidSection from '../../components/sections/LiquidSection';
 import FooterSection from '../../components/sections/FooterSection';
 import Spacer from '../../components/sections/Spacer';
+import { MARQUEE_ROWS } from '../../content/marquee';
 
 /**
  * 事業内容（Service 01〜05）。番号付きの事業一覧 + 提供形態（01 / 02）で構成する。
@@ -46,12 +47,6 @@ const Service = () => {
     { step: '06', title: '公開・運用', description: 'リリースして終わりじゃない。数字を見て、育て続ける。' },
   ];
 
-  const marqueeRows = [
-    businesses.map((b) => b.title),
-    process.map((p) => `${p.step} ${p.title}`),
-    ['コーポレートサイト', 'LP', 'ECサイト', 'Webアプリ', 'SEO', 'MEO', 'React', 'Next.js', 'WordPress'],
-  ];
-
   return (
     <article data-page="service">
       <HeroSection
@@ -73,7 +68,7 @@ const Service = () => {
         paragraph="Web制作を軸にした、5つの事業領域。"
         coords={{ x: 'X 0084', y: 'Y 0405' }}
       />
-      <BrandsSection sheet={4} rows={marqueeRows} />
+      <BrandsSection sheet={4} rows={MARQUEE_ROWS} />
       <Spacer />
       <ListSection sheet={5} flow heading="事業内容" subheading="Service 01 — 05" items={businesses} />
       <GhostSection sheet={6} top="Work" bottom="Flow" tail="How we work" />

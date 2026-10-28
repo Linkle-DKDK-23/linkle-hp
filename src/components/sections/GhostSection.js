@@ -3,7 +3,7 @@ import { motion, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { useSurface } from '../../lib/theme/surfaceRegistry';
 import { useSectionProgress } from '../../lib/scroll/useSectionProgress';
-import { useRibbon } from '../../lib/scroll/useRibbon';
+import { useSignal } from '../../lib/scroll/useSignal';
 import GiantGhostText from '../gimmicks/GiantGhostText';
 import SheetNumber from '../ui/SheetNumber';
 
@@ -14,7 +14,7 @@ import SheetNumber from '../ui/SheetNumber';
 const FADE_START = 0.86;
 const FADE_END = 0.97;
 
-/** 006 巨大低コントラスト文字（250vh）。G12 + 背景に虹色の帯（G13'）。終盤でブランド面へクロスフェード（G18'） */
+/** 006 巨大低コントラスト文字（250vh）。G12 + 背景にシグナル・リッジ（G13''）。終盤でブランド面へクロスフェード（G18'） */
 export default function GhostSection({ top, bottom, tail, sheet, height = '250vh' }) {
   const ref = useRef(null);
   const p = useSectionProgress(ref);
@@ -27,10 +27,11 @@ export default function GhostSection({ top, bottom, tail, sheet, height = '250vh
     ];
   }, []);
   useSurface('dark', ref, compute);
-  useRibbon(ref);
+  useSignal(ref);
 
   const bg = useTransform(p, [FADE_START, FADE_END], ['rgba(108,202,241,0)', 'rgba(108,202,241,1)']);
-  const ink = useTransform(p, [FADE_START, FADE_END], ['#14171b', '#ffffff']);
+  // 中間で無彩色の灰（暗い青の上でくすむ）を通らないよう、暗い青緑を経由して白へ
+  const ink = useTransform(p, [FADE_START, (FADE_START + FADE_END) / 2, FADE_END], ['#14171b', '#1d5f7c', '#ffffff']);
   const gridOpacity = useTransform(p, [FADE_START, FADE_END], [1, 0]);
   const sheetOpacity = useTransform(p, [FADE_START, FADE_END], [1, 0]);
 

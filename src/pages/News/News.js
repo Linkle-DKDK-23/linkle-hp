@@ -26,6 +26,14 @@ const News = () => {
   const currentNews = news.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(news.length / itemsPerPage);
 
+  // 「Linkleの『いま』」面のカード: 掲載するお知らせの種類（記事が 0 件でも面が空にならない）
+  const categories = [
+    { title: 'Info', items: ['会社・サービスに関するお知らせ'], glyph: '1' },
+    { title: 'Release', items: ['新サービス・制作実績のリリース'], glyph: '2' },
+    { title: 'Media', items: ['取材・メディア掲載のご報告'], glyph: '3' },
+    { title: 'Recruit', items: ['採用・イベント情報'], glyph: '4' },
+  ];
+
   const goPage = (page, e) => {
     setCurrentPage(page);
     const lenis = getLenis();
@@ -96,7 +104,7 @@ const News = () => {
         height="250vh"
         label="Linkleの「いま」"
         paragraph="お知らせ・リリース・メディア掲載などを随時更新していきます。"
-        cards={[]}
+        cards={categories}
       />
       <LiquidSection
         sheet={6}

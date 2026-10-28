@@ -25,6 +25,7 @@ function Shell() {
     <TransitionProvider>
       <SceneCanvas />
       <GridLayer />
+      <div className="bp-grain" aria-hidden="true" />
       <SmoothScroll>
         <Suspense fallback={null}>
           <Routes>

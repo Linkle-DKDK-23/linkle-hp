@@ -42,7 +42,7 @@ export default function CardsSection({
             <div className="flex items-end justify-between" style={{ marginBottom: isMobile ? 24 : 40, gap: 24, flexWrap: 'wrap' }}>
               <div>
                 {label && <h2 className="m-0 font-medium palt" style={{ fontSize: isLatin(label) ? 'var(--fs-card-title)' : 'var(--fs-card-title-ja)', lineHeight: 1.2 }}>{label}</h2>}
-                {paragraph && <p className="m-0" style={{ marginTop: 10, fontSize: 'var(--fs-body)', lineHeight: 1.7, color: 'var(--bp-ink-dark-muted)', maxWidth: 560 }}>{paragraph}</p>}
+                {paragraph && <p className="m-0 bp-body" style={{ marginTop: 10, color: 'var(--bp-ink-dark-muted)', maxWidth: 560 }}>{paragraph}</p>}
               </div>
               {labelTo && (
                 <TLink to={labelTo} className="inline-flex items-center font-medium" style={{ fontSize: 14, gap: 10, color: 'var(--bp-ink-dark)', borderBottom: '1px solid currentColor', paddingBottom: 2 }}>
