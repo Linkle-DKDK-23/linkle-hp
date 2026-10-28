@@ -4,7 +4,9 @@ import { splitChars, fitGiantFontSize } from '../../lib/text/splitText';
 import { fontsReady } from '../../lib/text/measure';
 import { useMotionPrefs } from '../../lib/motion/MotionPrefsProvider';
 import { EASE, T } from '../../lib/motion/timings';
+import { useLocation } from 'react-router-dom';
 import DimensionLine from '../ui/DimensionLine';
+import seo from '../../content/seo.json';
 
 /**
  * G3: 巨大ブランド名せり上がり。各行 overflow:hidden、文字 span が y 110% + rotate ±30° から着地。
@@ -16,6 +18,9 @@ import DimensionLine from '../ui/DimensionLine';
 export default function HeroTitle({ lines, play, letterStyles = [], titleStyle, measureFont }) {
   const { reducedMotion, isMobile } = useMotionPrefs();
   const [fs, setFs] = useState(120);
+  const { pathname } = useLocation();
+  // ページの h1。見た目は巨大文字のまま、検索エンジン・読み上げ向けに説明的な見出し文を持たせる
+  const heading = seo.pages[pathname.replace(/\/+$/, '') || '/']?.h1 || lines.join(' ');
 
   useLayoutEffect(() => {
     const compute = () => {
@@ -54,11 +59,11 @@ export default function HeroTitle({ lines, play, letterStyles = [], titleStyle, 
   const stagger = isMobile ? T.heroLetter.staggerSp : T.heroLetter.stagger;
 
   return (
-    <div
-      className="uppercase"
+    <h1
+      className="uppercase m-0"
       style={{ fontFamily: '"Bungee", "Chakra Petch", sans-serif', fontWeight: 400, fontSize: fs, lineHeight: 0.85, letterSpacing: 0, color: 'var(--bp-ink)', ...titleStyle }}
-      aria-label={lines.join(' ')}
     >
+      <span className="sr-only">{heading}</span>
       {lines.map((line, li) => (
         <div key={li} className="whitespace-nowrap" style={{ overflow: 'hidden', paddingTop: '.05em', marginTop: '-.05em' }} aria-hidden="true">
           {splitChars(line).map((ch, ci) => {
@@ -91,6 +96,6 @@ export default function HeroTitle({ lines, play, letterStyles = [], titleStyle, 
           })}
         </div>
       ))}
-    </div>
+    </h1>
   );
 }

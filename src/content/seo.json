@@ -1,0 +1,71 @@
+{
+  "site": {
+    "url": "https://linkle.group",
+    "name": "Linkle株式会社",
+    "shortName": "Linkle",
+    "locale": "ja_JP",
+    "ogImageVersion": "20261028",
+    "themeColor": "#000000"
+  },
+  "organization": {
+    "legalName": "Linkle株式会社",
+    "alternateName": "Linkle",
+    "foundingDate": "2025-01-23",
+    "founder": "鳥澤祐介",
+    "numberOfEmployees": 20,
+    "postalCode": "171-0021",
+    "addressRegion": "東京都",
+    "addressLocality": "豊島区",
+    "streetAddress": "西池袋2-36-1 ソフトタウン池袋913号",
+    "knowsAbout": ["ホームページ制作", "Webシステム開発", "業務効率化支援", "SEO", "UI/UXデザイン", "ITコンサルティング"]
+  },
+  "pages": {
+    "/": {
+      "key": "home",
+      "title": "Linkle株式会社 | 東京・池袋のホームページ制作・Webシステム開発",
+      "description": "Linkle株式会社は東京・池袋のWeb制作・システム開発会社です。デザイン力とスピード、本格SEOで「速く、美しく、見つかる」ホームページ制作から、Webシステム開発・業務効率化支援まで一気通貫で伴走します。",
+      "h1": "Linkle株式会社 — 東京・池袋のホームページ制作・Webシステム開発",
+      "ogAlt": "Linkle株式会社 — 速く、美しく、見つかる。ホームページ制作・Webシステム開発"
+    },
+    "/about": {
+      "key": "about",
+      "name": "会社概要",
+      "title": "会社概要 | Linkle株式会社",
+      "description": "Linkle株式会社の会社概要。2025年1月設立、東京都豊島区西池袋のWeb制作・システム開発会社です。代表者・所在地・事業内容・アクセスをご案内します。",
+      "h1": "会社概要 — Linkle株式会社",
+      "ogAlt": "Linkle株式会社 会社概要"
+    },
+    "/service": {
+      "key": "service",
+      "name": "サービス",
+      "title": "サービス | ホームページ制作・Webシステム開発・業務効率化支援 | Linkle株式会社",
+      "description": "Linkle株式会社のサービス。コーポレートサイト・LP・ECサイトのホームページ制作、Webアプリ・業務システム開発、SEO・グロース支援、業務効率化支援まで。ヒアリングから公開・運用まで6ステップで伴走します。",
+      "h1": "サービス — ホームページ制作・Webシステム開発・業務効率化支援",
+      "ogAlt": "Linkle株式会社 サービス — ホームページ制作 / Webシステム開発 / 業務効率化支援"
+    },
+    "/news": {
+      "key": "news",
+      "name": "ニュース",
+      "title": "ニュース | Linkle株式会社",
+      "description": "Linkle株式会社のお知らせ・リリース・メディア掲載・採用情報などの最新ニュースをお届けします。",
+      "h1": "ニュース — Linkle株式会社のお知らせ",
+      "ogAlt": "Linkle株式会社 ニュース"
+    },
+    "/recruit": {
+      "key": "recruit",
+      "name": "採用情報",
+      "title": "採用情報 | Linkle株式会社",
+      "description": "Linkle株式会社の採用情報。モバイル・Web・インフラ・セキュリティエンジニア、Webデザイナーなどを募集しています。勢いのあるチームで、一緒に本気でつくりませんか。",
+      "h1": "採用情報 — Linkle株式会社",
+      "ogAlt": "Linkle株式会社 採用情報"
+    },
+    "/contact": {
+      "key": "contact",
+      "name": "お問い合わせ",
+      "title": "お問い合わせ | Linkle株式会社",
+      "description": "Linkle株式会社へのお問い合わせ。ホームページ制作・Webシステム開発・業務効率化のご相談やお見積りは無料です。「まだふわっとしている」段階でもお気軽にご連絡ください。",
+      "h1": "お問い合わせ — Linkle株式会社",
+      "ogAlt": "Linkle株式会社 お問い合わせ"
+    }
+  }
+}
