@@ -12,6 +12,7 @@ import FixedUI from './components/layout/FixedUI';
 import SceneCanvas from './components/webgl/SceneCanvas';
 import Preloader from './components/gimmicks/Preloader';
 import PageTransition from './components/gimmicks/PageTransition';
+import Seo from './components/layout/Seo';
 
 const Home = React.lazy(pageLoaders['/']);
 const About = React.lazy(pageLoaders['/about']);
@@ -23,6 +24,7 @@ const Contact = React.lazy(pageLoaders['/contact']);
 function Shell() {
   return (
     <TransitionProvider>
+      <Seo />
       <SceneCanvas />
       <GridLayer />
       <div className="bp-grain" aria-hidden="true" />
