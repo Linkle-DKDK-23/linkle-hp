@@ -13,7 +13,7 @@ const About = () => {
   const companyInfo = [
     { label: '会社名', value: 'Linkle株式会社' },
     { label: '設立', value: '2025年1月23日' },
-    { label: '代表者', value: '鳥澤祐介' },
+    { label: '代表者', value: '倉石楽生' },
     { label: '所在地', value: '東京都豊島区西池袋2-36-1\nソフトタウン池袋913号' },
     { label: '資本金', value: '8,000,000円' },
     { label: '従業員数', value: '20名' },
