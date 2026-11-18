@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { meta, crumbLd, faqLd, serviceLd } from '@/lib/seo';
-import { Arrow, JsonLd, Label, PageHead, Cta } from '@/components/ui';
+import { Arrow, Big, JsonLd, Label, PageHead, Cta } from '@/components/ui';
+import { FEATURED, workByIndustry, workHref } from '@/content/works';
 import { INDUSTRIES, bySlug } from '@/content/industries';
 
 export const dynamicParams = false;
@@ -18,6 +19,7 @@ export default async function Industry({ params }) {
   if (!d) notFound();
   const path = `/industries/${d.slug}`;
   const related = d.related.map(bySlug).filter(Boolean);
+  const own = workByIndustry(d.slug), work = own || FEATURED;
   return (
     <main data-page="construction">
       <JsonLd data={crumbLd([{ name: 'ホーム', path: '/' }, { name: '建設業向けシステム開発', path: '/construction-dx' }, { name: '業種から探す', path: '/industries' }, { name: d.name, path }])} />
@@ -65,16 +67,22 @@ export default async function Industry({ params }) {
         <section className="row" data-sec="" data-rings={R([[0.16, 0.55, 0.3, 0.9, 0.6], [0.5, 0.5, 0.1, 0.6, 0], [0.5, 0.5, 0.1, 0.6, 0]])}>
           <div>
             <Label n="04">開発事例</Label>
-            <h2 className="h2" data-rv="">専門工事会社の<br />業務システム</h2>
+            <h2 className="h2" data-rv="">{work.title}</h2>
           </div>
           <div>
-            <div className="fact" data-rv="" style={{ marginTop: 0 }}>
-              <b>1<small>日</small>4<small>時間</small></b>
-              <span>事務作業にかかる時間を減らしました。</span>
-            </div>
+            {work.fact ? (
+              <div className="fact" data-rv="" style={{ marginTop: 0 }}>
+                <Big parts={work.fact.big} />
+                <span>{work.fact.text}<br />{work.client}での開発事例。</span>
+              </div>
+            ) : (
+              <dl className="tbl" data-rv="" style={{ marginBottom: 28 }}>
+                <div><dt>お客様</dt><dd>{work.client}</dd></div>
+                <div><dt>開発範囲</dt><dd>{work.scope.join(' / ')}</dd></div>
+              </dl>
+            )}
             <p className="body" data-rv="">{d.caseNote}</p>
-            <p className="note" data-rv="">お客様のご意向により、社名は掲載していません。</p>
-            <p style={{ marginTop: 28 }} data-rv=""><a className="tl" href="/works/specialty-contractor">事例を見る<Arrow /></a></p>
+            <p style={{ marginTop: 28 }} data-rv=""><a className="tl" href={workHref(work)}>事例を見る<Arrow /></a></p>
           </div>
         </section>
 
