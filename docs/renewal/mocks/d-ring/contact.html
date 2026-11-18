@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>お問い合わせ | Linkle株式会社</title>
+<meta name="description" content="Linkle株式会社へのお問い合わせ。ご相談・無料見本のご依頼・資料請求はこちらから。まだ何も決まっていない段階でも構いません。">
+<script>try{if(sessionStorage.getItem('lk-pt'))document.documentElement.classList.add('pt')}catch(e){}</script>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-page="contact">
+<div id="cover"></div>
+<svg id="stage" aria-hidden="true"></svg>
+
+<main>
+  <section class="ph" data-sec
+    data-rings='[[0.9,0.3,0.34,0.62,1],[1.06,0.62,0.2,0.62,0.45],[0.5,0.5,0.1,0.6,0]]'
+    data-rings-m='[[0.95,0.12,0.5,0.62,0.9],[0.5,0.5,0.1,0.6,0],[0.5,0.5,0.1,0.6,0]]'>
+    <div class="wrap">
+      <ol class="crumb"><li><a href="index.html">ホーム</a></li><li>お問い合わせ</li></ol>
+      <h1><span class="ln"><span>お問い合わせ</span></span></h1>
+      <p class="lead hero-fade">今の業務の話を聞かせてください。まだ何も決まっていない段階で構いません。お話を伺ったうえで、御社向けの見本を無料でお作りします。</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="row" data-sec
+      data-rings='[[1.1,0.6,0.34,0.62,0.4],[-0.08,0.9,0.2,0.62,0.3],[0.5,0.5,0.1,0.6,0]]'>
+      <div>
+        <p class="label" data-rv><span class="num">01</span>フォーム</p>
+        <h2 class="h2" data-rv>ご相談・お見積りは<br>無料です。</h2>
+        <p class="body" data-rv style="margin-top:24px;font-size:14.5px">内容を確認のうえ、担当者よりメールでご連絡します。</p>
+      </div>
+      <div>
+        <form class="cf" id="cf" novalidate data-rv>
+          <fieldset>
+            <legend>お問い合わせ種別<em>必須</em></legend>
+            <div class="cf-kinds">
+              <label><input type="radio" name="kind" value="相談"><span>システム開発の相談</span></label>
+              <label><input type="radio" name="kind" value="無料見本"><span>無料見本の依頼</span></label>
+              <label><input type="radio" name="kind" value="資料請求"><span>資料請求</span></label>
+              <label><input type="radio" name="kind" value="Web制作"><span>Web制作の相談</span></label>
+              <label><input type="radio" name="kind" value="採用"><span>採用について</span></label>
+              <label><input type="radio" name="kind" value="その他"><span>その他</span></label>
+            </div>
+            <p class="gd-err" data-for="kind" role="alert"></p>
+          </fieldset>
+          <label>お名前<em>必須</em><input name="name" type="text" autocomplete="name" placeholder="山田 太郎"></label>
+          <p class="gd-err" data-for="name" role="alert"></p>
+          <label>メールアドレス<em>必須</em><input name="email" type="email" autocomplete="email" inputmode="email" placeholder="example@example.co.jp"></label>
+          <p class="gd-err" data-for="email" role="alert"></p>
+          <label>会社名<input name="company" type="text" autocomplete="organization" placeholder="株式会社〇〇"></label>
+          <label>お問い合わせ内容<em>必須</em><textarea name="message" rows="6" placeholder="今の業務で困っていることを、分かる範囲でお書きください。"></textarea></label>
+          <p class="gd-err" data-for="message" role="alert"></p>
+          <button class="btn" type="submit" data-ar>送信する</button>
+          <p class="gd-note">ご入力いただいた情報は、お問い合わせへの対応にのみ使用します。</p>
+        </form>
+        <div class="cf-done" id="cf-done" hidden tabindex="-1">
+          <h2 class="h2">送信しました</h2>
+          <p class="body" style="margin-top:16px">お問い合わせありがとうございます。担当者より折り返しご連絡いたします。</p>
+          <p style="margin-top:32px"><a class="tl" href="index.html" data-ar>トップへ戻る</a></p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/fx3d.js"></script>
+</body>
+</html>

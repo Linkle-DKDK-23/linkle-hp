@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer-core');
 
-const PAGES = ['home', 'about', 'service', 'news', 'recruit', 'contact'];
+const PAGES = ['home', 'service', 'construction', 'works', 'about', 'recruit', 'news', 'contact'];
 const OUT = path.join(__dirname, '../../public/og');
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 

@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>建設業のDX・システム開発 | Linkle株式会社（デザイン案A: SORA）</title>
+<meta name="description" content="紙・Excel・LINEに分かれた建設業の事務を、御社専用のシステムにまとめる。建設業のDX・システム開発会社、Linkle株式会社。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b2239; --ink-2:#34506b; --ink-3:#5f7890;
+  --paper:#fbf8f2; --paper-2:#f3eee4; --line:#0b223922;
+  --brand:#6ccaf1; --brand-deep:#0e6b99; --warm:#ff9d4d;
+  --sky-top:#8fb6e6; --sky-mid:#e9dcea; --sky-bot:#ffd3ae;
+  --glow:#fff1d6; --cloud:#fff3ea; --cloud-a:.7; --star:0;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --latin:"Instrument Serif","Shippori Mincho B1",serif;
+  --wrap:min(1200px,100% - 48px);
+  --sun:clamp(104px,15vw,220px);
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:clip;-webkit-text-size-adjust:100%}
+body{font-family:var(--gothic);font-weight:500;font-size:17px;line-height:1.9;color:var(--ink);background:#8fb6e6;overflow-x:clip;font-feature-settings:"palt";-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+ul,ol{list-style:none}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+.on-night :focus-visible,.foot :focus-visible{outline-color:#fff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:fixed;left:16px;top:-80px;z-index:200;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px}
+.skip:focus{top:16px}
+
+/* ───────── 空 ───────── */
+.sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:linear-gradient(180deg,var(--sky-top) 0%,var(--sky-mid) 56%,var(--sky-bot) 100%)}
+.sky canvas{position:absolute;inset:0;width:100%;height:100%;opacity:var(--star)}
+.sun{position:absolute;left:0;top:0;width:var(--sun);height:var(--sun);border-radius:50%;will-change:transform;
+  border:calc(var(--sun)*.055) solid #fff;background:radial-gradient(circle,#ffffff66 0%,#ffffff1f 60%,#fff0 72%);
+  box-shadow:0 0 calc(var(--sun)*.5) calc(var(--sun)*.12) var(--glow),0 0 calc(var(--sun)*1.6) calc(var(--sun)*.5) color-mix(in srgb,var(--glow) 45%,transparent),inset 0 0 calc(var(--sun)*.2) #ffffffaa}
+.moon{position:absolute;left:0;top:0;width:calc(var(--sun)*.42);height:calc(var(--sun)*.42);border-radius:50%;border:2px solid #eaf3ff;
+  box-shadow:0 0 40px 6px #a8c6ff55,inset 0 0 18px #cfe0ff66;opacity:0;will-change:transform}
+.cloud{position:absolute;left:-40vw;width:46vw;min-width:320px;aspect-ratio:3/1;opacity:var(--cloud-a);filter:blur(14px);
+  background:
+   radial-gradient(closest-side,var(--cloud) 0 55%,transparent 100%) 8% 70%/46% 60% no-repeat,
+   radial-gradient(closest-side,var(--cloud) 0 55%,transparent 100%) 36% 40%/44% 86% no-repeat,
+   radial-gradient(closest-side,var(--cloud) 0 55%,transparent 100%) 66% 58%/50% 74% no-repeat,
+   radial-gradient(closest-side,var(--cloud) 0 50%,transparent 100%) 92% 74%/34% 48% no-repeat;
+  animation:drift linear infinite;transition:opacity .6s}
+.cloud.c1{top:9%;animation-duration:170s;animation-delay:-60s}
+.cloud.c2{top:30%;width:34vw;animation-duration:230s;animation-delay:-150s;opacity:calc(var(--cloud-a)*.7)}
+.cloud.c3{top:55%;width:58vw;animation-duration:200s;animation-delay:-20s;opacity:calc(var(--cloud-a)*.55);filter:blur(22px)}
+.cloud.c4{top:74%;width:40vw;animation-duration:260s;animation-delay:-200s;opacity:calc(var(--cloud-a)*.5)}
+.cloud.c5{top:18%;width:26vw;animation-duration:140s;animation-delay:-100s;opacity:calc(var(--cloud-a)*.8);filter:blur(10px)}
+@keyframes drift{to{transform:translateX(190vw)}}
+.grain{position:absolute;inset:-50%;opacity:.16;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.cursor-light{position:fixed;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;z-index:1;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,#ffffff3d 0%,#ffffff14 38%,#fff0 68%);transition:opacity .6s}
+
+/* ───────── ヘッダー ───────── */
+.head{position:fixed;z-index:50;top:14px;left:50%;transform:translateX(-50%);width:min(1320px,100% - 28px);
+  display:flex;align-items:center;gap:20px;padding:9px 10px 9px 22px;border-radius:999px;
+  background:#ffffffc4;backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid #ffffffcc;box-shadow:0 10px 40px -18px #0b223955,0 1px 0 #fff inset}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:21px;letter-spacing:.04em;line-height:1}
+.logo i{width:24px;height:24px;border-radius:50%;border:3.5px solid var(--brand);display:block;transition:transform .6s var(--ease)}
+.logo:hover i{transform:scale(1.18)}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{font-size:15px;font-weight:500;padding:6px 14px;border-radius:999px;position:relative;line-height:1.7;white-space:nowrap}
+.nav a::after{content:"";position:absolute;left:14px;right:14px;bottom:3px;height:1.5px;background:var(--ink);transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+.nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.head-cta{display:flex;gap:8px;align-items:center}
+.btn{--bg:var(--ink);--fg:#fff;position:relative;display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:999px;
+  background:var(--bg);color:var(--fg);font-weight:700;font-size:16px;line-height:1.4;white-space:nowrap;overflow:hidden;isolation:isolate;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.btn::before{content:"";position:absolute;z-index:-1;left:var(--mx,50%);top:var(--my,50%);width:0;height:0;border-radius:50%;background:var(--brand);transform:translate(-50%,-50%);transition:width .6s var(--ease),height .6s var(--ease)}
+.btn:hover::before{width:520px;height:520px}
+.btn:hover{color:var(--ink);transform:translateY(-2px);box-shadow:0 14px 30px -14px #0b223988}
+.btn svg{width:18px;height:18px;flex:none;transition:transform .5s var(--ease)}
+.btn:hover svg.arr{transform:translateX(4px)}
+.btn.ghost{--bg:#fffffff0;--fg:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.sm{padding:9px 18px;font-size:14.5px}
+.btn.lg{padding:18px 32px;font-size:18px}
+.btn.light{--bg:#fff;--fg:var(--ink)}
+.menu-btn{display:none;width:44px;height:44px;border-radius:50%;background:var(--ink);position:relative}
+.menu-btn span{position:absolute;left:13px;right:13px;height:2px;background:#fff;transition:transform .4s var(--ease),top .4s var(--ease)}
+.menu-btn span:nth-child(1){top:18px}.menu-btn span:nth-child(2){top:25px}
+.menu-btn[aria-expanded=true] span:nth-child(1){top:21px;transform:rotate(45deg)}
+.menu-btn[aria-expanded=true] span:nth-child(2){top:21px;transform:rotate(-45deg)}
+.sheet-menu{position:fixed;inset:0;z-index:45;background:#fbf8f2f5;backdrop-filter:blur(10px);padding:110px 28px 40px;display:flex;flex-direction:column;gap:6px;
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.sheet-menu.open{opacity:1;visibility:visible}
+.sheet-menu a.m{font-family:var(--mincho);font-weight:800;font-size:26px;padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.sheet-menu .btn{margin-top:14px;justify-content:center}
+
+/* ───────── 時計 ───────── */
+.clock{position:fixed;z-index:40;left:20px;bottom:20px;display:flex;align-items:center;gap:12px;padding:8px 18px 8px 10px;border-radius:999px;
+  background:#ffffffc9;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #fff;box-shadow:0 10px 30px -16px #0b223966;line-height:1}
+.clock svg{width:38px;height:38px}
+.clock b{font-family:var(--latin);font-weight:400;font-size:27px;letter-spacing:.01em;font-variant-numeric:tabular-nums;min-width:62px}
+.clock small{font-size:12.5px;font-weight:700;letter-spacing:.14em;color:var(--ink-2)}
+
+main{position:relative;z-index:2}
+.wrap{width:var(--wrap);margin-inline:auto}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:14.5px;font-weight:700;letter-spacing:.18em}
+.eyebrow::before{content:"";width:34px;height:1.5px;background:currentColor}
+.eyebrow em{font-family:var(--latin);font-style:italic;font-weight:400;font-size:20px;letter-spacing:.02em}
+h2{font-family:var(--mincho);font-weight:800;font-size:clamp(27px,3.9vw,52px);line-height:1.46;letter-spacing:.02em}
+.lead{font-size:clamp(17px,1.35vw,19px);line-height:2;max-width:38em}
+.ln{display:block;overflow:hidden}
+.ln>span{display:block}
+
+/* ───────── ヒーロー ───────── */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:118px 0 0;position:relative}
+.hero-in{width:var(--wrap);margin-inline:auto;padding-bottom:118px}
+.hero h1{font-weight:inherit}
+.hero .eyebrow{margin-bottom:26px}
+.h1-main{display:block;font-family:var(--mincho);font-weight:800;font-size:clamp(44px,min(8.2vw,14.5vh),124px);line-height:1.2;letter-spacing:.01em;margin-left:-.04em}
+.h1-main .dot{color:var(--brand-deep)}
+.hero .lead{margin-top:30px;max-width:35em}
+.hero .lead strong{font-weight:700;background:linear-gradient(transparent 68%,#ffffffb0 68%)}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.hero-note{margin-top:20px;font-size:14.5px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.hero-note svg{width:18px;height:18px}
+.scroll-hint{position:absolute;right:max(24px,calc((100% - 1200px)/2));bottom:170px;writing-mode:vertical-rl;font-size:13.5px;font-weight:700;letter-spacing:.3em;display:flex;align-items:center;gap:14px}
+.scroll-hint::after{content:"";width:1.5px;height:74px;background:linear-gradient(var(--ink) 50%,#0b223930 50%);background-size:100% 200%;animation:hint 2.4s var(--ease) infinite}
+@keyframes hint{from{background-position:0 100%}to{background-position:0 -100%}}
+.skyline{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:auto;display:block;pointer-events:none}
+.skyline .far{fill:#0b223914}.skyline .near{fill:#0b223926}
+.skyline .st{stroke:#0b223930;stroke-width:1.5;fill:none}
+
+/* ───────── 紙のシート ───────── */
+.sheet{width:min(1320px,100% - 28px);margin-inline:auto;background:var(--paper);border-radius:36px;padding:clamp(56px,8vw,120px) 0;
+  box-shadow:0 60px 120px -60px #0b223966,0 0 0 1px #ffffff99 inset;position:relative}
+.sheet::before{content:"";position:absolute;inset:14px;border:1px solid #0b223914;border-radius:24px;pointer-events:none}
+
+/* 悩み */
+.pains{padding:40px 0 clamp(90px,12vw,180px)}
+.pains-head{display:grid;grid-template-columns:1.6fr .7fr;gap:40px;align-items:end;margin-bottom:clamp(40px,5vw,72px)}
+.pains-head p{color:var(--ink-2)}
+.pain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pain{background:#fff;border:1px solid #0b22391a;border-radius:16px;padding:22px 22px 24px;position:relative;will-change:transform;
+  box-shadow:0 14px 30px -22px #0b223966;transition:box-shadow .4s,border-color .4s}
+.pain:hover{border-color:var(--ink);box-shadow:0 22px 40px -22px #0b223988}
+.pain .no{font-family:var(--latin);font-style:italic;font-size:19px;color:var(--ink-3);line-height:1}
+.pain h3{font-size:19px;font-weight:700;line-height:1.55;margin:34px 0 8px;padding-right:6px}
+.pain p{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
+.chk{position:absolute;right:18px;top:18px;width:30px;height:30px}
+.chk rect{fill:none;stroke:var(--ink);stroke-width:1.5}
+.chk path{fill:none;stroke:var(--brand-deep);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:30;stroke-dashoffset:30;transition:stroke-dashoffset .7s var(--ease) .1s}
+.pain.on .chk path{stroke-dashoffset:0}
+.pains-foot{margin-top:clamp(44px,6vw,84px);display:flex;align-items:center;gap:28px;flex-wrap:wrap;justify-content:space-between;border-top:1.5px solid var(--ink);padding-top:30px}
+.pains-foot p{font-family:var(--mincho);font-weight:800;font-size:clamp(24px,3vw,40px);line-height:1.5}
+.pains-foot p b{background:linear-gradient(transparent 62%,var(--brand) 62%)}
+
+/* ───────── 一日のタイムライン ───────── */
+.day{position:relative;padding:clamp(40px,7vw,90px) 0 60px}
+.day-intro{width:var(--wrap);margin:0 auto clamp(30px,5vw,60px)}
+.day-intro h2{margin-top:18px}
+.track{display:block}
+.panel{width:var(--wrap);margin:0 auto;padding:44px 0 60px;display:grid;gap:26px;border-top:1.5px solid var(--ink)}
+.p-time{font-family:var(--latin);font-size:clamp(84px,13vw,190px);line-height:.86;letter-spacing:-.03em;display:flex;align-items:flex-start;gap:14px}
+.p-time sup{font-family:var(--gothic);font-weight:700;font-size:13.5px;letter-spacing:.2em;line-height:1;margin-top:14px;padding:7px 12px;border:1.5px solid var(--ink);border-radius:999px;white-space:nowrap}
+.p-title{font-family:var(--mincho);font-weight:800;font-size:clamp(25px,2.5vw,36px);line-height:1.5;margin-top:22px;text-wrap:balance}
+.p-copy{margin-top:12px;font-size:17px;line-height:1.9;max-width:26em}
+.vs{display:grid;gap:16px;align-items:stretch}
+.card{border-radius:20px;padding:24px 24px 26px;position:relative}
+.card .tag{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;letter-spacing:.14em;line-height:1;padding:8px 13px;border-radius:999px}
+.card.was{background:#f3eee4e6;border:1.5px dashed #0b223966;color:var(--ink-2)}
+.card.was .tag{background:#0b223914;color:var(--ink)}
+.card.was p{margin-top:16px;font-size:16px;line-height:1.8;color:var(--ink)}
+.card.was .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.card.was .tools span{font-size:13.5px;font-weight:700;line-height:1;padding:7px 10px;border-radius:6px;background:#fff;border:1px solid #0b22392e;text-decoration:line-through;text-decoration-color:#0b223980}
+.card.now{background:#fff;box-shadow:0 40px 80px -40px #0b223980,0 0 0 1px #ffffff inset}
+.card.now .tag{background:var(--ink);color:#fff}
+.card.now .tag i{width:10px;height:10px;border-radius:50%;border:2.5px solid var(--brand)}
+.card.now>p{margin-top:14px;font-size:16px;line-height:1.75;font-weight:700}
+.ui{margin-top:16px;border:1px solid #0b22391f;border-radius:14px;background:var(--paper);padding:14px;font-size:14.5px;line-height:1.5}
+.ui-row{display:flex;align-items:center;gap:10px;padding:9px 10px;background:#fff;border-radius:9px;border:1px solid #0b223914}
+.ui-row+.ui-row{margin-top:6px}
+.ui-row b{font-weight:700;min-width:4.6em}.ui-row time{font-family:var(--latin);font-size:18px;min-width:2.8em}
+.av{display:flex;margin-left:auto}
+.av i{width:26px;height:26px;border-radius:50%;background:var(--brand);border:2px solid #fff;margin-left:-7px;font-style:normal;font-size:12px;font-weight:700;display:grid;place-items:center}
+.av i:nth-child(2){background:#bfe6fa}.av i:nth-child(3){background:#ffd3ae}
+.ui-send{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ui-send span{font-size:13.5px;color:var(--ink-2);font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:700;font-size:14px;line-height:1;padding:11px 16px;border-radius:999px}
+.pill svg{width:14px;height:14px}
+.ui.two{display:grid;grid-template-columns:.9fr 1.1fr;gap:12px;align-items:center}
+.plan{background:#fff;border-radius:9px;border:1px solid #0b223914;aspect-ratio:1/.8;width:100%}
+.plan path{fill:none;stroke:var(--ink);stroke-width:1.4}.plan .d{stroke:var(--brand-deep);stroke-dasharray:3 3}
+.qty li{display:flex;justify-content:space-between;align-items:baseline;padding:7px 2px;border-bottom:1px solid #0b22391f}
+.qty li b{font-family:var(--latin);font-size:21px;font-weight:400}
+.qty li:last-child{border:0}
+.phone{background:var(--ink);color:#fff;border-radius:16px;padding:14px;font-size:13.5px}
+.phone dl{display:grid;grid-template-columns:auto 1fr;gap:3px 10px}.phone dt{opacity:.65}
+.phone .tap{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.phone .tap span{text-align:center;padding:9px 0;border-radius:8px;font-weight:700;line-height:1.2}
+.phone .tap span:first-child{background:var(--brand);color:var(--ink)}.phone .tap span:last-child{box-shadow:inset 0 0 0 1.5px #ffffff88}
+.prog li{display:grid;grid-template-columns:4.4em 1fr auto;gap:8px;align-items:center;padding:7px 0;font-weight:700}
+.prog .bar{height:8px;border-radius:9px;background:#0b22391a;overflow:hidden}
+.prog .bar i{display:block;height:100%;border-radius:9px;background:var(--brand-deep);transform-origin:left}
+.prog small{font-size:12.5px;color:var(--ink-2)}
+.once{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.once .in{background:#fff;border:1.5px solid var(--ink);border-radius:9px;padding:12px;font-weight:700;text-align:center;line-height:1.5}
+.once .in small{display:block;font-size:12.5px;color:var(--ink-2);font-weight:500}
+.once svg{width:40px;height:84px}.once svg path{fill:none;stroke:var(--ink);stroke-width:1.4}
+.once ul li{background:#fff;border:1px solid #0b22391f;border-radius:8px;padding:8px 12px;font-weight:700;display:flex;align-items:center;gap:8px}
+.once ul li+li{margin-top:6px}
+.once ul li::before{content:"";width:9px;height:9px;border-radius:50%;border:2.5px solid var(--brand-deep)}
+.rail{display:none}
+
+@media (min-width:980px){
+  .vs{grid-template-columns:.74fr 1.26fr}
+  .card.was{transform:rotate(-1.6deg) translateY(18px);margin-right:-26px;padding-right:44px}
+  .card.now{z-index:2}
+}
+/* ピン留め横移動（JS有効・デスクトップ・動きを許可している場合のみ） */
+@media (min-width:980px) and (min-height:640px) and (prefers-reduced-motion:no-preference){
+  .has-gsap .day{padding:0;height:100vh;overflow:hidden}
+  .has-gsap .day-intro{position:absolute;left:max(24px,calc((100% - 1200px)/2));top:104px;margin:0;width:auto;z-index:3}
+  .has-gsap .day-intro h2{font-size:22px;margin:0;display:inline;font-family:var(--gothic);font-weight:700;letter-spacing:.06em}
+  .has-gsap .day-intro .eyebrow{display:none}
+  .has-gsap .day-intro p{display:none}
+  .has-gsap .track{display:flex;height:100%;width:max-content;will-change:transform}
+  .has-gsap .panel{width:100vw;flex:none;margin:0;border:0;height:100%;padding:150px max(24px,calc((100vw - 1200px)/2)) 120px;
+    grid-template-columns:minmax(300px,.8fr) 1.5fr;gap:clamp(28px,4vw,64px);align-items:center}
+  .has-gsap .p-copy{font-size:16.5px}
+  .has-gsap .rail{display:block;position:absolute;left:max(24px,calc((100% - 1200px)/2));right:max(24px,calc((100% - 1200px)/2));bottom:38px;height:54px;margin-left:230px}
+  .rail .base{position:absolute;left:0;right:0;top:9px;height:1.5px;background:#0b223940}
+  .rail .fill{position:absolute;left:0;right:0;top:9px;height:1.5px;background:var(--ink);transform:scaleX(0);transform-origin:left}
+  .rail ol{position:absolute;inset:0;display:flex;justify-content:space-between}
+  .rail li{position:relative;width:0;white-space:nowrap}
+  .rail li::before{content:"";position:absolute;left:-5px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink);transition:background .4s,transform .4s var(--ease)}
+  .rail li.on::before{background:var(--ink);transform:scale(1.25)}
+  .rail li span{position:absolute;top:26px;left:0;transform:translateX(-50%);font-size:13.5px;font-weight:700;letter-spacing:.08em;line-height:1}
+  .rail li:first-child span{transform:none}.rail li:last-child span{transform:translateX(-100%)}
+  .rail li span em{font-family:var(--latin);font-style:normal;font-size:19px;margin-right:6px;letter-spacing:0}
+}
+
+/* ───────── 数字（夕暮れ） ───────── */
+.on-night{color:#fff}
+.nums{padding:34vh 0 clamp(90px,12vw,170px)}
+.nums-grid{display:grid;grid-template-columns:1.4fr .6fr;gap:clamp(30px,5vw,80px);align-items:center}
+.nums h2{font-size:clamp(30px,4.4vw,60px)}
+.nums .lead{margin-top:26px;color:#eaf0ff}
+.big{display:flex;align-items:flex-end;gap:.08em;margin-top:44px;line-height:.8}
+.big .pre{font-family:var(--mincho);font-weight:800;font-size:clamp(22px,2.4vw,34px);line-height:1.3;padding-bottom:.6em}
+.big b{font-family:var(--latin);font-weight:400;font-size:clamp(170px,25vw,360px);letter-spacing:-.04em;margin:0 .02em -.06em}
+.big .post{font-family:var(--mincho);font-weight:800;font-size:clamp(26px,3.4vw,50px);line-height:1.3;padding-bottom:.4em}
+.fine{margin-top:22px;font-size:14.5px;line-height:1.8;color:#d8e2fb;max-width:36em;padding-left:14px;border-left:1.5px solid #ffffff66}
+.dial{width:100%;max-width:440px;justify-self:center;display:block}
+.dial .r{fill:none;stroke:#ffffff40;stroke-width:1.5}
+.dial .tick{stroke:#ffffff80;stroke-width:1.5}
+.dial .arc{fill:none;stroke:var(--brand);stroke-width:14;stroke-linecap:round}
+.dial text{fill:#fff;font-family:var(--latin);font-size:19px}
+.dial .c1{font-family:var(--mincho);font-weight:800;font-size:17px}
+.dial .c2{font-family:var(--latin);font-size:64px}
+.team{margin-top:clamp(60px,8vw,110px);border-top:1px solid #ffffff55;padding-top:28px;display:flex;gap:40px;align-items:baseline;flex-wrap:wrap}
+.team b{font-family:var(--latin);font-weight:400;font-size:clamp(60px,7vw,96px);line-height:1}
+.team b sup{font-size:.5em;vertical-align:top;line-height:1.3}
+.team p{max-width:36em;color:#eaf0ff}
+.team dt{font-size:14px;font-weight:700;letter-spacing:.18em}
+
+/* ───────── 業種 ───────── */
+.inds{padding:0 0 clamp(90px,12vw,170px)}
+.inds-head{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.inds-head p{color:var(--ink-2)}
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1.5px solid var(--ink);border-left:1px solid var(--line)}
+.ind{position:relative;display:flex;flex-direction:column;min-height:236px;padding:22px 22px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;isolation:isolate}
+.ind::before{content:"";position:absolute;z-index:-1;left:50%;top:104%;width:190%;aspect-ratio:1;border-radius:50%;background:var(--brand);transform:translateX(-50%);transition:top .7s var(--ease)}
+.ind:hover::before,.ind:focus-visible::before{top:-30%}
+.ind svg.ic{width:44px;height:44px;fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ind .no{position:absolute;right:20px;top:20px;font-family:var(--latin);font-style:italic;font-size:18px;color:var(--ink-3)}
+.ind h3{font-family:var(--mincho);font-weight:800;font-size:25px;line-height:1.4;margin-top:auto;padding-top:26px}
+.ind h3 small{display:block;font-family:var(--gothic);font-size:13.5px;font-weight:700;letter-spacing:.08em;color:var(--ink-2);margin-top:2px}
+.ind p{font-size:14.5px;line-height:1.7;color:var(--ink-2);margin-top:8px}
+.ind:hover p,.ind:hover h3 small,.ind:hover .no{color:var(--ink)}
+.ind .go{position:absolute;right:18px;bottom:20px;width:22px;height:22px;stroke:var(--ink);fill:none;stroke-width:1.6;opacity:0;transform:translate(-8px,8px);transition:.5s var(--ease)}
+.ind:hover .go{opacity:1;transform:none}
+.more{margin-top:44px;display:grid;grid-template-columns:200px 1fr;gap:30px;align-items:start}
+.more h3{font-size:15px;font-weight:700;letter-spacing:.14em;line-height:1.7;padding-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips a{font-size:15.5px;font-weight:700;line-height:1;padding:12px 17px;border-radius:999px;border:1.5px solid #0b223940;background:#fff;transition:.35s var(--ease)}
+.chips a:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}
+.chips a.all{background:var(--ink);color:#fff;border-color:var(--ink);display:inline-flex;gap:8px;align-items:center}
+.chips a.all:hover{background:var(--brand);color:var(--ink);border-color:var(--brand)}
+
+/* ───────── 進め方（夜・星座） ───────── */
+.flow{padding:clamp(40px,6vw,90px) 0 clamp(80px,10vw,150px)}
+.flow-head{display:grid;grid-template-columns:1.6fr .8fr;gap:40px;align-items:end}
+.flow-head p{color:#dfe8ff}
+.steps{position:relative;margin-top:clamp(50px,7vw,100px);display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
+.const{position:absolute;left:0;top:0;width:100%;height:150px;overflow:visible;pointer-events:none}
+.const path{fill:none;stroke:#ffffffb3;stroke-width:1.2;stroke-dasharray:4 7}
+.step{position:relative;padding-top:150px}
+.step:nth-child(2){--dy:56px}.step:nth-child(3){--dy:16px}.step:nth-child(4){--dy:84px}.step:nth-child(5){--dy:30px}
+.step .star{position:absolute;left:0;top:var(--dy);width:38px;height:38px;border-radius:50%;border:1.5px solid #fff;display:grid;place-items:center;background:#0d1d47}
+.step .star::after{content:"";width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 18px 5px #cfe0ffcc}
+.step:first-of-type .star,.step.first .star{border-color:var(--brand);border-width:3px;box-shadow:0 0 30px #6ccaf1aa}
+.step .no{font-family:var(--latin);font-style:italic;font-size:20px;color:#cddcff;line-height:1}
+.step h3{font-family:var(--mincho);font-weight:800;font-size:clamp(22px,2vw,27px);line-height:1.5;margin:10px 0 10px}
+.step p{font-size:16px;line-height:1.85;color:#e6edff}
+.step .free{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;line-height:1;padding:7px 11px;border-radius:999px;background:var(--brand);color:var(--ink);margin-left:8px;vertical-align:middle;font-family:var(--gothic)}
+.web{margin-top:clamp(70px,9vw,130px);border:1px solid #ffffff55;border-radius:28px;padding:clamp(28px,4vw,54px);display:grid;grid-template-columns:auto 1fr auto;gap:clamp(20px,4vw,60px);align-items:center;background:#ffffff0f;backdrop-filter:blur(6px)}
+.web .eyebrow{color:var(--brand)}
+.web h3{font-family:var(--mincho);font-weight:800;font-size:clamp(24px,2.8vw,38px);line-height:1.45;margin-top:8px}
+.web p{color:#e6edff;font-size:16.5px}
+
+/* ───────── CTA（次の夜明け） ───────── */
+.cta{position:relative;padding:clamp(90px,15vh,170px) 0 0;text-align:center}
+.cta .eyebrow{justify-content:center}
+.cta h2{font-size:clamp(40px,7.4vw,112px);line-height:1.25;margin-top:22px}
+.cta .lead{margin:28px auto 0;max-width:35em}
+.cta .cta-row{justify-content:center}
+.guide{width:min(880px,100% - 48px);margin:clamp(56px,7vw,96px) auto 0;text-align:left;background:#ffffffd9;backdrop-filter:blur(10px);border:1px solid #fff;border-radius:24px;padding:22px 26px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;box-shadow:0 40px 80px -50px #0b223988;transition:transform .5s var(--ease)}
+.guide:hover{transform:translateY(-4px)}
+.guide .doc{width:64px;height:84px;border-radius:6px;background:var(--paper);border:1.5px solid var(--ink);position:relative;transition:transform .5s var(--ease)}
+.guide:hover .doc{transform:rotate(-4deg)}
+.guide .doc::before{content:"";position:absolute;left:10px;right:10px;top:14px;height:1.5px;background:var(--ink);box-shadow:0 9px 0 var(--ink),0 18px 0 #0b223966,0 27px 0 #0b223966,0 36px 0 #0b223966}
+.guide .doc::after{content:"";position:absolute;right:8px;bottom:8px;width:14px;height:14px;border-radius:50%;border:3px solid var(--brand)}
+.guide b{font-size:19px;line-height:1.5;display:block}
+.guide span{font-size:15px;color:var(--ink-2);line-height:1.7;display:block}
+.guide .arr{width:46px;height:46px;border-radius:50%;background:var(--ink);display:grid;place-items:center}
+.guide .arr svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8}
+.cta .skyline{position:relative;margin-top:clamp(40px,6vw,80px)}
+.cta .skyline .far{fill:#0b223938}.cta .skyline .near{fill:var(--ink)}.cta .skyline .st{stroke:var(--ink)}
+
+.foot{position:relative;z-index:2;background:var(--ink);color:#fff;padding:60px 0 110px}
+.foot-in{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px}
+.foot .logo{font-size:26px}.foot .logo i{width:30px;height:30px;border-width:4.5px}
+.foot address{font-style:normal;margin-top:18px;font-size:15.5px;line-height:1.9;color:#d5deea}
+.foot h4{font-size:13.5px;letter-spacing:.2em;color:#9db3c8;margin-bottom:12px}
+.foot li a{font-size:16px;line-height:2.2;border-bottom:1px solid transparent;transition:border-color .3s}
+.foot li a:hover{border-color:#fff}
+.copy{margin-top:54px;padding-top:22px;border-top:1px solid #ffffff2e;font-size:13.5px;color:#9db3c8;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* ───────── 開幕 ───────── */
+.intro{position:fixed;inset:0;z-index:100;display:none}
+.js .intro{display:block}
+.intro-bg{position:absolute;inset:0;background:linear-gradient(180deg,#141f4d 0%,#3d3f80 46%,#c97f86 62%,#1a2450 62.2%,#0e1838 100%)}
+.intro-light{position:absolute;left:50%;top:62%;width:140vmax;height:70vmax;transform:translate(-50%,-50%) scale(.2);border-radius:50%;opacity:0;
+  background:radial-gradient(closest-side,#ffe6c2cc 0%,#ffb98a66 30%,#ff9d7a00 70%)}
+.intro-clip{position:absolute;left:0;right:0;top:0;height:62%;overflow:hidden}
+.intro-ring{position:absolute;left:50%;top:100%;width:var(--sun);height:var(--sun);margin-left:calc(var(--sun)/-2);border-radius:50%;
+  border:calc(var(--sun)*.055) solid var(--brand);box-shadow:0 0 60px 8px #6ccaf166,inset 0 0 30px #6ccaf144;will-change:transform}
+.intro-h{position:absolute;left:0;right:0;top:62%;height:1.5px;background:linear-gradient(90deg,#fff0,#fff 30%,#fff 70%,#fff0);transform:scaleX(0)}
+.intro-word{position:absolute;left:0;right:0;top:calc(62% + 34px);text-align:center;color:#fff;font-weight:700;font-size:clamp(30px,4vw,46px);letter-spacing:.14em;line-height:1}
+.intro-word span{display:inline-block;opacity:0;transform:translateY(14px)}
+.intro-sub{position:absolute;left:0;right:0;top:calc(62% + 96px);text-align:center;color:#dfe6ff;font-size:13.5px;letter-spacing:.34em;font-weight:700;opacity:0}
+.intro-skip{position:absolute;right:24px;bottom:24px;color:#fff;font-size:14px;font-weight:700;letter-spacing:.14em;padding:12px 18px;border:1px solid #ffffff80;border-radius:999px}
+
+/* ───────── レスポンシブ ───────── */
+@media (max-width:1180px){.nav{display:none}.head-cta{margin-left:auto}.menu-btn{display:block}}
+@media (max-width:979px){
+  .pains-head,.inds-head,.flow-head,.nums-grid{grid-template-columns:1fr;gap:20px}
+  .pain-grid,.ind-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:1fr;gap:0}.const{display:none}
+  .step{padding:0 0 34px 60px}.step .star{top:0}
+  .step::before{content:"";position:absolute;left:19px;top:38px;bottom:0;border-left:1.2px dashed #ffffffb3}
+  .step:last-child::before{display:none}
+  .web{grid-template-columns:1fr}.more{grid-template-columns:1fr;gap:10px}
+  .foot-in{grid-template-columns:1fr 1fr}.foot-in>div:first-child{grid-column:1/-1}
+  .dial{max-width:300px}
+  .scroll-hint{display:none}
+}
+@media (max-width:640px){
+  :root{--wrap:calc(100% - 40px)}
+  body{font-size:16.5px}
+  h2{font-size:6.4vw}.nums h2{font-size:6.6vw}.h1-main{font-size:10.4vw}.cta h2{font-size:10.6vw}
+  .head{padding:7px 7px 7px 16px;gap:8px;top:10px}
+  .head-cta .btn:not(.ghost){display:none}
+  .logo{font-size:19px}
+  .hero{padding-top:120px}.hero-in{padding-bottom:110px}
+  .cta-row .btn{width:100%;justify-content:center}
+  .sheet{border-radius:26px;width:calc(100% - 16px)}.sheet::before{inset:8px;border-radius:19px}
+  .pain-grid{grid-template-columns:1fr;gap:10px}
+  .pain{display:grid;grid-template-columns:auto 1fr;column-gap:14px;padding:18px 54px 18px 18px}
+  .pain h3{margin:0 0 4px;font-size:18px}.pain .no{grid-row:1/3;padding-top:6px}
+  .ind-grid{grid-template-columns:1fr 1fr}.ind{min-height:200px;padding:16px}.ind h3{font-size:21px}.ind p{font-size:14px}
+  .ui.two,.once{grid-template-columns:1fr}.once svg{display:none}
+  .guide{grid-template-columns:auto 1fr;padding:18px}.guide .arr{display:none}
+  .clock{left:10px;bottom:10px;padding:6px 14px 6px 8px;gap:8px}.clock svg{width:30px;height:30px}.clock b{font-size:22px;min-width:50px}.clock small{display:none}
+  .foot-in{grid-template-columns:1fr}
+  .nums{padding-top:26vh}
+  .big b{font-size:44vw}
+}
+@media (prefers-reduced-motion:reduce){
+  .cloud,.scroll-hint::after{animation:none}.cloud{left:auto}.cloud.c1{right:4%}.cloud.c2{left:6%}.cloud.c3{right:20%}.cloud.c4{left:30%}.cloud.c5{left:50%}
+  *{transition-duration:.01ms!important}
+  .intro{display:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+
+<!-- 開幕：夜明け -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-bg"></div>
+  <div class="intro-light"></div>
+  <div class="intro-clip"><div class="intro-ring"></div></div>
+  <div class="intro-h"></div>
+  <div class="intro-word"><span>L</span><span>i</span><span>n</span><span>k</span><span>l</span><span>e</span></div>
+  <div class="intro-sub">建設業のDX・システム開発</div>
+  <button class="intro-skip" type="button" tabindex="-1">スキップ</button>
+</div>
+
+<!-- 空 -->
+<div class="sky" aria-hidden="true">
+  <canvas id="stars"></canvas>
+  <div class="moon"></div>
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div><div class="cloud c4"></div><div class="cloud c5"></div>
+  <div class="grain"></div>
+</div>
+<div class="cursor-light" aria-hidden="true"></div>
+
+<header class="head">
+  <a class="logo" href="#top" aria-label="Linkle トップ"><i></i>Linkle</a>
+  <nav class="nav" aria-label="メイン">
+    <a href="#day">事業内容</a><a href="#industries">業種から探す</a><a href="#case">開発事例</a><a href="#flow">会社概要</a><a href="#flow">採用</a>
+  </nav>
+  <div class="head-cta">
+    <a class="btn ghost sm" href="https://guide.linkle.group/read.html" target="_blank" rel="noopener">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h7l3 3v11H4z"/><path d="M7 8h4M7 11h4"/></svg>資料を見る</a>
+    <a class="btn sm" href="#contact">無料で見本をつくる</a>
+  </div>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" aria-label="メニュー"><span></span><span></span></button>
+</header>
+<div class="sheet-menu" id="menu">
+  <a class="m" href="#day">事業内容<em>→</em></a><a class="m" href="#industries">業種から探す<em>→</em></a><a class="m" href="#case">開発事例<em>→</em></a><a class="m" href="#flow">会社概要<em>→</em></a><a class="m" href="#flow">採用<em>→</em></a>
+  <a class="btn lg" href="#contact">無料で見本をつくる</a>
+  <a class="btn ghost lg" href="https://guide.linkle.group/read.html" target="_blank" rel="noopener">資料を見る</a>
+</div>
+
+<div class="clock" aria-hidden="true">
+  <svg viewBox="0 0 38 38"><path d="M4 28a15 15 0 0 1 30 0" fill="none" stroke="#0b223940" stroke-width="1.5"/><line x1="1" y1="28" x2="37" y2="28" stroke="#0b2239" stroke-width="1.5"/><circle id="clockSun" cx="4" cy="28" r="4.5" fill="#fff" stroke="#0b2239" stroke-width="1.5"/></svg>
+  <b id="clockT">05:12</b><small id="clockL">夜明け</small>
+</div>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- 05:00 夜明け -->
+<section class="hero" data-sec="hero">
+  <div class="hero-in">
+    <h1>
+      <span class="eyebrow rv">建設業のDX・システム開発</span>
+      <span class="h1-main"><span class="ln"><span>建設業の事務を、</span></span><span class="ln"><span>ひとつに<span class="dot">。</span></span></span></span>
+    </h1>
+    <p class="lead rv">紙・Excel・LINEに分かれた業務を、<strong>御社専用のシステム</strong>にまとめる。<br>建設業のDX・システム開発会社、Linkleです。</p>
+    <div class="cta-row rv">
+      <a class="btn lg" href="#contact">無料で見本をつくる<svg class="arr" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+      <a class="btn ghost lg" href="https://guide.linkle.group/read.html" target="_blank" rel="noopener"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 2h7l3 3v11H4z"/><path d="M7 8h4M7 11h4"/></svg>資料を見る</a>
+    </div>
+    <p class="hero-note rv"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="7"/><path d="M6 9.2l2.1 2.1L12.2 7"/></svg>まずは無料で、御社向けのシステムの見本をお作りします。</p>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">スクロールで、一日がはじまる</div>
+  <svg class="skyline" viewBox="0 0 1440 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path class="far" d="M0 150V96h70V74h56v22h44V58h78v38h60V82h92v-34h64v48h50V70h110v26h66V50h84v46h54V78h96v18h70V62h88v34h60V84h98v66z"/>
+    <g class="st"><path d="M1010 132V18M1010 18h150M1010 18l-52 14M1010 18l36 30M1130 18v34"/><path d="M286 132V60h96v72M286 78h96M286 96h96M286 114h96M310 60v72M334 60v72M358 60v72M286 60l24 18M310 60l24 18M334 60l24 18M358 60l24 18"/></g>
+    <path class="near" d="M0 150v-30h120v-22h84v22h70v-8h130v-30h70v38h96v-18h150v18h60v-44h96v44h110v-14h120v-26h76v40h90v-12h168v42z"/>
+  </svg>
+</section>
+
+<!-- 05:30 悩み -->
+<section class="pains" data-sec="pains">
+  <div class="sheet">
+    <div class="wrap">
+      <div class="pains-head">
+        <div>
+          <span class="eyebrow"><em>Before</em>建設会社の事務の現状</span>
+          <h2 style="margin-top:18px">紙、Excel、LINE。<br>ばらばらの事務に、<br>朝から追われていませんか。</h2>
+        </div>
+        <p>一つでも当てはまれば、システムで減らせる手間があります。</p>
+      </div>
+      <ul class="pain-grid" id="painGrid">
+        <li class="pain"><span class="no">01</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>紙を使っている</h3><p>発注書・依頼書・請求書が、紙とファイルで棚に。</p></li>
+        <li class="pain"><span class="no">02</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>Excelで管理している</h3><p>予定表・受注表・給与が別々のExcel。在庫もExcelやメモで。</p></li>
+        <li class="pain"><span class="no">03</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>翌日の現場を、1件ずつ送っている</h3><p>職人一人ひとりにメールやLINE。または朝、紙で渡している。</p></li>
+        <li class="pain"><span class="no">04</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>属人化している</h3><p>手順も単価も、その人の頭の中にしかない。ベテランが辞めたら止まる。</p></li>
+        <li class="pain"><span class="no">05</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>連休が取れない</h3><p>担当者が休むと、請求も手配も止まる。</p></li>
+        <li class="pain"><span class="no">06</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>ミスや漏れが出る</h3><p>打ち直しのたびに数字がずれる。送り漏れが出る。</p></li>
+        <li class="pain"><span class="no">07</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>在宅作業ができない</h3><p>紙が事務所にあるので、来ないと進まない。</p></li>
+        <li class="pain"><span class="no">08</span><svg class="chk" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="6"/><path d="M9 15.5l4.5 4.5L22 10.5"/></svg><h3>新人の教育に時間がかかる</h3><p>どのExcelのどこに何を書くか、覚えるまで数か月。</p></li>
+      </ul>
+      <div class="pains-foot">
+        <p>それ、すべてシステムで解決して、<b>一つにまとめられます。</b></p>
+        <a class="btn" href="#day">一日の流れで見る<svg class="arr" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06:00–17:00 一日のタイムライン -->
+<section class="day" id="day" data-sec="day" aria-label="システムでできること">
+  <div class="day-intro">
+    <span class="eyebrow"><em>What we build</em>何ができるか</span>
+    <h2>受注から手配、請求まで。<br>ある一日で、見てみます。</h2>
+    <p class="lead" style="margin-top:14px">業務の流れは会社ごとに違います。お話を伺い、御社の業務に合わせて0からつくります。</p>
+  </div>
+  <div class="track" id="track">
+
+    <article class="panel">
+      <div>
+        <div class="p-time">6:00<sup>朝の手配</sup></div>
+        <h3 class="p-title">現場の手配を、<br>自動で組む。</h3>
+        <p class="p-copy">誰をどの現場に配置するかまで自動で組み、職人のスマホに翌日の現場が届きます。</p>
+      </div>
+      <div class="vs">
+        <div class="card was"><span class="tag">今まで</span>
+          <p>Excelの予定表を見ながら、翌日の現場を職人に1件ずつ送る。または朝、紙で渡す。</p>
+          <div class="tools"><span>Excel</span><span>LINE</span><span>メール</span><span>紙</span></div></div>
+        <div class="card now"><span class="tag"><i></i>Linkleのシステムなら</span>
+          <p>全職人に、ワンタップで。送り漏れは一覧で分かる。</p>
+          <div class="ui" aria-hidden="true">
+            <div class="ui-row"><time>7:30</time><b>A現場</b><span>3名</span><span class="av"><i>田</i><i>佐</i><i>鈴</i></span></div>
+            <div class="ui-row"><time>8:00</time><b>B現場</b><span>2名</span><span class="av"><i>高</i><i>伊</i></span></div>
+            <div class="ui-row"><time>8:00</time><b>C現場</b><span>3名</span><span class="av"><i>渡</i><i>山</i><i>中</i></span></div>
+            <div class="ui-send"><span>自動で配置しました（8名・3現場）</span><span class="pill"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 7l12-5-4 11-2.5-4.5z"/></svg>全員に送信</span></div>
+          </div></div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div>
+        <div class="p-time">10:00<sup>図面と材料</sup></div>
+        <h3 class="p-title">図面を渡せば、設計と<br>必要な材料を自動で。</h3>
+        <p class="p-copy">図面を取り込むと、設計と必要な材料の数量を自動で出します。そのまま各現場に手配する職人の割り当てまでつながります。</p>
+      </div>
+      <div class="vs">
+        <div class="card was"><span class="tag">今まで</span>
+          <p>図面を見ながら手で数量を拾い、Excelに打ち直す。在庫はExcelやメモ、紙で管理。</p>
+          <div class="tools"><span>手計算</span><span>Excel</span><span>メモ</span></div></div>
+        <div class="card now"><span class="tag"><i></i>Linkleのシステムなら</span>
+          <p>在庫管理や材料計算を、図面と台帳から自動で算出。</p>
+          <div class="ui two" aria-hidden="true">
+            <svg class="plan" viewBox="0 0 180 144"><path d="M22 22h136v100H22zM22 66h70M92 22v100M92 92h66M126 92v30"/><path class="d" d="M22 132h136M168 22v100M22 128v8M158 128v8M164 22h8M164 122h8"/></svg>
+            <ul class="qty"><li><span>材料 A</span><b>124</b></li><li><span>材料 B</span><b>86</b></li><li><span>材料 C</span><b>40</b></li><li><span>手配する職人</span><b>6<small style="font-size:14px;font-family:var(--gothic)"> 名</small></b></li></ul>
+          </div></div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div>
+        <div class="p-time">15:00<sup>現場の進み具合</sup></div>
+        <h3 class="p-title">職人は、<br>スマホを見るだけ。</h3>
+        <p class="p-copy">集合時間・現場・注意事項がスマホに届く。「出発」「終了」をタップすれば、事務所の画面で進み具合が分かります。</p>
+      </div>
+      <div class="vs">
+        <div class="card was"><span class="tag">今まで</span>
+          <p>現場の様子は、電話をかけて聞くまで分からない。紙が事務所にあるので、来ないと進まない。</p>
+          <div class="tools"><span>電話</span><span>紙</span></div></div>
+        <div class="card now"><span class="tag"><i></i>Linkleのシステムなら</span>
+          <p>クラウドなので、どこからでも同じ画面。</p>
+          <div class="ui two" aria-hidden="true">
+            <div class="phone"><dl><dt>集合</dt><dd>7:30</dd><dt>現場</dt><dd>A現場</dd><dt>注意</dt><dd>搬入口は北側</dd></dl><div class="tap"><span>出発</span><span>終了</span></div></div>
+            <ul class="prog"><li><span>A現場</span><span class="bar"><i style="width:100%"></i></span><small>終了</small></li><li><span>B現場</span><span class="bar"><i style="width:64%"></i></span><small>作業中</small></li><li><span>C現場</span><span class="bar"><i style="width:38%"></i></span><small>作業中</small></li></ul>
+          </div></div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div>
+        <div class="p-time">17:00<sup>請求</sup></div>
+        <h3 class="p-title">1現場1回の入力で、<br>明細も請求書も。</h3>
+        <p class="p-copy">案件登録・職人に送る明細・請求書。同じ情報を何度も入力していたのを解消。1回入力すれば、すべてに反映されます。</p>
+      </div>
+      <div class="vs">
+        <div class="card was"><span class="tag">今まで</span>
+          <p>同じ情報を、案件・明細・請求書へ打ち直す。そのたびに数字がずれる。</p>
+          <div class="tools"><span>二重入力</span><span>打ち直し</span><span>印刷・郵送</span></div></div>
+        <div class="card now"><span class="tag"><i></i>Linkleのシステムなら</span>
+          <p>一つの台帳。入力は1回、計算は自動。</p>
+          <div class="ui once" aria-hidden="true">
+            <div class="in">入力は 1回<small>案件・取引先・職人・単価</small></div>
+            <svg viewBox="0 0 40 84"><path d="M0 42h14M14 42C26 42 22 12 40 12M14 42h26M14 42c12 0 8 30 26 30"/></svg>
+            <ul><li>案件の台帳</li><li>職人への明細</li><li>請求書</li></ul>
+          </div></div>
+      </div>
+    </article>
+
+  </div>
+  <div class="rail" aria-hidden="true"><div class="base"></div><div class="fill" id="railFill"></div>
+    <ol id="railList"><li class="on"><span><em>6:00</em>朝の手配</span></li><li><span><em>10:00</em>図面と材料</span></li><li><span><em>15:00</em>現場の進み具合</span></li><li><span><em>17:00</em>請求</span></li></ol></div>
+</section>
+
+<!-- 18:00 数字 -->
+<section class="nums on-night" id="case" data-sec="nums">
+  <div class="wrap">
+    <div class="nums-grid">
+      <div>
+        <span class="eyebrow"><em>Case</em>開発事例</span>
+        <h2 style="margin-top:18px">夕焼けのうちに、<br>事務所の灯りを消せる。</h2>
+        <div class="big"><span class="pre">1日</span><b id="count4">4</b><span class="post">時間の<br>事務作業を削減</span></div>
+        <p class="fine">専門工事会社での開発事例です。顧客名は非公開としています。</p>
+      </div>
+      <svg class="dial" viewBox="0 0 440 440" role="img" aria-label="1日のうち4時間ぶんの事務作業を削減">
+        <circle class="r" cx="220" cy="220" r="170"/><circle class="r" cx="220" cy="220" r="204" stroke-dasharray="2 8"/>
+        <g id="ticks"></g>
+        <path class="arc" id="arc" d="M360.6 124.5A170 170 0 0 1 360.6 315.5" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+        <text x="220" y="34" text-anchor="middle">12</text><text x="414" y="227" text-anchor="middle">15</text><text x="220" y="420" text-anchor="middle">18</text><text x="26" y="227" text-anchor="middle">9</text>
+        <text class="c1" x="220" y="196" text-anchor="middle">空いた時間</text><text class="c2" x="220" y="258" text-anchor="middle">4h</text>
+      </svg>
+    </div>
+    <dl class="team"><div><dt>MEMBERS</dt><dd><b>20<sup>+</sup></b></dd></div>
+      <p>要件の整理から設計・開発・テスト・運用まで。20名を超えるメンバーが、自社で一貫してつくります。</p></dl>
+  </div>
+</section>
+
+<!-- 19:00 業種 -->
+<section class="inds" id="industries" data-sec="inds">
+  <div class="sheet">
+    <div class="wrap">
+      <div class="inds-head">
+        <div><span class="eyebrow"><em>Industries</em>業種から探す</span>
+          <h2 style="margin-top:18px">御社の業種の言葉で、<br>御社の業務に合わせて。</h2></div>
+        <p>足場には足場の、造園には造園の事務があります。業種ごとの帳票や段取りに合わせた業務システムを、専用で開発します。</p>
+      </div>
+      <div class="ind-grid">
+        <a class="ind" href="#"><span class="no">01</span><svg class="ic" viewBox="0 0 44 44"><path d="M10 38h24M14 38V24h16v14M22 18V5M16 11l6-6 6 6"/></svg><h3>荷揚げ・揚重<small>業務システム開発</small></h3><p>当日の人員手配、日報と出面の集計、元請ごとの請求。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">02</span><svg class="ic" viewBox="0 0 44 44"><path d="M22 40V24M22 30l-7-6M22 27l6-5"/><path d="M22 24c-8 0-13-5-13-10S14 4 22 4s13 5 13 10-5 10-13 10z"/></svg><h3>造園・植木<small>業務システム開発</small></h3><p>年間管理契約と剪定スケジュール、作業履歴と写真報告。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">03</span><svg class="ic" viewBox="0 0 44 44"><path d="M4 14h36v6H4zM22 4v10M22 20v8a5 5 0 1 1-5 5"/></svg><h3>鳶・土工<small>業務システム開発</small></h3><p>職人の出面と応援手配、複数現場への班編成。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">04</span><svg class="ic" viewBox="0 0 44 44"><path d="M22 5c7 9 11 14 11 20a11 11 0 0 1-22 0c0-6 4-11 11-20z"/><path d="M16 26a6 6 0 0 0 6 6"/></svg><h3>防水工事<small>業務システム開発</small></h3><p>工法別の材料拾い、保証書の発行と定期点検の管理。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">05</span><svg class="ic" viewBox="0 0 44 44"><path d="M6 38V18h14v20M20 38V26h10l-3 5 5 3-2 4M10 24h6M10 30h6M28 6l-4 8 7-2-3 8"/></svg><h3>解体工事<small>業務システム開発</small></h3><p>産廃マニフェストとの紐付け、重機・ダンプの回送手配。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">06</span><svg class="ic" viewBox="0 0 44 44"><path d="M6 8h32v28H6zM17 8v28M28 8v28M6 22h32"/></svg><h3>内装仕上<small>業務システム開発</small></h3><p>工種別の出来高、材料の発注と搬入日の調整。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">07</span><svg class="ic" viewBox="0 0 44 44"><path d="M8 6h24v10H8zM32 11h5v10H22v6M19 27h6v13h-6z"/></svg><h3>建築塗装<small>業務システム開発</small></h3><p>現場調査から見積まで、色と塗料の仕様記録、工程写真。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+        <a class="ind" href="#"><span class="no">08</span><svg class="ic" viewBox="0 0 44 44"><path d="M8 40V4M22 40V4M36 40V4M4 14h36M4 28h36M8 14l14 14M22 14l14 14"/></svg><h3>足場工事<small>業務システム開発</small></h3><p>部材在庫とリース・回収、架払しの工程と配車。</p><svg class="go" viewBox="0 0 22 22"><path d="M5 17L17 5M8 5h9v9"/></svg></a>
+      </div>
+      <div class="more">
+        <h3>ほかの業種も<br>ご相談ください</h3>
+        <div class="chips">
+          <a href="#">外構・エクステリア</a><a href="#">型枠</a><a href="#">鉄筋</a><a href="#">左官</a><a href="#">屋根・板金</a><a href="#">リフォーム</a><a href="#">土木</a><a href="#">舗装</a><a href="#">設備</a><a href="#">管工事</a><a href="#">電気</a><a href="#">クレーン</a><a href="#">産廃</a><a href="#">交通誘導警備</a><a href="#">建機レンタル</a>
+          <a class="all" href="#">すべての業種を見る →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 21:00 進め方 -->
+<section class="flow on-night" id="flow" data-sec="flow">
+  <div class="wrap">
+    <div class="flow-head">
+      <div><span class="eyebrow"><em>Process</em>進め方</span>
+        <h2 style="margin-top:18px">まず、見本をつくる。<br>決めるのは、見てから。</h2></div>
+      <p>言葉の説明だけでは、使えるかどうか分かりません。だから最初に、御社向けのシステムの見本を無料でつくります。</p>
+    </div>
+    <ol class="steps" id="steps">
+      <svg class="const" id="const" aria-hidden="true"><path id="constPath" d=""/></svg>
+      <li class="step first"><span class="star"></span><span class="no">Step 01</span><h3>見本をつくる<span class="free">無料</span></h3><p>お話を伺い、御社の業務に合わせたシステムの見本をつくります。</p></li>
+      <li class="step"><span class="star"></span><span class="no">Step 02</span><h3>見て、判断する</h3><p>実際の画面を触って、進めるかどうかを決めてください。</p></li>
+      <li class="step"><span class="star"></span><span class="no">Step 03</span><h3>開発する</h3><p>案件・取引先・職人・単価・在庫を一つの台帳に。御社専用に0からつくります。</p></li>
+      <li class="step"><span class="star"></span><span class="no">Step 04</span><h3>運用する</h3><p>使いはじめてからが本番。現場の声を聞きながら、改善を続けます。</p></li>
+    </ol>
+    <div class="web">
+      <div><span class="eyebrow"><em>Web</em>Web制作</span><h3>ホームページ制作も、<br>業種を問わず。</h3></div>
+      <p>コーポレートサイト、採用サイト、LP。設計・デザイン・開発から検索対策まで、一貫してつくります。</p>
+      <a class="btn light" href="#">Web制作を見る<svg class="arr" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- 翌 05:00 次の夜明け -->
+<section class="cta" id="contact" data-sec="cta">
+  <div class="wrap">
+    <span class="eyebrow"><em>Next morning</em>お問い合わせ</span>
+    <h2>明日の朝を、<br>変えませんか。</h2>
+    <p class="lead">まずは無料で、御社向けのシステムの見本をお作りします。「何から話せばいいか分からない」段階でも構いません。</p>
+    <div class="cta-row">
+      <a class="btn lg" href="#">無料で見本をつくる<svg class="arr" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9h12M10 4l5 5-5 5"/></svg></a>
+      <a class="btn ghost lg" href="#">お問い合わせ</a>
+    </div>
+  </div>
+  <a class="guide" href="https://guide.linkle.group/read.html" target="_blank" rel="noopener">
+    <span class="doc" aria-hidden="true"></span>
+    <span><b>サービスガイド「建設業のための業務効率化」</b><span>業務効率化・システム開発のご案内。登録なしで、そのままお読みいただけます。</span></span>
+    <span class="arr" aria-hidden="true"><svg viewBox="0 0 18 18"><path d="M4 14L14 4M7 4h7v7"/></svg></span>
+  </a>
+  <svg class="skyline" viewBox="0 0 1440 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path class="far" d="M0 150V96h70V74h56v22h44V58h78v38h60V82h92v-34h64v48h50V70h110v26h66V50h84v46h54V78h96v18h70V62h88v34h60V84h98v66z"/>
+    <g class="st" fill="none" stroke-width="1.5"><path d="M1010 132V18M1010 18h150M1010 18l-52 14M1010 18l36 30M1130 18v34"/><path d="M286 132V60h96v72M286 78h96M286 96h96M286 114h96M310 60v72M334 60v72M358 60v72M286 60l24 18M310 60l24 18M334 60l24 18M358 60l24 18"/></g>
+    <path class="near" d="M0 150v-30h120v-22h84v22h70v-8h130v-30h70v38h96v-18h150v18h60v-44h96v44h110v-14h120v-26h76v40h90v-12h168v42z"/>
+  </svg>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-in">
+      <div><a class="logo" href="#top"><i></i>Linkle</a>
+        <address>Linkle株式会社<br>〒171-0021<br>東京都豊島区西池袋2-36-1 ソフトタウン池袋913号</address></div>
+      <div><h4>SERVICE</h4><ul><li><a href="#day">建設業向けシステム開発</a></li><li><a href="#industries">業種から探す</a></li><li><a href="#case">開発事例</a></li><li><a href="#flow">Web制作</a></li></ul></div>
+      <div><h4>COMPANY</h4><ul><li><a href="#">会社概要</a></li><li><a href="#">採用</a></li><li><a href="#">ニュース</a></li><li><a href="https://guide.linkle.group/read.html" target="_blank" rel="noopener">資料を見る</a></li><li><a href="#contact">お問い合わせ</a></li></ul></div>
+    </div>
+    <div class="copy"><span>© 2026 Linkle Inc. All rights reserved.</span><span>デザイン案 A — SORA / 空の下の一日</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+'use strict';
+var root=document.documentElement, $=function(s,c){return (c||document).querySelector(s)}, $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var hasG=!!(window.gsap&&window.ScrollTrigger);
+var qs=new URLSearchParams(location.search);
+root.classList.add('js'); if(hasG) root.classList.add('has-gsap');
+
+/* ───── 空の色：時刻 → 配色 ───── */
+var KEYS=[
+ {t:4.0, top:'#1b2a5e',mid:'#56558f',bot:'#e79a86',glow:'#ffc9a3',cloud:'#b9a9d6',ca:.28,star:.55},
+ {t:5.2, top:'#8fb6e6',mid:'#e9dcea',bot:'#ffd3ae',glow:'#ffe2bd',cloud:'#fff3ea',ca:.72,star:0},
+ {t:6.0, top:'#7cc4f2',mid:'#bfe6fa',bot:'#fff1dc',glow:'#fff3d6',cloud:'#ffffff',ca:.9,star:0},
+ {t:11.0,top:'#43ade6',mid:'#6ccaf1',bot:'#bfe9fb',glow:'#ffffff',cloud:'#ffffff',ca:.95,star:0},
+ {t:15.0,top:'#58aee6',mid:'#93d3f2',bot:'#f8e6bf',glow:'#fff0c8',cloud:'#ffffff',ca:.9,star:0},
+ {t:17.0,top:'#86a5dc',mid:'#f6b98f',bot:'#ffd28f',glow:'#ffcf8f',cloud:'#ffe3cf',ca:.8,star:0},
+ {t:18.5,top:'#16245a',mid:'#3b3b7c',bot:'#b9667a',glow:'#ff9f7a',cloud:'#8f7fb0',ca:.3,star:.5},
+ {t:20.5,top:'#0a1838',mid:'#11244f',bot:'#213a73',glow:'#9db8ff',cloud:'#6d7fb5',ca:.14,star:1},
+ {t:26.0,top:'#0a1838',mid:'#11244f',bot:'#213a73',glow:'#9db8ff',cloud:'#6d7fb5',ca:.14,star:1},
+ {t:27.4,top:'#1b2a5e',mid:'#56558f',bot:'#e79a86',glow:'#ffc9a3',cloud:'#b9a9d6',ca:.28,star:.5},
+ {t:29.2,top:'#8fb6e6',mid:'#e9dcea',bot:'#ffd3ae',glow:'#ffe2bd',cloud:'#fff3ea',ca:.72,star:0}
+];
+function hex(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
+KEYS.forEach(function(k){['top','mid','bot','glow','cloud'].forEach(function(p){k[p]=hex(k[p])})});
+function mix(a,b,u){return 'rgb('+Math.round(a[0]+(b[0]-a[0])*u)+','+Math.round(a[1]+(b[1]-a[1])*u)+','+Math.round(a[2]+(b[2]-a[2])*u)+')'}
+var sun=$('.sun'), moon=$('.moon'), clockT=$('#clockT'), clockL=$('#clockL'), clockSun=$('#clockSun');
+var LABELS=[[4.6,'夜明け前'],[5.9,'夜明け'],[10,'朝'],[14,'昼'],[16.5,'午後'],[18.4,'夕方'],[27,'夜'],[28.3,'夜明け前'],[99,'夜明け']];
+function sunPos(t){
+  var W=innerWidth,H=innerHeight,u=(t-3.6)/15.2; if(t>24) u=(t-24-3.6)/15.2;
+  var s=sun.offsetWidth, f=(u>0&&u<1)?Math.pow(Math.sin(Math.PI*u),.62):0;
+  var x=W*(W<700?.80-.60*u:.84-.70*u), y=H+s*.7-f*(H*.82+s*.7)+ (u<=0||u>=1? s:0);
+  return {x:x-s/2,y:y-s/2,u:u};
+}
+function setTime(t){
+  var i=0; while(i<KEYS.length-2&&t>KEYS[i+1].t)i++;
+  var a=KEYS[i],b=KEYS[i+1],u=Math.max(0,Math.min(1,(t-a.t)/(b.t-a.t))), st=root.style;
+  st.setProperty('--sky-top',mix(a.top,b.top,u)); st.setProperty('--sky-mid',mix(a.mid,b.mid,u)); st.setProperty('--sky-bot',mix(a.bot,b.bot,u));
+  st.setProperty('--glow',mix(a.glow,b.glow,u)); st.setProperty('--cloud',mix(a.cloud,b.cloud,u));
+  st.setProperty('--cloud-a',(a.ca+(b.ca-a.ca)*u).toFixed(3)); st.setProperty('--star',(a.star+(b.star-a.star)*u).toFixed(3));
+  var p=sunPos(t); sun.style.transform='translate3d('+p.x.toFixed(1)+'px,'+p.y.toFixed(1)+'px,0)';
+  // 月：19時〜翌4時
+  var mu=(t-18.8)/8.4, mo=mu>0&&mu<1?Math.min(1,Math.sin(Math.PI*mu)*2.2):0;
+  moon.style.opacity=(mo*.75).toFixed(2);
+  moon.style.transform='translate3d('+(innerWidth*(.86-.5*mu)).toFixed(1)+'px,'+(innerHeight*(.62-.46*Math.sin(Math.PI*Math.max(0,Math.min(1,mu))))).toFixed(1)+'px,0)';
+  var h=t%24, hh=Math.floor(h), mm=Math.floor((h-hh)*60); mm-=mm%2;
+  clockT.textContent=(hh<10?'0':'')+hh+':'+(mm<10?'0':'')+mm;
+  for(var j=0;j<LABELS.length;j++){ if(t<LABELS[j][0]){ if(clockL.textContent!==LABELS[j][1]) clockL.textContent=LABELS[j][1]; break; } }
+  var cu=Math.max(0,Math.min(1,p.u)); clockSun.setAttribute('cx',(19-15*Math.cos(Math.PI*cu)).toFixed(1)); clockSun.setAttribute('cy',(28-15*Math.sin(Math.PI*cu)).toFixed(1));
+  clockSun.setAttribute('fill',(p.u>0&&p.u<1)?'#fff':'#0b2239');
+}
+
+/* ───── スクロール位置 → 時刻 ───── */
+var anchors=[], dayST=null;
+function top(el){var y=0;while(el){y+=el.offsetTop;el=el.offsetParent}return y}
+function sec(n){return $('[data-sec="'+n+'"]')}
+function buildAnchors(){
+  var vh=innerHeight, a=[[0,5.2]], pains=sec('pains'), day=sec('day'), nums=sec('nums'), inds=sec('inds'), flow=sec('flow'), cta=sec('cta');
+  var maxY=document.documentElement.scrollHeight-vh;
+  a.push([top(pains)-vh*.4,5.5]);
+  var T=[6,10,15,17];
+  if(dayST&&dayST.pin){ var s=dayST.start,e=dayST.end; a.push([s-vh*.5,5.9]); T.forEach(function(t,i){a.push([s+(e-s)*i/3,t])}); }
+  else { a.push([top(day)-vh*.5,5.9]); $$('.panel',day).forEach(function(p,i){a.push([top(p)+p.offsetHeight/2-vh/2,T[i]])}); }
+  a.push([top(nums)-vh*.72,17.2]); a.push([top(nums)-vh*.18,18.5]); a.push([top(nums)+nums.offsetHeight-vh,19.2]);
+  a.push([top(inds)+inds.offsetHeight*.5-vh*.5,19.8]); a.push([top(flow)-vh*.5,20.5]);
+  a.push([top(flow)+flow.offsetHeight-vh*1.05,26]); a.push([top(cta)-vh*.45,28.2]); a.push([Math.max(maxY,top(cta)+vh*.2),29.2]);
+  for(var i=1;i<a.length;i++){ if(a[i][0]<=a[i-1][0]) a[i][0]=a[i-1][0]+1; }
+  anchors=a;
+}
+function timeAt(y){
+  var a=anchors; if(y<=a[0][0]) return a[0][1];
+  for(var i=1;i<a.length;i++){ if(y<=a[i][0]){ var u=(y-a[i-1][0])/(a[i][0]-a[i-1][0]); return a[i-1][1]+(a[i][1]-a[i-1][1])*u; } }
+  return a[a.length-1][1];
+}
+var ticking=false;
+function onScroll(){ if(ticking) return; ticking=true; requestAnimationFrame(function(){ticking=false; setTime(timeAt(scrollY));}); }
+
+/* ───── 星 ───── */
+(function(){
+  var c=$('#stars'), x=c.getContext('2d'), stars=[], W,H,dpr=Math.min(devicePixelRatio||1,2);
+  function size(){ W=c.width=innerWidth*dpr; H=c.height=innerHeight*dpr; stars=[]; var n=Math.round(innerWidth*innerHeight/7000);
+    for(var i=0;i<n;i++) stars.push({x:Math.random()*W,y:Math.pow(Math.random(),1.6)*H*.9,r:(Math.random()*1.1+.3)*dpr,p:Math.random()*6.28,s:.4+Math.random()*1.4}); draw(0); }
+  function draw(t){ x.clearRect(0,0,W,H); for(var i=0;i<stars.length;i++){var s=stars[i]; x.globalAlpha=reduce?.8:.45+.55*Math.sin(s.p+t*s.s); x.fillStyle='#fff'; x.beginPath(); x.arc(s.x,s.y,s.r,0,6.28); x.fill();} }
+  size(); addEventListener('resize',size);
+  if(!reduce) setInterval(function(){ if(parseFloat(root.style.getPropertyValue('--star'))>0.02) draw(performance.now()/1000); },120);
+})();
+
+/* ───── カーソルの光 / ボタン ───── */
+if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!reduce){
+  var cl=$('.cursor-light'), cx=innerWidth/2, cy=innerHeight/2, tx=cx, ty=cy;
+  addEventListener('pointermove',function(e){tx=e.clientX;ty=e.clientY;cl.style.opacity=1},{passive:true});
+  (function loop(){cx+=(tx-cx)*.12;cy+=(ty-cy)*.12;cl.style.transform='translate3d('+cx.toFixed(1)+'px,'+cy.toFixed(1)+'px,0)';requestAnimationFrame(loop)})();
+}
+$$('.btn').forEach(function(b){b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.setProperty('--mx',(e.clientX-r.left)+'px');b.style.setProperty('--my',(e.clientY-r.top)+'px')})});
+
+/* ───── メニュー ───── */
+var mb=$('.menu-btn'), menu=$('#menu');
+function setMenu(o){mb.setAttribute('aria-expanded',o);menu.classList.toggle('open',o);document.body.style.overflow=o?'hidden':''}
+mb.addEventListener('click',function(){setMenu(mb.getAttribute('aria-expanded')!=='true')});
+$$('a',menu).forEach(function(a){a.addEventListener('click',function(){setMenu(false)})});
+addEventListener('keydown',function(e){if(e.key==='Escape')setMenu(false)});
+
+/* ───── 時計盤の目盛り ───── */
+(function(){var g=$('#ticks'),s='';for(var i=0;i<48;i++){var a=i/48*Math.PI*2,r1=i%4===0?182:188,r2=196;s+='<line class="tick" x1="'+(220+Math.sin(a)*r1).toFixed(1)+'" y1="'+(220-Math.cos(a)*r1).toFixed(1)+'" x2="'+(220+Math.sin(a)*r2).toFixed(1)+'" y2="'+(220-Math.cos(a)*r2).toFixed(1)+'"/>'}g.innerHTML=s})();
+
+/* ───── 星座の線 ───── */
+function drawConst(){
+  var svg=$('#const'), stp=$$('.step'); if(!svg||getComputedStyle(svg).display==='none') return;
+  var b=svg.getBoundingClientRect(), d='';
+  stp.forEach(function(s,i){var r=$('.star',s).getBoundingClientRect(); d+=(i?'L':'M')+(r.left+r.width/2-b.left).toFixed(1)+' '+(r.top+r.height/2-b.top).toFixed(1)});
+  $('#constPath').setAttribute('d',d);
+}
+
+function init(){
+  buildAnchors(); setTime(timeAt(scrollY)); drawConst();
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){buildAnchors();drawConst();onScroll()});
+}
+
+if(!hasG||reduce){
+  $$('.pain').forEach(function(p){p.classList.add('on')}); $('#arc').style.strokeDashoffset=0;
+  var io=$('#intro'); if(io) io.remove();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(init); else init();
+  addEventListener('load',function(){buildAnchors();drawConst();onScroll()});
+  return;
+}
+
+/* ══════════ GSAP ══════════ */
+gsap.registerPlugin(ScrollTrigger);
+var mm=gsap.matchMedia();
+
+/* 横移動の一日 */
+mm.add('(min-width:980px) and (min-height:640px)',function(){
+  var day=sec('day'), track=$('#track'), fill=$('#railFill'), lis=$$('#railList li');
+  var dist=function(){return (track.scrollWidth-innerWidth)*.9}, hold=function(){return innerHeight*.6};
+  var pinST=ScrollTrigger.create({trigger:day,pin:true,start:'top top',end:function(){return '+='+(dist()+hold()*2)},invalidateOnRefresh:true,anticipatePin:1});
+  var tw=gsap.to(track,{x:function(){return -(track.scrollWidth-innerWidth)},ease:'none',
+    scrollTrigger:{trigger:day,scrub:.5,start:function(){return pinST.start+hold()},end:function(){return pinST.end-hold()},invalidateOnRefresh:true,
+      onUpdate:function(self){gsap.set(fill,{scaleX:self.progress});var k=Math.round(self.progress*3);lis.forEach(function(l,i){l.classList.toggle('on',i<=k)})}}});
+  dayST={pin:true,get start(){return tw.scrollTrigger.start},get end(){return tw.scrollTrigger.end}};
+  $$('.panel').forEach(function(p,i){
+    var o=i===0?{trigger:day,start:'top 60%'}:{trigger:p,containerAnimation:tw,start:'left 72%'};
+    o.toggleActions='play none none reverse';
+    gsap.from($('.p-time',p),{yPercent:30,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:o});
+    gsap.from([$('.p-title',p),$('.p-copy',p)],{y:26,opacity:0,duration:.8,stagger:.08,delay:.1,ease:'power3.out',scrollTrigger:o});
+    gsap.from($('.card.was',p),{x:80,opacity:0,rotation:3,duration:.9,delay:.15,ease:'power3.out',scrollTrigger:o});
+    gsap.from($('.card.now',p),{x:160,y:30,opacity:0,duration:1.1,delay:.28,ease:'power3.out',scrollTrigger:o});
+    gsap.from($$('.prog .bar i',p),{scaleX:0,duration:1.2,delay:.7,stagger:.12,ease:'power2.out',scrollTrigger:o});
+  });
+  return function(){dayST=null};
+});
+mm.add('(max-width:979px), (max-height:639px)',function(){
+  $$('.panel').forEach(function(p){
+    gsap.from($('.card.now',p),{y:50,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:$('.vs',p),start:'top 82%'}});
+  });
+});
+
+/* 悩み：散らばった紙が、ひとつに揃う */
+mm.add('(min-width:641px)',function(){
+  var cards=$$('.pain'), R=[[-70,60,-9],[40,-30,7],[-30,90,5],[80,20,-6],[60,70,8],[-50,-20,-7],[30,100,6],[-80,40,-10]];
+  cards.forEach(function(c,i){
+    gsap.fromTo(c,{x:R[i][0],y:R[i][1]+60,rotation:R[i][2]},{x:0,y:0,rotation:0,ease:'power2.out',
+      scrollTrigger:{trigger:'#painGrid',start:'top 96%',end:'top 38%',scrub:.6}});
+  });
+});
+ScrollTrigger.create({trigger:'#painGrid',start:'top 55%',onEnter:function(){$$('.pain').forEach(function(c,i){setTimeout(function(){c.classList.add('on')},i*90)})}});
+
+/* 汎用の出現 */
+$$('.sheet h2,.nums h2,.flow h2,.cta h2,.inds-head p,.pains-head p,.flow-head p,.pains-foot,.more,.web,.team,.guide,.cta .lead,.cta .cta-row').forEach(function(el){
+  gsap.from(el,{y:36,opacity:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}});
+});
+gsap.from('.ind',{y:40,opacity:0,duration:.8,stagger:.06,ease:'power3.out',scrollTrigger:{trigger:'.ind-grid',start:'top 82%'}});
+
+/* 数字 */
+(function(){
+  var el=$('#count4'), o={v:0};
+  gsap.to(o,{v:4,duration:1.6,ease:'power2.out',scrollTrigger:{trigger:'.big',start:'top 80%'},onUpdate:function(){el.textContent=Math.round(o.v)}});
+  gsap.from('.big>*',{yPercent:40,opacity:0,duration:1.1,stagger:.1,ease:'power3.out',scrollTrigger:{trigger:'.big',start:'top 85%'}});
+  gsap.to('#arc',{strokeDashoffset:0,ease:'none',scrollTrigger:{trigger:'.dial',start:'top 80%',end:'top 30%',scrub:.6}});
+  gsap.from('.dial',{rotation:-24,transformOrigin:'50% 50%',ease:'none',scrollTrigger:{trigger:'.dial',start:'top bottom',end:'bottom top',scrub:true}});
+})();
+
+/* 星座 */
+(function(){
+  var p=$('#constPath');
+  gsap.from('.step',{y:30,opacity:0,duration:.9,stagger:.14,ease:'power3.out',scrollTrigger:{trigger:'#steps',start:'top 78%'}});
+  gsap.fromTo(p,{clipPath:'inset(0 100% 0 0)'},{clipPath:'inset(0 0% 0 0)',ease:'none',scrollTrigger:{trigger:'#steps',start:'top 75%',end:'top 35%',scrub:.6}});
+})();
+
+/* 視差 */
+$$('.hero .skyline .far').forEach(function(el){gsap.to(el,{x:-40,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}})});
+gsap.to('.hero-in',{y:-70,opacity:.0,ease:'none',scrollTrigger:{trigger:'.hero',start:'60% top',end:'bottom top',scrub:true}});
+
+/* ───── 開幕 ───── */
+function heroIn(delay){
+  var tl=gsap.timeline({delay:delay||0});
+  tl.from('.h1-main .ln>span',{yPercent:108,duration:1.05,stagger:.11,ease:'power4.out'},0)
+    .from('.hero .rv',{y:22,opacity:0,duration:.8,stagger:.08,ease:'power3.out'},.25)
+    .from('.head',{y:-30,opacity:0,duration:.8,ease:'power3.out'},.2)
+    .from('.clock,.scroll-hint',{opacity:0,duration:.8},.7)
+    .from('.hero .skyline',{yPercent:30,opacity:0,duration:1.2,ease:'power3.out'},.1);
+  return tl;
+}
+function start(){
+  init();
+  ScrollTrigger.addEventListener('refresh',function(){buildAnchors();drawConst();setTime(timeAt(scrollY))});
+  ScrollTrigger.refresh();
+  var intro=$('#intro'), skip=qs.has('nointro')||scrollY>40;
+  if(skip){ intro.remove(); if(scrollY<40) heroIn(0).progress(qs.has('nointro')?1:0); return; }
+  var seen=false; try{seen=sessionStorage.getItem('sora-intro')==='1'; sessionStorage.setItem('sora-intro','1')}catch(e){}
+  var ring=$('.intro-ring'), s=ring.offsetWidth, hY=innerHeight*.62;
+  sun.style.opacity=0;
+  var p=sunPos(timeAt(0)), cxS=innerWidth/2-s/2, riseTo=-(s*1.25);          // 地平線より上へ
+  var endX=p.x-cxS, endY=p.y-(hY+riseTo);
+  var tl=gsap.timeline({defaults:{ease:'power3.out'},onComplete:done});
+  tl.to('.intro-h',{scaleX:1,duration:.55,ease:'power2.inOut'},0)
+    .to('.intro-light',{opacity:1,scale:1,duration:1.3,ease:'power2.out'},.1)
+    .to(ring,{y:riseTo,duration:1.0,ease:'power3.out'},.15)
+    .to('.intro-word span',{opacity:1,y:0,duration:.5,stagger:.045},.45)
+    .to('.intro-sub',{opacity:1,duration:.5},.75)
+    .add(function(){$('.intro-clip').style.overflow='visible'},1.25)
+    .to(ring,{x:endX,y:riseTo+endY,borderColor:'#fff',boxShadow:'0 0 110px 26px #ffe2bd',duration:1.0,ease:'power3.inOut'},1.3)
+    .to('.intro-bg,.intro-light,.intro-h,.intro-word,.intro-sub,.intro-skip',{opacity:0,duration:.8,ease:'power2.inOut'},1.35)
+    .add(heroIn(0),1.55)
+    .set(sun,{opacity:1},2.28).to(ring,{opacity:0,duration:.2},2.28);
+  if(seen) tl.timeScale(2.4);
+  function done(){ sun.style.opacity=1; if(intro.parentNode) intro.remove(); removeEventListener('keydown',sk); }
+  function sk(){ tl.progress(1); }
+  intro.addEventListener('click',sk); addEventListener('keydown',sk); addEventListener('wheel',sk,{once:true,passive:true}); addEventListener('touchmove',sk,{once:true,passive:true});
+}
+var started=false; function go(){ if(started) return; started=true; start(); }
+if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(go); setTimeout(go,1200); } else go();
+addEventListener('load',function(){ if(started) ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>

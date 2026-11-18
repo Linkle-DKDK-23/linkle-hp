@@ -5,80 +5,89 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 開発コマンド
 
 ```bash
-npm start     # 開発サーバーを起動 (http://localhost:3000)
-npm test      # テストを実行（インタラクティブウォッチモード）
-npm run build # 本番用ビルド (build/フォルダに出力)
-npm deploy    #　本番環境デプロイ
+npm run dev     # 開発サーバー (http://localhost:3000)
+npm run build   # 静的書き出し (out/) + canonical の後処理 (scripts/postbuild.mjs)
+npm run check   # out/ の検査: title / description / canonical / h1 / リンク切れ / sitemap / 掲載しない表現
+npm run preview # out/ をローカルで配信 (http://localhost:3010)
+npm run deploy  # build → check → S3 (linkle-hp) 同期 → CloudFront (E1P3P8CPSEO8HE) 無効化
 ```
 
 ## プロジェクト概要
 
-`linkle-hp`は、**linkleの企業ホームページ**を構築するためのReactアプリケーションです。Mijプラットフォームモノレポ内に配置されており、Create React Appで初期化されています。
+`linkle-hp` は **Linkle株式会社のコーポレートサイト**です。Next.js（App Router）の静的書き出しで、S3 + CloudFront から配信します。
+2026年11月に Create React App から全面刷新しました。経緯と決定事項は `docs/renewal/00-hearing.md`。
 
-## 技術スタック
+- **会社の顔**: システム開発会社。事業は 業務システム開発 / FDE（常駐・準委任）/ DX支援・業務効率化 / Web制作
+- **注力領域**: 建設業（専門工事会社）。「建設業 システム開発」「{業種} 業務システム / 管理システム」での検索流入を、`/construction-dx` と `/industries/*` で狙う（根拠は `docs/renewal/research-seo.md`）
+- **トップ見出し**: 「システムに、仕事を合わせない。」
 
-- **React**: 19.2.0
-- **ビルドツール**: Create React App (react-scripts 5.0.1)
-- **テスティング**: Jest + React Testing Library
-- **プロジェクト構造**: 標準的なCRA構造
-
-## プロジェクト構造
+## 構成
 
 ```
-linkle-hp/
-├── public/          # 静的アセット
-├── src/
-│   ├── App.js       # メインアプリケーションコンポーネント
-│   ├── index.js     # アプリケーションエントリーポイント
-│   └── setupTests.js # テスト設定
-└── package.json
+app/                    ページ（すべて静的）。layout.jsx が共通の枠
+  page.jsx              トップ
+  service/              事業内容（4事業を1ページに。#system #fde #dx #web）
+  construction-dx/      建設業向けシステム開発（柱ページ）
+  industries/           業種ハブ + [slug]（8業種）
+  works/                開発事例 + [slug]
+  about/ recruit/ news/ contact/
+  sitemap.js robots.js not-found.jsx globals.css
+components/             Header / Footer / ui.jsx（共通部品）/ GuideDialog / ContactForm / Effects
+content/                原稿。ページの文言はここを直す
+  home.js service.js construction.js works.js news.json
+  industries/<slug>.js  業種ページの原稿（index.js に登録）
+lib/
+  site.js seo.js mail.js
+  effects/site.js       輪・波紋・スクロール連動・ページ遷移（DOM を直接操作）
+  effects/fx3d.js       Three.js の粒子、anime.js の文字の動き
+scripts/                postbuild.mjs / check-export.mjs / og/
+infra/cloudfront/       viewer-request.js（www → apex、末尾スラッシュ除去、/about → /about/index.html）
+docs/renewal/           調査・決定事項・デザインモック（mocks/d-ring が採用案）
 ```
 
-## サイト構成
+## 実装上の決まり
 
-### 必要ページ
-1. トップページ (`/`)
-2. 会社概要 (`/about`)
-3. サービス紹介 (`/service`) - Web制作特化
-4. ニュース・お知らせ (`/news`)
-5. 採用情報 (`/recruit`)
-6. お問い合わせ (`/contact`)
+- **サイト内リンクは `<a href="/about">`（末尾スラッシュなし、next/link は使わない）。** ページ遷移は通常のページ読み込みで、`lib/effects/site.js` が水色の円で覆う演出を付ける。演出コードは読み込みごとに一度だけ動く前提で、後始末を持たない。
+- **canonical は末尾スラッシュなし。** Next は末尾スラッシュ付きで出すので `scripts/postbuild.mjs` が直す。`next build` を単体で使わず `npm run build` を使う。
+- **背景の輪は `data-rings`**（`[x, y, 半径, 内径比, 不透明度]` を最大4つ。x・y は画面比、半径は PC で画面高さ比・スマホで画面幅比）。`data-sec` の付いた節ごとに配置を書き、スクロールで補間される。スマホ用は `data-rings-m`。
+- **画面が止まる演出は `data-pin`**（stmt / hs / iris / flow）。PC 幅かつ動きを減らす設定でない場合だけ有効。
+- **資料リンクは `<GuideLink>`。** 代表者名・会社名・メールの入力後に https://guide.linkle.group/read.html を開く。入力内容は EmailJS で one@linkle.group に通知する。
+- **環境変数**: `.env.example` を参照。`NEXT_PUBLIC_EMAILJS_*` が無いと、お問い合わせは送信失敗の表示になる（成功を装わない）。
 
-## デザイン要件
+## 載せない・書かないもの
 
-- **ベースカラー**: #6ccaf1
-- **参考サイト**: https://neu-ad.jp/
-- レスポンシブデザイン必須（デスクトップ/タブレット/スマートフォン）
-- モダンでクリーンなデザイン
-- スクロールアニメーション推奨
+- 金額・料金・開発期間の具体値
+- 根拠のない数字（顧客満足度など）、No.1・圧倒的などの誇張
+- 事例の社名と業種。公開できる事実は「専門工事会社の業務システム開発で、事務作業が1日4時間減った（社名非掲載）」のみ
+- 業種ページは実績ではなく「想定する構成例」として書く。導入効果を装わない
+- 電話番号
 
-## 主要機能
+## デザイン
 
-### お問い合わせフォーム
-- お問い合わせ種別（選択式）
-- 氏名、メールアドレス、会社名、お問い合わせ内容
-- 送信先: one@linkle.group
-- バリデーション機能必須
-
-### ニュース管理
-- JSONまたはMarkdownファイルで管理
-- 開発者が直接Git経由で更新
-- トップページに最新3件表示
-- 一覧ページでページネーション
+- ベースカラー #6ccaf1（面・線専用。白地の文字色には使わない）、文字は #10181f
+- 白地、控えめな文字サイズ、広い余白、細い罫線。主役はロゴ由来の水色の輪
+- 方眼・図面風の背景、太枠とずらした影、架空の画面イラストは使わない（不採用になった経緯あり）
+- レスポンシブ必須。`prefers-reduced-motion` では演出を止める
 
 ## 会社情報
 
-- **会社名**: linkle株式会社
-- **設立**: 2025年1月23日
-- **代表者**: 倉石楽生
+- **会社名**: Linkle株式会社（表記は「Linkle」で統一）
+- **設立**: 2025年1月23日 / **代表者**: 倉石楽生
 - **所在地**: 東京都豊島区西池袋2-36-1 ソフトタウン池袋913号
-- **事業内容**: アプリ受託運営開発事業（Web制作特化）
+- **お問い合わせ先**: one@linkle.group
 
-## 重要な注意事項
+## 計測
 
-- このプロジェクトはCreate React Appを使用しており、ejectしていません
-- カスタム設定（webpack、babel）は公開されていません
-- 標準的なCRAの規約に従います
-- 日本語のみ対応（多言語対応不要）
-- 詳細な要件定義は `docs/requirements.md` を参照してください
-- より大きなモノレポの一部です。全体的なプロジェクトコンテキストについては、親レベルのCLAUDE.mdを参照してください
+- GA4（プロパティ「Linkle HP」、測定 ID `G-9MWQEBQ1P0`、`lib/site.js`）。linkle.group / guide / service のクロスドメイン計測を設定済み
+- `lib/mail.js` の `track()` が送るイベント: `guide_dialog_open` / `generate_lead`（method: guide | contact）/ `guide_open`
+- Search Console と GA4 への API 接続方法と刷新前の数値は `docs/renewal/03-baseline.md`
+
+## 注意
+
+- ビルドは Google Fonts を取得する（next/font）。取得に失敗すると `An error occurred in next/font` で落ちるので、もう一度実行する
+- OGP 画像は `scripts/og/template.html` を直してから `npm i --no-save puppeteer-core && node scripts/og/render.js`
+
+## 公開前に必要な作業（未対応）
+
+- CloudFront のカスタムエラーレスポンスを `/404.html`（ステータス 404）に変更する。現状は SPA 用に `/index.html` を 200 で返す設定のため、存在しない URL が 200 になる。旧サイトが動いている間に変えると旧サイトの下層ページが壊れるので、デプロイと同時に行う
+- お問い合わせと資料請求の通知メールが実際に届くかを確認する（`.env.local` は設定済み）
