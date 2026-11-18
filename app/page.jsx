@@ -1,8 +1,9 @@
 import { meta } from '@/lib/seo';
 import { SITE } from '@/lib/site';
-import { Arrow, GuideLink, Label, Cta } from '@/components/ui';
+import { Arrow, Big, GuideLink, Label, Cta } from '@/components/ui';
 import { hero, statement, services, flow, marquee } from '@/content/home';
 import { INDUSTRIES } from '@/content/industries';
+import { FEATURED } from '@/content/works';
 
 export const metadata = meta({
   title: 'Linkle株式会社 | 業務システム開発・FDE・DX支援・Web制作',
@@ -73,10 +74,10 @@ export default function Home() {
           <div>
             <Label n="02">注力領域</Label>
             <h2 className="h2" data-rv="">なかでも、建設業。</h2>
-            <p className="body" data-rv="" style={{ '--d': 1 }}>現場の手配、職人への連絡、図面からの材料の拾い出し、請求。建設業の事務は、業種ごとに進め方が違い、既製のソフトでは合わない部分が残ります。Linkleは専門工事会社の業務システムを開発しています。</p>
+            <p className="body" data-rv="" style={{ '--d': 1 }}>現場の手配、職人への連絡、図面からの材料の拾い出し、請求。建設業の事務は、業種ごとに進め方が違い、既製のソフトでは合わない部分が残ります。Linkleは、荷揚げ、足場、造園、管工事などの専門工事会社の業務システムを開発しています。</p>
             <div className="fact" data-rv="" style={{ '--d': 2 }}>
-              <b>1<small>日</small>4<small>時間</small></b>
-              <span>専門工事会社での開発事例。<br />事務作業にかかる時間を減らしました。</span>
+              <Big parts={FEATURED.fact.big} />
+              <span>{FEATURED.fact.text}<br />{FEATURED.client}での開発事例。</span>
             </div>
             <div className="inds" data-rv="" style={{ '--d': 3 }}>
               {INDUSTRIES.map(i => <a href={`/industries/${i.slug}`} key={i.slug}>{i.short}</a>)}

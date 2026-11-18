@@ -1,6 +1,7 @@
 import { meta, crumbLd, faqLd, serviceLd } from '@/lib/seo';
 import { OTHER_INDUSTRIES } from '@/lib/site';
-import { Arrow, JsonLd, Label, PageHead, Cta } from '@/components/ui';
+import { Arrow, Big, JsonLd, Label, PageHead, Cta } from '@/components/ui';
+import { FEATURED, WORKS, workHref } from '@/content/works';
 import { issues, features, faq } from '@/content/construction';
 import { INDUSTRIES } from '@/content/industries';
 
@@ -62,12 +63,15 @@ export default function ConstructionDx() {
           </div>
           <div>
             <div className="fact" data-rv="" style={{ marginTop: 0 }}>
-              <b>1<small>日</small>4<small>時間</small></b>
-              <span>事務作業にかかる時間を減らしました。</span>
+              <Big parts={FEATURED.fact.big} />
+              <span>{FEATURED.fact.text}<br />{FEATURED.client}での開発事例。</span>
             </div>
-            <p className="body" data-rv="">紙とExcel、個別の連絡で回していた手配から請求までの業務を、一つのシステムにまとめました。</p>
-            <p className="note" data-rv="">お客様のご意向により、社名は掲載していません。</p>
-            <p style={{ marginTop: 28 }} data-rv=""><a className="tl" href="/works/specialty-contractor">事例を見る<Arrow /></a></p>
+            <div className="ind-rows" data-rv="">
+              {WORKS.filter(w => w.scale).map(w => (
+                <a href={workHref(w)} key={w.slug}><span className="num">—</span><b>{w.client}</b><span>{w.scope.join(' / ')}</span><Arrow /></a>
+              ))}
+            </div>
+            <p style={{ marginTop: 28 }} data-rv=""><a className="tl" href="/works">開発事例を見る<Arrow /></a></p>
           </div>
         </section>
 

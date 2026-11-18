@@ -17,6 +17,11 @@ export const JsonLd = ({ data }) => (
   <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, '\\u003c') }} />
 );
 
+/** 事例の数字。数字は大きく、単位と矢印は小さく組む。 */
+export const Big = ({ parts }) => (
+  <b>{parts.map((t, i) => (t === '→' ? <i key={i}>→</i> : /^[\d,.]+$/.test(t) ? t : <small key={i}>{t}</small>))}</b>
+);
+
 export const Label = ({ n, children }) => (
   <p className="label" data-rv=""><span className="num">{n}</span>{children}</p>
 );

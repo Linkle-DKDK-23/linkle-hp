@@ -16,7 +16,7 @@ walk(OUT);
 
 const errors = [];
 const canon = new Set();
-const BANNED = [/万円/, /顧客満足度/, /No\.?\s?1/i, /圧倒的/, /業界最/];
+const BANNED = [/万円/, /社名は掲載して/, /1日4時間/, /顧客満足度/, /No\.?\s?1/i, /圧倒的/, /業界最/];
 const pick = (html, re) => (html.match(re) || [])[1];
 
 for (const file of pages) {
