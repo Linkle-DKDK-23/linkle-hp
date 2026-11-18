@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { meta, crumbLd } from '@/lib/seo';
+import { meta, crumbLd, caseLd } from '@/lib/seo';
 import { Arrow, Big, JsonLd, Label, PageHead, Cta } from '@/components/ui';
 import { WORKS, workBySlug } from '@/content/works';
 import { bySlug } from '@/content/industries';
@@ -10,7 +10,7 @@ export const generateStaticParams = () => DETAILS.map(w => ({ slug: w.slug }));
 export async function generateMetadata({ params }) {
   const w = workBySlug((await params).slug);
   if (!w) return {};
-  return meta({ title: `${w.title} | 開発事例`, description: `${w.client}（${w.scale}）の開発事例。${w.summary}開発範囲: ${w.scope.join('、')}。`, path: `/works/${w.slug}`, og: 'works' });
+  return meta({ title: `${w.title} | 開発事例`, description: `${w.abstract}開発範囲は${w.scope.join('、')}です。`, path: `/works/${w.slug}`, og: 'works' });
 }
 const R = v => JSON.stringify(v);
 const n2 = n => String(n).padStart(2, '0');
@@ -23,7 +23,8 @@ export default async function Work({ params }) {
   return (
     <main data-page="works">
       <JsonLd data={crumbLd([{ name: 'ホーム', path: '/' }, { name: '開発事例', path: '/works' }, { name: w.title, path: `/works/${w.slug}` }])} />
-      <PageHead crumbs={[{ name: '開発事例', path: '/works' }, { name: w.title }]} title={w.title} lead={w.summary}
+      <JsonLd data={caseLd({ title: w.title, description: w.abstract, path: `/works/${w.slug}`, published: w.published })} />
+      <PageHead crumbs={[{ name: '開発事例', path: '/works' }, { name: w.title }]} title={w.title} lead={`${w.abstract}${w.summary}`}
         rings={[[0.86, 0.42, 0.34, 0.9, 1], [0.86, 0.42, 0.22, 0.62, 0.6], [0.5, 0.5, 0.1, 0.6, 0]]}
         ringsM={[[0.95, 0.12, 0.5, 0.9, 0.9], [0.95, 0.12, 0.3, 0.62, 0.5], [0.5, 0.5, 0.1, 0.6, 0]]} />
       <div className="wrap">

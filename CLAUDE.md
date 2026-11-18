@@ -10,6 +10,7 @@ npm run build   # 静的書き出し (out/) + canonical の後処理 (scripts/po
 npm run check   # out/ の検査: title / description / canonical / h1 / リンク切れ / sitemap / 掲載しない表現
 npm run preview # out/ をローカルで配信 (http://localhost:3010)
 npm run deploy  # build → check → S3 (linkle-hp) 同期 → CloudFront (E1P3P8CPSEO8HE) 無効化
+npm run seo:report # 週次の SEO レポートを docs/seo/reports/ に書き出す（gcloud にオーナーでログイン済みであること）
 ```
 
 ## プロジェクト概要
@@ -82,6 +83,12 @@ docs/renewal/           調査・決定事項・デザインモック（mocks/d-
 - GA4（プロパティ「Linkle HP」、測定 ID `G-9MWQEBQ1P0`、`lib/site.js`）。linkle.group / guide / service のクロスドメイン計測を設定済み
 - `lib/mail.js` の `track()` が送るイベント: `guide_dialog_open` / `generate_lead`（method: guide | contact）/ `guide_open`
 - Search Console と GA4 への API 接続方法と刷新前の数値は `docs/renewal/03-baseline.md`
+
+## SEO / AIO の運用
+
+- 計画は `docs/renewal/04-seo-aio-roadmap.md`。週次で `npm run seo:report` → 所見を書く → その週の作業を決める
+- 有料の掲載・広告は使わない方針。Linkle 側の作業（アカウント登録、顧客への依頼）は発注者本人が担当
+- 外部プロフィール（Google ビジネスプロフィールなど）を登録したら、`lib/site.js` の `sameAs` に URL を追加する
 
 ## 注意
 
