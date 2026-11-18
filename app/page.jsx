@@ -1,6 +1,6 @@
-import { meta } from '@/lib/seo';
+import { meta, siteLd } from '@/lib/seo';
 import { SITE } from '@/lib/site';
-import { Arrow, Big, GuideLink, Label, Cta } from '@/components/ui';
+import { Arrow, Big, GuideLink, JsonLd, Label, Cta } from '@/components/ui';
 import { hero, statement, services, flow, marquee } from '@/content/home';
 import { INDUSTRIES } from '@/content/industries';
 import { FEATURED } from '@/content/works';
@@ -17,6 +17,7 @@ const R = v => JSON.stringify(v);
 export default function Home() {
   return (
     <main data-page="top">
+      <JsonLd data={siteLd} />
       <section className="hero" data-sec=""
         data-rings={R([[0.84, 0.57, 0.5, 0.62, 1], [1.04, 0.14, 0.3, 0.62, 0.5], [0.6, 1.1, 0.17, 0.62, 0.4]])}
         data-rings-m={R([[0.92, 0.17, 0.62, 0.62, 1], [0.34, 0.02, 0.3, 0.62, 0.45], [0.5, 0.5, 0.1, 0.6, 0]])}>
